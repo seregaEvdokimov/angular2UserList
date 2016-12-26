@@ -1,0 +1,11 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial';
+}
+
+#app {
+  display: table;
+  margin: 0 auto;
+  min-width: 1090px;
+}

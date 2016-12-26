@@ -1,0 +1,230 @@
+<div class="user-list">
+  <div class="user-list__table">
+    <table class="table table_lazyload">
+      <thead class="table__thead">
+      <tr class="row row_type_head">
+        <th class="row__id active asc" data-sort-by="id">№</th>
+        <th class="row__name" data-sort-by="name">Имя</th>
+        <th class="row__email" data-sort-by="email">Email</th>
+        <th class="row__birth" data-sort-by="birth">День рождения</th>
+        <th class="row__date" data-sort-by="date">Расчетное время</th>
+        <th class="row__delete">Удалить</th>
+        <th class="row__edit">Редактировать</th>
+      </tr>
+      </thead>
+      <tbody class="table__tbody">
+      <tr *ngFor="let user of userList" class="row row_type_body row_display_type_row">
+        <td class="row__id">
+          <a class="row__link" href="#/user/813">{{ user.id }}</a>
+        </td>
+        <td class="row__name" data-tooltip="name">{{ user.name }}</td>
+        <td class="row__email" data-tooltip="email">{{ user.email }}</td>
+        <td class="row__birth">{{ user.startDate }}</td>
+        <td class="row__date" livetime
+            [startDate]="user.birth"
+            [finishDate]="user.date"
+            [counterTag]="leftTime"
+            [progressBarTag]="overlay"
+        >
+          <div #leftTime class="left-time"></div>
+          <div #overlay class="overlay"></div>
+        </td>
+        <td class="row__del">
+          <a class="row__button delete-btn">Удалить</a>
+        </td>
+        <td class="row__edit">
+          <a class="row__button edit-btn">Редактировать</a>
+        </td>
+      </tr>
+      <!--<tr class="row row_type_body row_display_type_row ">-->
+        <!--<td class="row__id">-->
+          <!--<a class="row__link" href="#/user/815">815</a>-->
+        <!--</td>-->
+        <!--<td class="row__name" data-tooltip="name">Ayana Hammes</td>-->
+        <!--<td class="row__email" data-tooltip="email">Vernon7@hotmail.com</td>-->
+        <!--<td class="row__birth">15. 12. 2016</td>-->
+        <!--<td class="row__date">-->
+          <!--<div class="left-time">years: 0, months: 0, days: 2, hours: 23, minutes: 52, seconds: 36, </div>-->
+          <!--<div class="overlay positive" style="width: 74.0218%;"></div>-->
+        <!--</td>-->
+        <!--<td class="row__del">-->
+          <!--<a class="row__button delete-btn">Удалить</a>-->
+        <!--</td>-->
+        <!--<td class="row__edit">-->
+          <!--<a class="row__button edit-btn">Редактировать</a>-->
+        <!--</td>-->
+      <!--</tr>-->
+      <!--<tr class="row row_type_body row_display_type_row ">-->
+        <!--<td class="row__id">-->
+          <!--<a class="row__link" href="#/user/816">816</a>-->
+        <!--</td>-->
+        <!--<td class="row__name" data-tooltip="name">Verda Denesik</td>-->
+        <!--<td class="row__email" data-tooltip="email">Arvilla_Kemmer@yahoo.com</td>-->
+        <!--<td class="row__birth">15. 12. 2016</td>-->
+        <!--<td class="row__date">-->
+          <!--<div class="left-time">years: 0, months: 0, days: 19, hours: 22, minutes: 50, seconds: 33, </div>-->
+          <!--<div class="overlay positive" style="width: 30.0666%;"></div>-->
+        <!--</td>-->
+        <!--<td class="row__del">-->
+          <!--<a class="row__button delete-btn">Удалить</a>-->
+        <!--</td>-->
+        <!--<td class="row__edit">-->
+          <!--<a class="row__button edit-btn">Редактировать</a>-->
+        <!--</td>-->
+      <!--</tr>-->
+      <!--<tr class="row row_type_body row_display_type_row ">-->
+        <!--<td class="row__id">-->
+          <!--<a class="row__link" href="#/user/846">846</a>-->
+        <!--</td>-->
+        <!--<td class="row__name" data-tooltip="name">Eldred Simonis</td>-->
+        <!--<td class="row__email" data-tooltip="email">Madge33@hotmail.com</td>-->
+        <!--<td class="row__birth">15. 12. 2016</td>-->
+        <!--<td class="row__date">-->
+          <!--<div class="left-time">years: 0, months: 0, days: 21, hours: 17, minutes: 0, seconds: 52, </div>-->
+          <!--<div class="overlay positive" style="width: 27.5416%;"></div>-->
+        <!--</td>-->
+        <!--<td class="row__del">-->
+          <!--<a class="row__button delete-btn">Удалить</a>-->
+        <!--</td>-->
+        <!--<td class="row__edit">-->
+          <!--<a class="row__button edit-btn">Редактировать</a>-->
+        <!--</td>-->
+      <!--</tr>-->
+      <!--<tr class="row row_type_body row_display_type_row ">-->
+        <!--<td class="row__id">-->
+          <!--<a class="row__link" href="#/user/881">881</a>-->
+        <!--</td>-->
+        <!--<td class="row__name" data-tooltip="name">Dulce Konopelski</td>-->
+        <!--<td class="row__email" data-tooltip="email">Trenton_Kunde11@gmail.com</td>-->
+        <!--<td class="row__birth">15. 12. 2016</td>-->
+        <!--<td class="row__date">-->
+          <!--<div class="left-time">years: 0, months: 0, days: 0, hours: 7, minutes: 41, seconds: 3, </div>-->
+          <!--<div class="overlay positive" style="width: 96.3359%;"></div>-->
+        <!--</td>-->
+        <!--<td class="row__del">-->
+          <!--<a class="row__button delete-btn">Удалить</a>-->
+        <!--</td>-->
+        <!--<td class="row__edit">-->
+          <!--<a class="row__button edit-btn">Редактировать</a>-->
+        <!--</td>-->
+      <!--</tr>-->
+      <!--<tr class="row row_type_body row_display_type_row ">-->
+        <!--<td class="row__id">-->
+          <!--<a class="row__link" href="#/user/886">886</a>-->
+        <!--</td>-->
+        <!--<td class="row__name" data-tooltip="name">Terrence Lesch</td>-->
+        <!--<td class="row__email" data-tooltip="email">Constance_Crona0@hotmail.com</td>-->
+        <!--<td class="row__birth">15. 12. 2016</td>-->
+        <!--<td class="row__date">-->
+          <!--<div class="left-time">years: 0, months: 0, days: 2, hours: 21, minutes: 30, seconds: 45, </div>-->
+          <!--<div class="overlay positive" style="width: 74.0931%;"></div>-->
+        <!--</td>-->
+        <!--<td class="row__del">-->
+          <!--<a class="row__button delete-btn">Удалить</a>-->
+        <!--</td>-->
+        <!--<td class="row__edit">-->
+          <!--<a class="row__button edit-btn">Редактировать</a>-->
+        <!--</td>-->
+      <!--</tr>-->
+      <!--<tr class="row row_type_body row_display_type_row ">-->
+        <!--<td class="row__id">-->
+          <!--<a class="row__link" href="#/user/889">889</a>-->
+        <!--</td>-->
+        <!--<td class="row__name" data-tooltip="name">Rebekah Heidenreich</td>-->
+        <!--<td class="row__email" data-tooltip="email">Jennie_Gulgowski89@yahoo.com</td>-->
+        <!--<td class="row__birth">15. 12. 2016</td>-->
+        <!--<td class="row__date">-->
+          <!--<div class="left-time">years: 0, months: 0, days: 24, hours: 9, minutes: 11, seconds: 11, </div>-->
+          <!--<div class="overlay positive" style="width: 25.0986%;"></div>-->
+        <!--</td>-->
+        <!--<td class="row__del">-->
+          <!--<a class="row__button delete-btn">Удалить</a>-->
+        <!--</td>-->
+        <!--<td class="row__edit">-->
+          <!--<a class="row__button edit-btn">Редактировать</a>-->
+        <!--</td>-->
+      <!--</tr>-->
+      <!--<tr class="row row_type_body row_display_type_row ">-->
+        <!--<td class="row__id">-->
+          <!--<a class="row__link" href="#/user/891">891</a>-->
+        <!--</td>-->
+        <!--<td class="row__name" data-tooltip="name">Noe Heaney</td>-->
+        <!--<td class="row__email" data-tooltip="email">Elmer_Cummerata97@hotmail.com</td>-->
+        <!--<td class="row__birth">15. 12. 2016</td>-->
+        <!--<td class="row__date">-->
+          <!--<div class="left-time">years: 0, months: 0, days: 13, hours: 8, minutes: 32, seconds: 29, </div>-->
+          <!--<div class="overlay positive" style="width: 38.6506%;"></div>-->
+        <!--</td>-->
+        <!--<td class="row__del">-->
+          <!--<a class="row__button delete-btn">Удалить</a>-->
+        <!--</td>-->
+        <!--<td class="row__edit">-->
+          <!--<a class="row__button edit-btn">Редактировать</a>-->
+        <!--</td>-->
+      <!--</tr>-->
+      <!--<tr class="row row_type_body row_display_type_row ">-->
+        <!--<td class="row__id">-->
+          <!--<a class="row__link" href="#/user/901">901</a>-->
+        <!--</td>-->
+        <!--<td class="row__name" data-tooltip="name">Daija Medhurst V</td>-->
+        <!--<td class="row__email" data-tooltip="email">Zachery_Ritchie46@hotmail.com</td>-->
+        <!--<td class="row__birth">14. 12. 2016</td>-->
+        <!--<td class="row__date">-->
+          <!--<div class="left-time">years: 0, months: 1, days: 15, hours: 5, minutes: 47, seconds: 35, </div>-->
+          <!--<div class="overlay positive" style="width: 16.3818%;"></div>-->
+        <!--</td>-->
+        <!--<td class="row__del">-->
+          <!--<a class="row__button delete-btn">Удалить</a>-->
+        <!--</td>-->
+        <!--<td class="row__edit">-->
+          <!--<a class="row__button edit-btn">Редактировать</a>-->
+        <!--</td>-->
+      <!--</tr>-->
+      <!--<tr class="row row_type_body row_display_type_row ">-->
+        <!--<td class="row__id">-->
+          <!--<a class="row__link" href="#/user/903">903</a>-->
+        <!--</td>-->
+        <!--<td class="row__name" data-tooltip="name">Scot Morissette</td>-->
+        <!--<td class="row__email" data-tooltip="email">Sadie.West21@gmail.com</td>-->
+        <!--<td class="row__birth">15. 12. 2016</td>-->
+        <!--<td class="row__date">-->
+          <!--<div class="left-time">years: 0, months: 1, days: 14, hours: 14, minutes: 1, seconds: 18, </div>-->
+          <!--<div class="overlay positive" style="width: 16.0406%;"></div>-->
+        <!--</td>-->
+        <!--<td class="row__del">-->
+          <!--<a class="row__button delete-btn">Удалить</a>-->
+        <!--</td>-->
+        <!--<td class="row__edit">-->
+          <!--<a class="row__button edit-btn">Редактировать</a>-->
+        <!--</td>-->
+      <!--</tr>-->
+      <!--<tr class="row row_type_body row_display_type_row ">-->
+        <!--<td class="row__id">-->
+          <!--<a class="row__link" href="#/user/907">907</a>-->
+        <!--</td>-->
+        <!--<td class="row__name" data-tooltip="name">Jarret Lemke</td>-->
+        <!--<td class="row__email" data-tooltip="email">Keara_Pfannerstill@hotmail.com</td>-->
+        <!--<td class="row__birth">15. 12. 2016</td>-->
+        <!--<td class="row__date">-->
+          <!--<div class="left-time">years: 0, months: 0, days: 20, hours: 7, minutes: 46, seconds: 59, </div>-->
+          <!--<div class="overlay positive" style="width: 28.8137%;"></div>-->
+        <!--</td>-->
+        <!--<td class="row__del">-->
+          <!--<a class="row__button delete-btn">Удалить</a>-->
+        <!--</td>-->
+        <!--<td class="row__edit">-->
+          <!--<a class="row__button edit-btn">Редактировать</a>-->
+        <!--</td>-->
+      <!--</tr>-->
+      </tbody>
+    </table>
+  </div>
+  <div class="user-list__tooltip">
+    <div class="tooltip "></div>
+  </div>
+  <div class="user-list__options">
+    <div class="option">
+      <button class="option__add-user">Добавить клиента</button>
+    </div>
+  </div>
+</div>
