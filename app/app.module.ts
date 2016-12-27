@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent }  from './app.component';
 import { HeaderComponent }  from './components/header/header.component';
 import { UserlistComponent }  from './components/content/user-list/user-list.component';
+import { ModalComponent }  from './components/additional/modal/modal.component';
 
 import {LivetimeDirective} from './assets/directives/livetime.directive';
 
@@ -14,9 +15,11 @@ import {LivetimeDirective} from './assets/directives/livetime.directive';
     AppComponent,
     HeaderComponent,
     UserlistComponent,
+    ModalComponent,
 
     LivetimeDirective
   ],
+  providers: [ModalComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

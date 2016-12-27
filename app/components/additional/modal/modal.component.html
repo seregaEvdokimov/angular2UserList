@@ -1,0 +1,94 @@
+<section class="modal-bg" [ngClass]="{'modal-bg_show': globalModal.active}" (click)="closeModals($event)">
+  <div class="modal-window" [ngClass]="{'modal-window_show': createModal.active}">
+    <h3 class="modal-window__caption">Добавить нового клиента</h3>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label">Загрузить аватар</label>
+        <input type="file" class="modal-window-group__input" name="avatar">
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label">Введите имя</label>
+        <input type="text" class="modal-window-group__input" name="name">
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label">Введите email</label>
+        <input type="text" class="modal-window-group__input" name="email">
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label">Укажите день рождения</label>
+        <input type="date" class="modal-window-group__input" name="birth">
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label">Укажите расчётное время</label>
+        <input type="date" class="modal-window-group__input" name="date">
+        <input type="time" class="modal-window-group__input" name="time"></div>
+    </div>
+    <div class="modal-window__group modal-window__group_control">
+      <div class="modal-window-group modal-window-group_control" (click)="handlerControls($event)">
+        <button class="modal-window-group__button add-btn">Сохранить</button>
+        <button class="modal-window-group__button cancel-btn">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-window" [ngClass]="{'modal-window_show': editModal.active}">
+    <h3 class="modal-window__caption">Редактировать клиента</h3>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label">Загрузить аватар</label>
+        <img class="modal-window-group__picture" src="" alt="">
+        <input type="file" class="modal-window-group__input" name="avatar">
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label">Введите новое имя</label>
+        <input type="text" class="modal-window-group__input" name="name">
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label">Введите новый email</label>
+        <input type="text" class="modal-window-group__input" name="email">
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label">Изменить день рождения</label>
+        <input type="date" class="modal-window-group__input" name="birth">
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label">Изменить расчётное время</label>
+        <input type="date" class="modal-window-group__input" name="date">
+        <input type="time" class="modal-window-group__input" name="time">
+      </div>
+    </div>
+    <div class="modal-window__group modal-window__group_control">
+      <div class="modal-window-group modal-window-group_control" (click)="handlerControls($event)">
+        <button class="modal-window-group__button add-btn">Сохранить</button>
+        <button class="modal-window-group__button cancel-btn">Отмена</button>
+      </div>
+    </div>
+    <input type="hidden" name="id" class="id-input" value="">
+  </div>
+
+  <div class="modal-window" [ngClass]="{'modal-window_show': confirmModal.active}">
+    <h3 class="modal-window__caption">Есть изменения. Сохранить?</h3>
+    <div class="modal-window__group modal-window__group_control">
+      <div class="modal-window-group modal-window-group_control" (click)="handlerControls($event)">
+        <button class="modal-window-group__button ok">Сохранить</button>
+        <button class="modal-window-group__button cancel">Отмена</button>
+      </div>
+    </div>
+  </div>
+</section>

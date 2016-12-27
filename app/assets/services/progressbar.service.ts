@@ -4,6 +4,7 @@
 
 import {Injectable} from '@angular/core';
 import {TimerService} from './timer.service';
+import {ITimer} from '../interfaces/timer';
 
 @Injectable()
 export class ProgressBarService {
@@ -18,7 +19,7 @@ export class ProgressBarService {
     this.timer = new TimerService();
   }
 
-  init(data: any, element) {
+  init(data: ITimer, element: HTMLElement): void {
     this.startTime = new Date(data.start).getTime();
     this.finishTime = new Date(data.end).getTime();
     this.element = element;
@@ -26,26 +27,26 @@ export class ProgressBarService {
     this.timer.init(data, this.tick.bind(this));
   }
 
-  start() {
+  start(): void {
     this.timer.start();
   }
 
-  stop() {
+  stop(): void {
     this.timer.stop();
   }
 
-  tick() {
+  tick(): void {
     this.progressCalc();
     this.showProgress();
   }
 
-  update(data: any) {
+  update(data: ITimer): void {
     this.startTime = new Date(data.start).getTime();
     this.finishTime = new Date(data.end).getTime();
     this.progressCalc();
   }
 
-  progressCalc() {
+  progressCalc(): void {
     let difference = this.finishTime - this.startTime;
     let current = Date.now() - this.startTime;
     this.percent = current * 100 / difference;
@@ -54,11 +55,10 @@ export class ProgressBarService {
     this.percent = (this.percent >= 0 && this.percent <= 100) ? this.percent : 100;
   };
 
-  showProgress() {
+  showProgress(): void {
     this.className == 'positive' ? this.element.classList.remove('negative') : this.element.classList.remove('positive');
 
     this.element.style.width = this.percent + '%';
     this.element.classList.add(this.className);
   };
-
 }

@@ -5,6 +5,7 @@ import {Directive, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
 
 import {TimerService} from '../services/timer.service';
 import {ProgressBarService} from '../services/progressbar.service';
+import {ITimer} from '../interfaces/timer';
 
 
 @Directive({
@@ -23,35 +24,38 @@ export class LivetimeDirective implements OnInit, OnDestroy {
     this.timer = new TimerService();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.init();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.stop();
   }
 
-  init() {
-    let startDate = this.startDate;
-    let finishDate = this.finishDate;
+  init(): void {
 
-    this.timer.init({start: startDate, end: finishDate}, this.showLiveTime.bind(this));
-    this.progress.init({start: startDate, end: finishDate}, this.progressBarTag);
+    let timerData: ITimer = {
+      start: this.startDate,
+      end: this.finishDate
+    };
+
+    this.timer.init(timerData, this.showLiveTime.bind(this));
+    this.progress.init(timerData, this.progressBarTag);
 
     this.start();
   }
 
-  start() {
+  start(): void {
     this.timer.start();
     this.progress.start();
   }
 
-  stop() {
+  stop(): void {
     this.timer.stop();
     this.progress.stop();
   }
 
-  showLiveTime() {
+  showLiveTime(): void {
     this.counterTag.textContent = this.parseDate();
   }
 

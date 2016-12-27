@@ -133,13 +133,13 @@
   background-size: contain;
 }
 
-.row_type_head .row__id.active.asc:after,
-.row_type_head .row__name.active.asc:after,
-.row_type_head .row__email.active.asc:after,
-.row_type_head .row__birth.active.asc:after,
-.row_type_head .row__date.active.asc:after,
-.row_type_head .row__delete.active.asc:after,
-.row_type_head .row__edit.active.asc:after {
+.row_type_head .row__id.active.desc:before,
+.row_type_head .row__name.active.desc:before,
+.row_type_head .row__email.active.desc:before,
+.row_type_head .row__birth.active.desc:before,
+.row_type_head .row__date.active.desc:before,
+.row_type_head .row__delete.active.desc:before,
+.row_type_head .row__edit.active.desc:before {
   content: '';
   position: absolute;
   top: 14px;
