@@ -12,20 +12,14 @@
 .table__thead {
   background: #333;
   color: #ddd;
-}
-
-.table__tbody {}
-
-.table__tbody_lazyload {
-   display: block;
-}
-
-.table__tbody_lazyload .table__tbody {
   display: block;
-  height: 250px;
-  overflow: auto;
 }
 
+.table__tbody {
+  display: block;
+  overflow: auto;
+  max-height: 200px;
+}
 
 
 .row {}
@@ -173,7 +167,7 @@
 }
 
 .row_type_body.addition {
-   transform: translateX(100%);
+  transform: translateX(100%);
 }
 
 

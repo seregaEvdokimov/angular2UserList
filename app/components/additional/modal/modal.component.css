@@ -45,6 +45,19 @@
   min-width: 100%;
 }
 
+.modal-window__form {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-end;
+}
+
+.modal-window__debug {
+  max-width: 100%;
+  word-break: break-all;
+  color: #fff;
+  font-size: 14px;
+}
+
 .modal-window__group {
   margin: 10px;
 }
@@ -80,15 +93,15 @@
   margin-bottom: 10px;
 }
 
-.indow-group__input.error {
+.modal-window-group__input.error {
    border-color: red !important;
 }
 
-.indow-group__input.success {
+.modal-window-group__input.success {
    border-color: green;
 }
 
-.indow-group__input:focus {
+.modal-window-group__input:focus {
    outline: 0;
 }
 

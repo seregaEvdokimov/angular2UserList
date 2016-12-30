@@ -1,85 +1,143 @@
 <section class="modal-bg" [ngClass]="{'modal-bg_show': globalModal.active}" (click)="closeModals($event)">
   <div class="modal-window" [ngClass]="{'modal-window_show': createModal.active}">
     <h3 class="modal-window__caption">Добавить нового клиента</h3>
-    <div class="modal-window__group">
-      <div class="modal-window-group">
-        <label class="modal-window-group__label">Загрузить аватар</label>
-        <input type="file" class="modal-window-group__input" name="avatar">
+    <form [formGroup]="myForm" class="modal-window__form">
+      <div class="modal-window__group">
+        <div class="modal-window-group">
+          <label class="modal-window-group__label">Загрузить аватар</label>
+          <img class="modal-window-group__picture" src="{{ myForm.controls.avatar.value }}" alt="" #avatarCreate>
+          <input type="file" class="modal-window-group__input" (change)="handlerUploadFile($event, avatarCreate)">
+        </div>
       </div>
-    </div>
-    <div class="modal-window__group">
-      <div class="modal-window-group">
-        <label class="modal-window-group__label">Введите имя</label>
-        <input type="text" class="modal-window-group__input" name="name">
+      <div class="modal-window__group">
+        <div class="modal-window-group">
+          <label class="modal-window-group__label">Введите имя</label>
+          <input type="text" class="modal-window-group__input"
+            formControlName="name"
+            [ngClass]="{
+              'error': myForm.controls.name.dirty && myForm.controls.name.invalid,
+              'success': myForm.controls.name.dirty && myForm.controls.name.valid
+            }"
+          >
+        </div>
       </div>
-    </div>
-    <div class="modal-window__group">
-      <div class="modal-window-group">
-        <label class="modal-window-group__label">Введите email</label>
-        <input type="text" class="modal-window-group__input" name="email">
+      <div class="modal-window__group">
+        <div class="modal-window-group">
+          <label class="modal-window-group__label">Введите email</label>
+          <input type="text" class="modal-window-group__input"
+            formControlName="email"
+            [ngClass]="{
+              'error': myForm.controls.email.dirty && myForm.controls.email.invalid,
+              'success': myForm.controls.email.dirty && myForm.controls.email.valid
+            }"
+          >
+        </div>
       </div>
-    </div>
-    <div class="modal-window__group">
-      <div class="modal-window-group">
-        <label class="modal-window-group__label">Укажите день рождения</label>
-        <input type="date" class="modal-window-group__input" name="birth">
+      <div class="modal-window__group">
+        <div class="modal-window-group">
+          <label class="modal-window-group__label">Укажите день рождения</label>
+          <input type="date" class="modal-window-group__input"
+            valueAsNumber="{{ myForm.controls.birth.value }}"
+            formControlName="birth"
+            [ngClass]="{
+              'error': myForm.controls.birth.dirty && myForm.controls.birth.invalid,
+              'success': myForm.controls.birth.dirty && myForm.controls.birth.valid
+            }"
+          >
+        </div>
       </div>
-    </div>
-    <div class="modal-window__group">
-      <div class="modal-window-group">
-        <label class="modal-window-group__label">Укажите расчётное время</label>
-        <input type="date" class="modal-window-group__input" name="date">
-        <input type="time" class="modal-window-group__input" name="time"></div>
-    </div>
-    <div class="modal-window__group modal-window__group_control">
-      <div class="modal-window-group modal-window-group_control" (click)="handlerControls($event)">
-        <button class="modal-window-group__button add-btn">Сохранить</button>
-        <button class="modal-window-group__button cancel-btn">Отмена</button>
+      <div class="modal-window__group">
+        <div class="modal-window-group">
+          <label class="modal-window-group__label">Укажите расчётное время</label>
+          <input type="date" class="modal-window-group__input"
+            valueAsNumber="{{ myForm.controls.date.value }}"
+            formControlName="date"
+            [ngClass]="{
+              'error': myForm.controls.date.dirty && myForm.controls.date.invalid,
+              'success': myForm.controls.date.dirty && myForm.controls.date.valid
+            }"
+          >
+        </div>
       </div>
-    </div>
+      <div class="modal-window__group modal-window__group_control">
+        <div class="modal-window-group modal-window-group_control" (click)="handlerControls($event)">
+          <button class="modal-window-group__button add-btn" [disabled]="myForm.invalid">Сохранить</button>
+          <button class="modal-window-group__button cancel-btn">Отмена</button>
+        </div>
+      </div>
+    </form>
   </div>
 
   <div class="modal-window" [ngClass]="{'modal-window_show': editModal.active}">
     <h3 class="modal-window__caption">Редактировать клиента</h3>
-    <div class="modal-window__group">
-      <div class="modal-window-group">
-        <label class="modal-window-group__label">Загрузить аватар</label>
-        <img class="modal-window-group__picture" src="" alt="">
-        <input type="file" class="modal-window-group__input" name="avatar">
+    <form [formGroup]="myForm" class="modal-window__form">
+      <div class="modal-window__group">
+        <div class="modal-window-group">
+          <label class="modal-window-group__label">Загрузить аватар</label>
+          <img class="modal-window-group__picture" src="{{ myForm.controls.avatar.value }}" alt="" #avatarEdit>
+          <input type="file" class="modal-window-group__input" name="avatar" (change)="handlerUploadFile($event, avatarEdit)">
+        </div>
       </div>
-    </div>
-    <div class="modal-window__group">
-      <div class="modal-window-group">
-        <label class="modal-window-group__label">Введите новое имя</label>
-        <input type="text" class="modal-window-group__input" name="name">
+      <div class="modal-window__group">
+        <div class="modal-window-group">
+          <label class="modal-window-group__label">Введите новое имя</label>
+          <input type="text" class="modal-window-group__input"
+             formControlName="name"
+             [ngClass]="{
+              'error': myForm.controls.name.dirty && myForm.controls.name.invalid,
+              'success': myForm.controls.name.dirty && myForm.controls.name.valid
+             }"
+          >
+        </div>
       </div>
-    </div>
-    <div class="modal-window__group">
-      <div class="modal-window-group">
-        <label class="modal-window-group__label">Введите новый email</label>
-        <input type="text" class="modal-window-group__input" name="email">
+      <div class="modal-window__group">
+        <div class="modal-window-group">
+          <label class="modal-window-group__label">Введите новый email</label>
+          <input type="text" class="modal-window-group__input"
+            formControlName="email"
+            [ngClass]="{
+              'error': myForm.controls.email.dirty && myForm.controls.email.invalid,
+              'success': myForm.controls.email.dirty && myForm.controls.email.valid
+            }"
+          >
+        </div>
       </div>
-    </div>
-    <div class="modal-window__group">
-      <div class="modal-window-group">
-        <label class="modal-window-group__label">Изменить день рождения</label>
-        <input type="date" class="modal-window-group__input" name="birth">
+      <div class="modal-window__group">
+        <div class="modal-window-group">
+          <label class="modal-window-group__label">Изменить день рождения</label>
+          <input type="date" class="modal-window-group__input"
+            valueAsNumber="{{ myForm.controls.birth.value }}"
+            formControlName="birth"
+            [ngClass]="{
+              'error': myForm.controls.birth.dirty && myForm.controls.birth.invalid,
+              'success': myForm.controls.birth.dirty && myForm.controls.birth.valid
+            }"
+          >
+        </div>
       </div>
-    </div>
-    <div class="modal-window__group">
-      <div class="modal-window-group">
-        <label class="modal-window-group__label">Изменить расчётное время</label>
-        <input type="date" class="modal-window-group__input" name="date">
-        <input type="time" class="modal-window-group__input" name="time">
+      <div class="modal-window__group">
+        <div class="modal-window-group">
+          <label class="modal-window-group__label">Изменить расчётное время</label>
+          <input type="date" class="modal-window-group__input"
+            valueAsNumber="{{ myForm.controls.date.value }}"
+            formControlName="date"
+            [ngClass]="{
+              'error': myForm.controls.date.dirty && myForm.controls.date.invalid,
+              'success': myForm.controls.date.dirty && myForm.controls.date.valid
+            }"
+          >
+        </div>
       </div>
-    </div>
-    <div class="modal-window__group modal-window__group_control">
-      <div class="modal-window-group modal-window-group_control" (click)="handlerControls($event)">
-        <button class="modal-window-group__button add-btn">Сохранить</button>
-        <button class="modal-window-group__button cancel-btn">Отмена</button>
+      <div class="modal-window__group modal-window__group_control">
+        <div class="modal-window-group modal-window-group_control" (click)="handlerControls($event)">
+          <button class="modal-window-group__button add-btn" [disabled]="myForm.invalid">Сохранить</button>
+          <button class="modal-window-group__button cancel-btn">Отмена</button>
+        </div>
       </div>
-    </div>
-    <input type="hidden" name="id" class="id-input" value="">
+      <input type="hidden" class="id-input"
+
+      >
+    </form>
   </div>
 
   <div class="modal-window" [ngClass]="{'modal-window_show': confirmModal.active}">

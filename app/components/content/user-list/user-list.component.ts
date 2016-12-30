@@ -2,76 +2,63 @@
  * Created by s.evdokimov on 23.12.2016.
  */
 
-import {Component, Output, EventEmitter} from '@angular/core';
-
+import {Component, Input ,Output, EventEmitter} from '@angular/core';
 import {IUser} from '../../../assets/interfaces/user';
-import {USERS} from '../../../assets/interfaces/user';
-import {ModalComponent} from '../../additional/modal/modal.component';
+
 
 @Component({
   moduleId: module.id,
   selector: 'user-list-component',
   templateUrl: 'user-list.component.html',
-  styleUrls: ['user-list.component.css'],
-  providers: [ModalComponent]
+  styleUrls: ['user-list.component.css']
 })
 
+
 export class UserlistComponent {
-  @Output() onModal = new EventEmitter();
+  @Output() onAction = new EventEmitter();
+  @Input()
+  set props(props: any) {
+    if(!props) return;
 
+    switch(props.type) {
+      case 'GET_USERS':
+        this.userList = props.payload.users;
+        break;
+      case 'NEW_USER':
+        this.newItem = props.payload.user;
+        break;
+    }
+  }
+
+  newItem: IUser;
   userList: IUser[] = [];
-  sortType: string = 'id';
-  sortDirection: string = 'asc';
 
-  constructor(private modal: ModalComponent) {
-    this.userList = this.formatData(USERS);
-  }
+  handlerScroll($event: any) {
+    let el: HTMLElement = $event.target;
 
-  formatData(data: IUser[]): IUser[] {
-    data.forEach(function(item) {
+    let currentScroll = el.scrollTop + el.clientHeight;
+    let maxScroll = el.scrollHeight;
 
-      let date: any = new Date(item.birth);
-      date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-
-      item.startDate = date;
-    });
-
-    data = this.sortData(data);
-    return data;
-  }
-
-  sortData(data: IUser[]): IUser[] {
-    let sortType: string = this.sortType;
-    let sortDirection: string = this.sortDirection;
-
-    let sorted: IUser[] = data.sort(function(v1, v2) {
-      let p1 = (sortType == 'date' || sortType == 'birth') ? new Date(v1[sortType]).getTime() : v1[sortType];
-      let p2 = (sortType == 'date' || sortType == 'birth') ? new Date(v2[sortType]).getTime() : v2[sortType];
-      let res = 0;
-
-      if (sortDirection == 'asc') res = (p1 > p2) ? 1 : -1;
-      if (sortDirection == 'desc') res = (p1 > p2) ? -1 : 1;
-      return res;
-    });
-
-    return sorted;
+    if(currentScroll == maxScroll) {
+      this.onAction.emit({type: 'PAGINATION'});
+    }
   }
 
   handlerSort($event: any):boolean {
     let el: HTMLElement = $event.target;
     if(el.dataset['sortBy'] === undefined) return false;
 
-    this.sortType = el.dataset['sortBy'];
-    this.sortDirection = el.dataset['directionBy'];
-    this.userList = this.sortData(this.userList);
+    let sortType = el.dataset['sortBy'];
+    let sortDirection = el.dataset['directionBy'];
+    this.onAction.emit({type: 'SORT', payload: {type: sortType, direction: sortDirection}});
 
     let nodes = [].slice.apply(el.parentNode.childNodes);
     for(let i = 0, len = nodes.length; i < len; i++) {
       if(nodes[i].nodeType === 1) nodes[i].classList.remove('active');
     }
 
-    el.className = 'row__' + this.sortType + ' active ' + this.sortDirection;
-    el.dataset['directionBy'] = (this.sortDirection === 'asc') ? 'desc' : 'asc';
+    el.className = 'row__' + sortType + ' active ' + sortDirection;
+    el.dataset['directionBy'] = (sortDirection === 'asc') ? 'desc' : 'asc';
   }
 
   handlerControl($event: any):boolean {
@@ -90,14 +77,23 @@ export class UserlistComponent {
   }
 
   editUser($event: any, type: string) {
-    this.onModal.emit({type: type, action: 'show'});
+    let el: HTMLElement = this.getRow($event.target);
+    let id = parseInt(el.querySelector('.row__link').textContent);
+    this.onAction.emit({type: 'SHOW_EDIT_MODAL', payload: {id: id}});
   }
 
   deleteUser($event: any, type: string) {
-    alert('delete');
+    let el: HTMLElement = this.getRow($event.target);
+    let id = parseInt(el.querySelector('.row__link').textContent);
+    this.onAction.emit({type: 'DELETE_USER', payload: {id: id}});
   }
 
   addUser($event: any, type: string) {
-    this.onModal.emit({type: type, action: 'show'});
+    this.onAction.emit({type: 'SHOW_ADD_MODAL'});
+  }
+
+  getRow(el:any): HTMLElement {
+    if(el.tagName === 'TR') return el;
+    return this.getRow(el['parentNode']);
   }
 }

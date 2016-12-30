@@ -1,6 +1,7 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 
 import { AppComponent }  from './app.component';
 import { HeaderComponent }  from './components/header/header.component';
@@ -10,7 +11,7 @@ import { ModalComponent }  from './components/additional/modal/modal.component';
 import {LivetimeDirective} from './assets/directives/livetime.directive';
 
 @NgModule({
-  imports: [BrowserModule, FormsModule],
+  imports: [BrowserModule, ReactiveFormsModule, HttpModule],
   declarations: [
     AppComponent,
     HeaderComponent,
