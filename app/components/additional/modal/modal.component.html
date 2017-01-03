@@ -37,7 +37,7 @@
         <div class="modal-window-group">
           <label class="modal-window-group__label">Укажите день рождения</label>
           <input type="date" class="modal-window-group__input"
-            valueAsNumber="{{ myForm.controls.birth.value }}"
+            value="{{ myForm.controls.birth.value }}"
             formControlName="birth"
             [ngClass]="{
               'error': myForm.controls.birth.dirty && myForm.controls.birth.invalid,
@@ -50,7 +50,7 @@
         <div class="modal-window-group">
           <label class="modal-window-group__label">Укажите расчётное время</label>
           <input type="date" class="modal-window-group__input"
-            valueAsNumber="{{ myForm.controls.date.value }}"
+            value="{{ myForm.controls.date.value }}"
             formControlName="date"
             [ngClass]="{
               'error': myForm.controls.date.dirty && myForm.controls.date.invalid,
@@ -106,7 +106,7 @@
         <div class="modal-window-group">
           <label class="modal-window-group__label">Изменить день рождения</label>
           <input type="date" class="modal-window-group__input"
-            valueAsNumber="{{ myForm.controls.birth.value }}"
+            value="{{ myForm.controls.birth.value }}"
             formControlName="birth"
             [ngClass]="{
               'error': myForm.controls.birth.dirty && myForm.controls.birth.invalid,
@@ -119,7 +119,7 @@
         <div class="modal-window-group">
           <label class="modal-window-group__label">Изменить расчётное время</label>
           <input type="date" class="modal-window-group__input"
-            valueAsNumber="{{ myForm.controls.date.value }}"
+            value="{{ myForm.controls.date.value }}"
             formControlName="date"
             [ngClass]="{
               'error': myForm.controls.date.dirty && myForm.controls.date.invalid,
@@ -134,9 +134,7 @@
           <button class="modal-window-group__button cancel-btn">Отмена</button>
         </div>
       </div>
-      <input type="hidden" class="id-input"
-
-      >
+      <input type="hidden" class="id-input">
     </form>
   </div>
 

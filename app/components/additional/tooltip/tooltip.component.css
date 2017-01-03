@@ -1,0 +1,48 @@
+.tooltip {
+  display: none;
+  padding: 2px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.tooltip_show {
+   display: block;
+}
+
+.tooltip__item {
+  display: none;
+}
+
+.tooltip__item_show {
+  display: block;
+}
+
+.tooltip__item.tooltip_name {
+   background: #333;
+}
+
+.tooltip__item.tooltip_email {
+   width: 275px;
+   background: #333;
+ }
+
+.tooltip__picture {
+  display: table;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.tooltip__paragraph {
+  text-align: center;
+  color: #fff;
+  padding: 10px 5px;
+  font-size: 14px;
+}
+
+.tooltip__email {
+  color: #fff;
+  padding: 10px 0;
+  font-size: 14px;
+  text-align: center;
+}

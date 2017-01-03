@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import {StoreService} from './assets/services/store.service';
+import {StoreService} from './config/store.service';
 import {UserService} from './assets/services/user.service';
-import {IUser} from './assets/interfaces/user';
+import {TooltipService} from './assets/services/tooltip.service';
+
+import {FETCH_USER_LIST} from './components/content/user-list/actions'
 
 @Component({
   selector: 'my-app',
@@ -18,116 +20,55 @@ import {IUser} from './assets/interfaces/user';
         [props]="modalProps"  
         (onAction)="onAction($event)"
       ></modal-component>
-    </div>
+      
+      <tooltip-component
+        [props]="tooltipProps"  
+        (onAction)="onAction($event)"
+      ></tooltip-component>
+    </div> 
   `,
-  providers: [StoreService, UserService]
+  providers: [StoreService, UserService, TooltipService]
 })
 
 export class AppComponent  {
   modalProps: any = null;
   userListProps: any = null;
+  tooltipProps: any = null;
 
-  constructor(private store: StoreService, private userService: UserService) {
-    this.store.init({user: this.userService});
+  constructor(
+    private store: StoreService,
+    private userService: UserService,
+    private tooltipService: TooltipService
+  ) {
+
+    this.store.init({
+      user: this.userService,
+      tooltip: this.tooltipService
+    }, {
+      userList: this.setUserList.bind(this),
+      modal: this.setModal.bind(this),
+      tooltip: this.setTooltip.bind(this),
+    });
 
     this.store.dispatch({
-      type: 'LOAD_USERS',
-      payload: {start: 0, limit: 10, callback: this.loadUsers.bind(this)}
+      type: FETCH_USER_LIST,
+      payload: {start: 0, limit: 10}
     });
   }
 
-  // ACTIONS
   onAction(params: any): void {
-    // console.log('onAction', params);
-    switch(params.type) {
-      case 'PAGINATION':
-        this.store.dispatch({
-          type: 'PAGINATION',
-          payload: {callback: this.loadUsers.bind(this)}
-        });
-        break;
-      case 'SORT':
-        this.store.dispatch({
-          type: 'SORT',
-          payload: {
-            type: params.payload.type,
-            direction: params.payload.direction,
-            callback: this.loadUsers.bind(this)}
-        });
-        break;
-      case 'SHOW_EDIT_MODAL':
-        this.store.dispatch({
-          type: 'SHOW_MODAL',
-          payload: {
-            id: params.payload.id,
-            type: 'EDIT',
-            callback: this.showModal.bind(this)}
-        });
-        break;
-      case 'SHOW_ADD_MODAL':
-        this.store.dispatch({
-          type: 'SHOW_MODAL',
-          payload: {
-            type: 'CREATE',
-            callback: this.showModal.bind(this)}
-        });
-        break;
-      case 'UPDATE_USER':
-        this.store.dispatch({
-          type: 'UPDATE_USER',
-          payload: {
-            user: params.payload.user,
-            callback: this.updatedUser.bind(this)}
-        });
-        break;
-      case 'CREATE_USER':
-        this.store.dispatch({
-          type: 'CREATE_USER',
-          payload: {
-            user: params.payload.user,
-            callback: this.createdUser.bind(this)}
-        });
-        break;
-      case 'DELETE_USER':
-        this.store.dispatch({
-          type: 'DELETE_USER',
-          payload: {
-            id: params.payload.id,
-            callback: this.deletedUser.bind(this)}
-        });
-        break;
-    }
+    this.store.dispatch(params);
   }
 
-  // CALLBACKS
-  loadUsers(data: IUser[]): void {
-    this.userListProps = {
-      type: 'GET_USERS',
-      payload: {users: data}
-    };
+  setUserList(state: any): void {
+    this.userListProps = state;
   }
 
-  showModal(type: string, data: IUser): void {
-    this.modalProps = {
-      type: (type === 'EDIT') ? 'SHOW_EDIT_MODAL' : 'SHOW_ADD_MODAL',
-      payload: {model: data}
-    }
+  setTooltip(state: any): void {
+    this.tooltipProps = state;
   }
 
-  updatedUser(res: any): void {
-    this.modalProps = {type: 'HIDE_EDIT_MODAL'};
-    this.loadUsers(res);
-  }
-
-  createdUser(res: any) {
-    this.modalProps = {type: 'HIDE_ADD_MODAL'};
-    this.userListProps = {
-      type: 'NEW_USER',
-      payload: {user: res.pop()}
-    };
-  }
-
-  deletedUser(res: any) {
-    this.loadUsers(res);
+  setModal(state: any): void {
+    this.modalProps = state;
   }
 }

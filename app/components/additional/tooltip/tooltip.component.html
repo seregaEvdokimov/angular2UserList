@@ -1,0 +1,13 @@
+<div class="tooltip"
+  [ngClass]="{'tooltip_show': tooltip.active}"
+  [ngStyle]="{'left': tooltip.coords.x, 'top': tooltip.coords.y}"
+>
+  <div class="tooltip__item tooltip_name" [ngClass]="{'tooltip__item_show': tooltipName.active}">
+    <img class="tooltip__picture" src="{{ tooltipName.content.avatar }}" />
+    <p class="tooltip__paragraph">{{ tooltipName.content.name }}</p>
+  </div>
+
+  <div class="tooltip__item tooltip_email" [ngClass]="{'tooltip__item_show': tooltipEmail.active}">
+    <p class="tooltip__email">{{ tooltipEmail.content.message }}</p>
+  </div>
+</div>

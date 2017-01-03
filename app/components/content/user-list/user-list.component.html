@@ -12,7 +12,12 @@
         <th class="row__edit">Редактировать</th>
       </tr>
       </thead>
-      <tbody class="table__tbody" (click)="handlerControl($event)" (scroll)="handlerScroll($event)">
+      <tbody class="table__tbody"
+        (click)="handlerControl($event)"
+        (scroll)="handlerScroll($event)"
+        (mousemove)="handlerMouse($event)"
+        (mouseover)="handlerMouse($event)"
+        (mouseout)="handlerMouse($event)">
       <tr *ngIf="newItem" class="row row_type_body row_display_type_row">
         <td class="row__id">
           <a class="row__link" href="#/user/813">{{ newItem.id }}</a>
@@ -67,7 +72,7 @@
   </div>
   <div class="user-list__options">
     <div class="option">
-      <button class="option__add-user" (click)="addUser($event, 'create')">Добавить клиента</button>
+      <button class="option__add-user" (click)="addUser($event)">Добавить клиента</button>
     </div>
   </div>
 </div>

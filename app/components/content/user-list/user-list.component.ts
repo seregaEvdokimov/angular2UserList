@@ -5,6 +5,10 @@
 import {Component, Input ,Output, EventEmitter} from '@angular/core';
 import {IUser} from '../../../assets/interfaces/user';
 
+import {USER_LIST_PAGINATION, USER_LIST_SORT, USER_DELETE, FETCH_USER_LIST, USER_NEW} from './actions';
+import {TOOLTIP_SHOW, TOOLTIP_HIDE, TOOLTIP_MOVE} from '../../additional/tooltip/actions';
+import {MODAL_CREATE_SHOW, MODAL_EDIT_SHOW} from '../../additional/modal/actions';
+
 
 @Component({
   moduleId: module.id,
@@ -21,10 +25,10 @@ export class UserlistComponent {
     if(!props) return;
 
     switch(props.type) {
-      case 'GET_USERS':
+      case FETCH_USER_LIST:
         this.userList = props.payload.users;
         break;
-      case 'NEW_USER':
+      case USER_NEW:
         this.newItem = props.payload.user;
         break;
     }
@@ -40,7 +44,7 @@ export class UserlistComponent {
     let maxScroll = el.scrollHeight;
 
     if(currentScroll == maxScroll) {
-      this.onAction.emit({type: 'PAGINATION'});
+      this.onAction.emit({type: USER_LIST_PAGINATION});
     }
   }
 
@@ -50,7 +54,10 @@ export class UserlistComponent {
 
     let sortType = el.dataset['sortBy'];
     let sortDirection = el.dataset['directionBy'];
-    this.onAction.emit({type: 'SORT', payload: {type: sortType, direction: sortDirection}});
+    this.onAction.emit({
+      type: USER_LIST_SORT,
+      payload: {type: sortType, direction: sortDirection}
+    });
 
     let nodes = [].slice.apply(el.parentNode.childNodes);
     for(let i = 0, len = nodes.length; i < len; i++) {
@@ -68,32 +75,70 @@ export class UserlistComponent {
     let classes = el.classList;
     switch(classes[1]) {
       case 'edit-btn':
-        this.editUser($event, 'edit');
+        this.editUser($event);
         break;
       case 'delete-btn':
-        this.deleteUser($event, 'delete');
+        this.deleteUser($event);
         break;
     }
   }
 
-  editUser($event: any, type: string) {
-    let el: HTMLElement = this.getRow($event.target);
-    let id = parseInt(el.querySelector('.row__link').textContent);
-    this.onAction.emit({type: 'SHOW_EDIT_MODAL', payload: {id: id}});
+  handlerMouse($event: any): boolean {
+    let type = $event.type;
+    let el = $event.target;
+    let id = parseInt(this.getRow(el).querySelector('.row__link').textContent);
+    let tooltip = el.dataset.tooltip;
+
+    if(tooltip) {
+      switch(type) {
+        case 'mousemove':
+          this.onAction.emit({
+            type: TOOLTIP_MOVE,
+            payload: {coords: {x: $event.pageX, y: $event.pageY}}
+          });
+          break;
+        case 'mouseover':
+          this.onAction.emit({
+            type: TOOLTIP_SHOW,
+            payload: {id: id, type: tooltip, coords: {x: $event.pageX, y: $event.pageY}}
+          });
+          break;
+        case 'mouseout':
+          this.onAction.emit({
+            type: TOOLTIP_HIDE,
+            payload: {type: tooltip}
+          });
+          break;
+      }
+    }
+
+    return true;
   }
 
-  deleteUser($event: any, type: string) {
+  editUser($event: any) {
     let el: HTMLElement = this.getRow($event.target);
     let id = parseInt(el.querySelector('.row__link').textContent);
-    this.onAction.emit({type: 'DELETE_USER', payload: {id: id}});
+    this.onAction.emit({
+      type: MODAL_EDIT_SHOW,
+      payload: {id: id}
+    });
   }
 
-  addUser($event: any, type: string) {
-    this.onAction.emit({type: 'SHOW_ADD_MODAL'});
+  deleteUser($event: any) {
+    let el: HTMLElement = this.getRow($event.target);
+    let id = parseInt(el.querySelector('.row__link').textContent);
+    this.onAction.emit({
+      type: USER_DELETE,
+      payload: {id: id}
+    });
+  }
+
+  addUser($event: any) {
+    this.onAction.emit({type: MODAL_CREATE_SHOW});
   }
 
   getRow(el:any): HTMLElement {
-    if(el.tagName === 'TR') return el;
+    if(!el || el.tagName === 'TR') return el;
     return this.getRow(el['parentNode']);
   }
 }

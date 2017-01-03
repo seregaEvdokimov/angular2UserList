@@ -75,7 +75,8 @@ var backAPI = {
         return JSON.stringify(result);
     },
     createUser: function(data) {
-        var uniqId = parseInt(this.userData[this.userData.length - 1].id) + 1;
+        var id = (this.userData.length) ? this.userData[this.userData.length - 1].id : 0;
+        var uniqId = parseInt(id) + 1;
         data.id = uniqId;
         data.timePassed = ('boolean' == typeof data.timePassed) ? data.timePassed : !data.timePassed;
 
@@ -115,14 +116,14 @@ var backAPI = {
         var type = data.type;
 
         var find = this.userData.filter(function (item, index) {
-            return item.id === id;
+            return item.id == id;
         })[0];
 
         var result = {type: type};
         switch(type) {
             case 'name':
-                result.img = find.avatar;
-                result.text = find.name;
+                result.avatar = find.avatar;
+                result.name = find.name;
                 break;
             case 'email':
                 result.text = Math.floor(Math.random() * 100);
