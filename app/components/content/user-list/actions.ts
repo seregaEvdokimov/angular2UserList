@@ -12,3 +12,4 @@ export const USER_UPDATE = 'USER_UPDATE';
 
 export const SHOULD_UPDATE_USER = 'SHOULD_UPDATE_USER';
 export const USER_NEW = 'USER_NEW';
+export const USER_TIME_PASSED = 'USER_TIME_PASSED';

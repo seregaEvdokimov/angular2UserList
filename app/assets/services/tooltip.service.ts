@@ -4,6 +4,7 @@
 
 import {Injectable} from '@angular/core';
 import {Http, URLSearchParams} from '@angular/http';
+
 import {TOOLTIP_SHOW} from '../../components/additional/tooltip/actions';
 
 @Injectable()

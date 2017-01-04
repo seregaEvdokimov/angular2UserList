@@ -3,15 +3,17 @@
  */
 import {Directive, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
 
+import {ITimer} from '../interfaces/timer';
+
 import {TimerService} from '../services/timer.service';
 import {ProgressBarService} from '../services/progressbar.service';
-import {ITimer} from '../interfaces/timer';
 
 
 @Directive({
   selector: '[livetime]',
   providers: [ProgressBarService]
 })
+
 
 export class LivetimeDirective implements OnInit, OnDestroy {
   timer: TimerService;

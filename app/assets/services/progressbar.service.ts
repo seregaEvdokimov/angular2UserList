@@ -3,8 +3,10 @@
  */
 
 import {Injectable} from '@angular/core';
-import {TimerService} from './timer.service';
+
 import {ITimer} from '../interfaces/timer';
+
+import {TimerService} from './timer.service';
 
 @Injectable()
 export class ProgressBarService {

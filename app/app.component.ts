@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+
 import {StoreService} from './config/store.service';
 import {UserService} from './assets/services/user.service';
 import {TooltipService} from './assets/services/tooltip.service';
+import {DictionaryService} from './assets/services/dictionary.service';
 import {middlewareSharedWorker} from './config/sharedWorker';
 
 import {FETCH_USER_LIST} from './components/content/user-list/actions'
@@ -10,7 +12,10 @@ import {FETCH_USER_LIST} from './components/content/user-list/actions'
   selector: 'my-app',
   template: `
     <div id="app">
-      <header-component></header-component>
+      <header-component
+        [props]="headerProps"  
+        (onAction)="onAction($event)"
+      ></header-component>
       
       <user-list-component 
         [props]="userListProps"  
@@ -39,20 +44,24 @@ import {FETCH_USER_LIST} from './components/content/user-list/actions'
 export class AppComponent  {
   modalProps: any = null;
   userListProps: any = null;
+  headerProps: any = null;
   tooltipProps: any = null;
   notifyProps: any = null;
 
   constructor(
     private store: StoreService,
     private userService: UserService,
-    private tooltipService: TooltipService
+    private tooltipService: TooltipService,
+    private dictionaryService: DictionaryService
   ) {
 
     this.store.init({
       user: this.userService,
-      tooltip: this.tooltipService
+      tooltip: this.tooltipService,
+      dictionary: this.dictionaryService
     }, {
       userList: this.setUserList.bind(this),
+      header: this.setHeader.bind(this),
       modal: this.setModal.bind(this),
       tooltip: this.setTooltip.bind(this),
       notify: this.setNotify.bind(this),
@@ -72,6 +81,10 @@ export class AppComponent  {
 
   setUserList(state: any): void {
     this.userListProps = state;
+  }
+
+  setHeader(state: any): void {
+    this.headerProps = state;
   }
 
   setTooltip(state: any): void {

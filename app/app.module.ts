@@ -1,29 +1,10 @@
-import { NgModule }      from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
-
-import { AppComponent }  from './app.component';
-import { HeaderComponent }  from './components/header/header.component';
-import { UserlistComponent }  from './components/content/user-list/user-list.component';
-import { ModalComponent }  from './components/additional/modal/modal.component';
-import { TooltipComponent }  from './components/additional/tooltip/tooltip.component';
-import { NotifyComponent }  from './components/additional/notify/notify.component';
-
-import {LivetimeDirective} from './assets/directives/livetime.directive';
+import { NgModule } from '@angular/core';
+import {imports, declarations, providers, bootstrap} from './config/config';
 
 @NgModule({
-  imports: [BrowserModule, ReactiveFormsModule, HttpModule],
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    UserlistComponent,
-    ModalComponent,
-    TooltipComponent,
-    NotifyComponent,
-
-    LivetimeDirective
-  ],
-  bootstrap: [AppComponent]
+  imports: imports,
+  declarations: declarations,
+  providers: providers,
+  bootstrap: bootstrap
 })
 export class AppModule { }

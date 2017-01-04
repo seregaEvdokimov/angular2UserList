@@ -3,6 +3,7 @@
  */
 
 import {Component, Input, Output, EventEmitter} from '@angular/core';
+
 import {NOTIFY_ADD} from './actions';
 
 @Component({
@@ -17,7 +18,7 @@ export class NotifyComponent {
   @Input()
   set props(props: any) {
     if(!props) return;
-    // console.log('nootify', props);
+
     switch(props.type) {
       case NOTIFY_ADD:
         this.add(props.payload);
@@ -25,7 +26,7 @@ export class NotifyComponent {
     }
   }
 
-  items = [];
+  items: any = [];
 
   constructor() {
     setInterval(() => {
@@ -43,14 +44,14 @@ export class NotifyComponent {
 
   liveCycle() {
     let now = Date.now();
-    this.items = this.items.reduce(function(acc, item) {
+    this.items = this.items.reduce(function(acc: any, item: any) {
       if(item.timeStamp > now) acc.push(item);
       return acc;
     }, []);
   }
 
   remove(id: number): void {
-    this.items = this.items.reduce(function(acc, item) {
+    this.items = this.items.reduce(function(acc: any, item: any) {
       if(item.id !== id) acc.push(item);
       return acc;
     }, []);

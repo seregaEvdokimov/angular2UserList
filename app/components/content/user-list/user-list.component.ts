@@ -2,12 +2,15 @@
  * Created by s.evdokimov on 23.12.2016.
  */
 
-import {Component, Input ,Output, EventEmitter} from '@angular/core';
+import {Component, Input ,Output, EventEmitter, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
+
 import {IUser} from '../../../assets/interfaces/user';
 
-import {USER_LIST_PAGINATION, USER_LIST_SORT, USER_DELETE, FETCH_USER_LIST, USER_NEW} from './actions';
-import {TOOLTIP_SHOW, TOOLTIP_HIDE, TOOLTIP_MOVE} from '../../additional/tooltip/actions';
+import {DictionaryService} from '../../../assets/services/dictionary.service';
+
 import {MODAL_CREATE_SHOW, MODAL_EDIT_SHOW} from '../../additional/modal/actions';
+import {TOOLTIP_SHOW, TOOLTIP_HIDE, TOOLTIP_MOVE} from '../../additional/tooltip/actions';
+import {USER_LIST_PAGINATION, USER_LIST_SORT, USER_DELETE, FETCH_USER_LIST, USER_NEW} from './actions';
 
 
 @Component({
@@ -18,7 +21,18 @@ import {MODAL_CREATE_SHOW, MODAL_EDIT_SHOW} from '../../additional/modal/actions
 })
 
 
-export class UserlistComponent {
+export class UserlistComponent implements AfterViewInit {
+  // nodes to translate
+  @ViewChild('TId')      TId: ElementRef;
+  @ViewChild('TName')    TName: ElementRef;
+  @ViewChild('TEmail')   TEmail: ElementRef;
+  @ViewChild('TBirth')   TBirth: ElementRef;
+  @ViewChild('TDate')    TDate: ElementRef;
+  @ViewChild('TDelete')  TDelete: ElementRef;
+  @ViewChild('TEdit')    TEdit: ElementRef;
+  @ViewChild('TBody')    TBody: ElementRef;
+  @ViewChild('TAddUser') TAddUser: ElementRef;
+
   @Output() onAction = new EventEmitter();
   @Input()
   set props(props: any) {
@@ -31,11 +45,20 @@ export class UserlistComponent {
       case USER_NEW:
         this.newItem = props.payload.user;
         break;
+      case 'TRANSLATE':
+        this.translate();
+        break;
     }
   }
 
   newItem: IUser;
   userList: IUser[] = [];
+
+  constructor(private dictionary: DictionaryService) {}
+
+  ngAfterViewInit() {
+    this.translate();
+  }
 
   handlerScroll($event: any) {
     let el: HTMLElement = $event.target;
@@ -140,5 +163,22 @@ export class UserlistComponent {
   getRow(el:any): HTMLElement {
     if(!el || el.tagName === 'TR') return el;
     return this.getRow(el['parentNode']);
+  }
+
+  translate(): void {
+    this.TId.nativeElement.textContent = this.dictionary.t(['userTable','tHead','id']);
+    this.TName.nativeElement.textContent = this.dictionary.t(['userTable','tHead','name']);
+    this.TEmail.nativeElement.textContent = this.dictionary.t(['userTable','tHead','email']);
+    this.TBirth.nativeElement.textContent = this.dictionary.t(['userTable','tHead','birth']);
+    this.TDate.nativeElement.textContent = this.dictionary.t(['userTable','tHead','time']);
+    this.TDelete.nativeElement.textContent = this.dictionary.t(['userTable','tHead','delete']);
+    this.TEdit.nativeElement.textContent = this.dictionary.t(['userTable','tHead','edit']);
+    this.TAddUser.nativeElement.textContent = this.dictionary.t(['option','adduser']);
+
+    for (var i = 0, len = this.TBody.nativeElement.children.length; i < len; i++) {
+      let el = this.TBody.nativeElement.children[i];
+      el.querySelector('.row__del a').textContent = this.dictionary.t(['userTable','tBody','delete']);
+      el.querySelector('.row__edit a').textContent = this.dictionary.t(['userTable','tBody','edit']);
+    }
   }
 }

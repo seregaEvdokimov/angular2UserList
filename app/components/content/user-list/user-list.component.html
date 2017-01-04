@@ -3,13 +3,13 @@
     <table class="table table_lazyload">
       <thead class="table__thead" (click)="handlerSort($event)">
       <tr class="row row_type_head">
-        <th class="row__id active asc" data-sort-by="id" data-direction-by="asc">№</th>
-        <th class="row__name" data-sort-by="name" data-direction-by="asc">Имя</th>
-        <th class="row__email" data-sort-by="email" data-direction-by="asc">Email</th>
-        <th class="row__birth" data-sort-by="birth" data-direction-by="asc">День рождения</th>
-        <th class="row__date" data-sort-by="date" data-direction-by="asc">Расчетное время</th>
-        <th class="row__delete">Удалить</th>
-        <th class="row__edit">Редактировать</th>
+        <th class="row__id active asc" data-sort-by="id" data-direction-by="asc" #TId>№</th>
+        <th class="row__name" data-sort-by="name" data-direction-by="asc" #TName>Имя</th>
+        <th class="row__email" data-sort-by="email" data-direction-by="asc" #TEmail>Email</th>
+        <th class="row__birth" data-sort-by="birth" data-direction-by="asc" #TBirth>День рождения</th>
+        <th class="row__date" data-sort-by="date" data-direction-by="asc" #TDate>Расчетное время</th>
+        <th class="row__delete" #TDelete>Удалить</th>
+        <th class="row__edit" #TEdit>Редактировать</th>
       </tr>
       </thead>
       <tbody class="table__tbody"
@@ -17,7 +17,10 @@
         (scroll)="handlerScroll($event)"
         (mousemove)="handlerMouse($event)"
         (mouseover)="handlerMouse($event)"
-        (mouseout)="handlerMouse($event)">
+        (mouseout)="handlerMouse($event)"
+         #TBody
+      >
+      <!--NEW USER-->
       <tr *ngIf="newItem" class="row row_type_body row_display_type_row">
         <td class="row__id">
           <a class="row__link" href="#/user/813">{{ newItem.id }}</a>
@@ -35,12 +38,13 @@
           <div #overlay class="overlay"></div>
         </td>
         <td class="row__del">
-          <a class="row__button delete-btn" >Удалить</a>
+          <a class="row__button delete-btn">Удалить</a>
         </td>
         <td class="row__edit">
           <a class="row__button edit-btn">Редактировать</a>
         </td>
       </tr>
+      <!--USER LIST-->
       <tr *ngFor="let user of userList" class="row row_type_body row_display_type_row">
         <td class="row__id">
           <a class="row__link" href="#/user/813">{{ user.id }}</a>
@@ -58,7 +62,7 @@
           <div #overlay class="overlay"></div>
         </td>
         <td class="row__del">
-          <a class="row__button delete-btn" >Удалить</a>
+          <a class="row__button delete-btn">Удалить</a>
         </td>
         <td class="row__edit">
           <a class="row__button edit-btn">Редактировать</a>
@@ -67,12 +71,9 @@
       </tbody>
     </table>
   </div>
-  <div class="user-list__tooltip">
-    <div class="tooltip "></div>
-  </div>
   <div class="user-list__options">
     <div class="option">
-      <button class="option__add-user" (click)="addUser($event)">Добавить клиента</button>
+      <button class="option__add-user" (click)="addUser($event)" #TAddUser>Добавить клиента</button>
     </div>
   </div>
 </div>

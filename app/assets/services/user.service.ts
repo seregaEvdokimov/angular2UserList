@@ -6,10 +6,12 @@ import {Injectable} from '@angular/core';
 import {Http, URLSearchParams} from '@angular/http';
 
 import {IUser} from '../interfaces/user';
+
 import {FETCH_USER_LIST, USER_NEW} from '../../components/content/user-list/actions';
 
 @Injectable()
 export class UserService {
+  url: string = 'http://localhost:4001/user';
   users: IUser[];
   count: number;
 
@@ -23,7 +25,7 @@ export class UserService {
     params.set('start', payload.start + '');
     params.set('limit', payload.limit + '');
 
-    this.http.get('http://localhost:4001/user', {search: params}).subscribe(res => {
+    this.http.get(this.url, {search: params}).subscribe(res => {
       this.users = this.equivalent(res.json());
       this.count = this.users.length;
       this.sort({
@@ -34,7 +36,7 @@ export class UserService {
   }
 
   createUser(payload: any, callback: any): any {
-    this.http.post('http://localhost:4001/user', payload.user).subscribe(res => {
+    this.http.post(this.url, payload.user).subscribe(res => {
       let user = res.json();
       this.users.push(user);
       this.users = this.equivalent(this.users);
@@ -53,7 +55,7 @@ export class UserService {
   updateUser(payload: any, callback: any): any {
     let compare: boolean = this.compare(payload.user);
     if(!compare) {
-      this.http.put('http://localhost:4001/user', payload.user).subscribe(res => {
+      this.http.put(this.url, payload.user).subscribe(res => {
         this.users = this.users.map(function(item) {
           if(item.id === res.json().id) item = res.json();
           return item;
@@ -76,7 +78,7 @@ export class UserService {
     let params = new URLSearchParams();
     params.set('id', payload.id + '');
 
-    this.http.delete('http://localhost:4001/user', {search: params}).subscribe(res => {
+    this.http.delete(this.url, {search: params}).subscribe(res => {
       this.users = this.users.reduce(function(acc, item) {
         if(item.id !== res.json().id) acc.push(item);
         return acc;
@@ -118,7 +120,10 @@ export class UserService {
   equivalent(data: IUser[]): IUser[] {
     data.forEach(function(item) {
       let date: any = new Date(item.birth);
-      item.startDate = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+      var dateMonth = (date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+      var dateDay = (date.getDate() < 10) ? '0' + date.getDate() : date.getDate();
+
+      item.startDate = dateDay + '.' + dateMonth + '.' + date.getFullYear();
     });
 
     return data;

@@ -3,6 +3,9 @@
  */
 
 import {Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+
+import {DictionaryService} from '../../../assets/services/dictionary.service';
+
 import {TOOLTIP_MOVE, TOOLTIP_HIDE, TOOLTIP_SHOW} from './actions';
 
 
@@ -13,6 +16,7 @@ import {TOOLTIP_MOVE, TOOLTIP_HIDE, TOOLTIP_SHOW} from './actions';
   styleUrls: ['tooltip.component.css']
 })
 
+
 export class TooltipComponent implements  AfterViewInit{
   @ViewChild('elTooltip') elTooltip: ElementRef;
 
@@ -20,7 +24,7 @@ export class TooltipComponent implements  AfterViewInit{
   @Input()
   set props(props: any) {
     if(!props) return;
-    // console.log('tooltip', props);
+
     switch(props.type) {
       case TOOLTIP_SHOW:
         this.show(props.payload);
@@ -57,11 +61,9 @@ export class TooltipComponent implements  AfterViewInit{
     }
   };
 
-  constructor() {}
+  constructor(private dictionary: DictionaryService) {}
 
-  ngAfterViewInit() {
-    // this.elTooltip = this.elTooltip.nativeElement;
-  }
+  ngAfterViewInit() {}
 
   show(data: any) {
     this.reset();
@@ -72,18 +74,17 @@ export class TooltipComponent implements  AfterViewInit{
         this.tooltipName.active = true;
         break;
       case 'email':
-        this.tooltipEmail.content.message = 'количество непрочитанных сообщений ' + data.text;
+        this.tooltipEmail.content.message = this.dictionary.getMessage({number: data.text},['tooltip', 'email']);
         this.tooltipEmail.active = true;
         break;
     }
-
-    this.tooltip.active = true;
 
     let x = this.getX(data.coords.x);
     let y = this.getY(data.coords.y);
 
     this.tooltip.coords.x = x;
     this.tooltip.coords.y = y;
+    this.tooltip.active = true;
   }
 
   move(data: any) {

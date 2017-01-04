@@ -2,11 +2,14 @@
  * Created by s.evdokimov on 26.12.2016.
  */
 
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
-import {UploadFileService} from '../../../assets/services/uploadFile.service';
 
 import {IModal} from '../../../assets/interfaces/modal';
+
+import {UploadFileService} from '../../../assets/services/uploadFile.service';
+import {DictionaryService} from '../../../assets/services/dictionary.service';
+
 import {SHOULD_UPDATE_USER, USER_CREATE, USER_UPDATE} from '../../content/user-list/actions';
 import {MODAL_EDIT_SHOW, MODAL_EDIT_HIDE, MODAL_CREATE_SHOW, MODAL_CREATE_HIDE, MODAL_CONFIRM_SHOW, MODAL_ALL_HIDE} from './actions';
 
@@ -19,7 +22,31 @@ import {MODAL_EDIT_SHOW, MODAL_EDIT_HIDE, MODAL_CREATE_SHOW, MODAL_CREATE_HIDE, 
   providers: [UploadFileService]
 })
 
-export class ModalComponent {
+
+export class ModalComponent implements AfterViewInit {
+  // nodes to translate
+  @ViewChild('TCMCaption') TCMCaption: ElementRef;
+  @ViewChild('TCMAvatar')  TCMAvatar: ElementRef;
+  @ViewChild('TCMName')    TCMName: ElementRef;
+  @ViewChild('TCMEmail')   TCMEmail: ElementRef;
+  @ViewChild('TCMBirth')   TCMBirth: ElementRef;
+  @ViewChild('TCMTime')    TCMTime: ElementRef;
+  @ViewChild('TCMCancel')  TCMCancel: ElementRef;
+  @ViewChild('TCMSave')    TCMSave: ElementRef;
+
+  @ViewChild('TEMCaption') TEMCaption: ElementRef;
+  @ViewChild('TEMAvatar')  TEMAvatar: ElementRef;
+  @ViewChild('TEMName')    TEMName: ElementRef;
+  @ViewChild('TEMEmail')   TEMEmail: ElementRef;
+  @ViewChild('TEMBirth')   TEMBirth: ElementRef;
+  @ViewChild('TEMTime')    TEMTime: ElementRef;
+  @ViewChild('TEMCancel')  TEMCancel: ElementRef;
+  @ViewChild('TEMSave')    TEMSave: ElementRef;
+
+  @ViewChild('TAMCaption') TAMCaption: ElementRef;
+  @ViewChild('TAMSave')    TAMSave: ElementRef;
+  @ViewChild('TAMCancel')  TAMCancel: ElementRef;
+
   @Output() onAction = new EventEmitter();
   @Input()
   set props(props: any) {
@@ -52,6 +79,9 @@ export class ModalComponent {
       case MODAL_ALL_HIDE:
         this.resetModals();
         break;
+      case 'TRANSLATE':
+        this.translate();
+        break;
     }
   }
 
@@ -74,7 +104,7 @@ export class ModalComponent {
   };
 
   myForm: FormGroup;
-  constructor(public uploader: UploadFileService) {
+  constructor(public uploader: UploadFileService, private dictionary: DictionaryService) {
     this.myForm = new FormGroup({
       avatar: new FormControl(),
       name: new FormControl([Validators.required, Validators.pattern(/^\w+\s*\w*$/i)]),
@@ -83,6 +113,10 @@ export class ModalComponent {
       date: new FormControl([Validators.required]),
       id: new FormControl([Validators.required, Validators.pattern(/^\d+$/i)])
     });
+  }
+
+  ngAfterViewInit() {
+    this.translate();
   }
 
   show(): void {
@@ -194,5 +228,29 @@ export class ModalComponent {
     this.createModal.active = false;
     this.editModal.active = false;
     this.globalModal.active = false;
+  }
+
+  translate() {
+    this.TCMCaption.nativeElement.textContent = this.dictionary.t(['modal', 'create', 'caption']);
+    this.TCMAvatar.nativeElement.textContent  = this.dictionary.t(['modal', 'create', 'avatar']);
+    this.TCMName.nativeElement.textContent    = this.dictionary.t(['modal', 'create', 'name']);
+    this.TCMEmail.nativeElement.textContent   = this.dictionary.t(['modal', 'create', 'email']);
+    this.TCMBirth.nativeElement.textContent   = this.dictionary.t(['modal', 'create', 'birth']);
+    this.TCMTime.nativeElement.textContent    = this.dictionary.t(['modal', 'create', 'time']);
+    this.TCMCancel.nativeElement.textContent  = this.dictionary.t(['modal', 'create', 'cancel']);
+    this.TCMSave.nativeElement.textContent    = this.dictionary.t(['modal', 'create', 'save']);
+
+    this.TEMCaption.nativeElement.textContent = this.dictionary.t(['modal', 'edit', 'caption']);
+    this.TEMAvatar.nativeElement.textContent  = this.dictionary.t(['modal', 'edit', 'avatar']);
+    this.TEMName.nativeElement.textContent    = this.dictionary.t(['modal', 'edit', 'name']);
+    this.TEMEmail.nativeElement.textContent   = this.dictionary.t(['modal', 'edit', 'email']);
+    this.TEMBirth.nativeElement.textContent   = this.dictionary.t(['modal', 'edit', 'birth']);
+    this.TEMTime.nativeElement.textContent    = this.dictionary.t(['modal', 'edit', 'time']);
+    this.TEMCancel.nativeElement.textContent  = this.dictionary.t(['modal', 'edit', 'cancel']);
+    this.TEMSave.nativeElement.textContent    = this.dictionary.t(['modal', 'edit', 'save']);
+
+    this.TAMCaption.nativeElement.textContent = this.dictionary.t(['modal', 'confirm', 'message']);
+    this.TAMSave.nativeElement.textContent    = this.dictionary.t(['modal', 'confirm', 'save']);
+    this.TAMCancel.nativeElement.textContent  = this.dictionary.t(['modal', 'confirm', 'cancel']);
   }
 }

@@ -1,17 +1,17 @@
 <section class="modal-bg" [ngClass]="{'modal-bg_show': globalModal.active}" (click)="closeModals($event)">
   <div class="modal-window" [ngClass]="{'modal-window_show': createModal.active}">
-    <h3 class="modal-window__caption">Добавить нового клиента</h3>
+    <h3 class="modal-window__caption" #TCMCaption>Добавить нового клиента</h3>
     <form [formGroup]="myForm" class="modal-window__form">
       <div class="modal-window__group">
         <div class="modal-window-group">
-          <label class="modal-window-group__label">Загрузить аватар</label>
+          <label class="modal-window-group__label" #TCMAvatar>Загрузить аватар</label>
           <img class="modal-window-group__picture" src="{{ myForm.controls.avatar.value }}" alt="" #avatarCreate>
           <input type="file" class="modal-window-group__input" (change)="handlerUploadFile($event, avatarCreate)">
         </div>
       </div>
       <div class="modal-window__group">
         <div class="modal-window-group">
-          <label class="modal-window-group__label">Введите имя</label>
+          <label class="modal-window-group__label" #TCMName>Введите имя</label>
           <input type="text" class="modal-window-group__input"
             formControlName="name"
             [ngClass]="{
@@ -23,7 +23,7 @@
       </div>
       <div class="modal-window__group">
         <div class="modal-window-group">
-          <label class="modal-window-group__label">Введите email</label>
+          <label class="modal-window-group__label" #TCMEmail>Введите email</label>
           <input type="text" class="modal-window-group__input"
             formControlName="email"
             [ngClass]="{
@@ -35,7 +35,7 @@
       </div>
       <div class="modal-window__group">
         <div class="modal-window-group">
-          <label class="modal-window-group__label">Укажите день рождения</label>
+          <label class="modal-window-group__label" #TCMBirth>Укажите день рождения</label>
           <input type="date" class="modal-window-group__input"
             value="{{ myForm.controls.birth.value }}"
             formControlName="birth"
@@ -48,7 +48,7 @@
       </div>
       <div class="modal-window__group">
         <div class="modal-window-group">
-          <label class="modal-window-group__label">Укажите расчётное время</label>
+          <label class="modal-window-group__label" #TCMTime>Укажите расчётное время</label>
           <input type="date" class="modal-window-group__input"
             value="{{ myForm.controls.date.value }}"
             formControlName="date"
@@ -61,26 +61,26 @@
       </div>
       <div class="modal-window__group modal-window__group_control">
         <div class="modal-window-group modal-window-group_control" (click)="handlerControls($event)">
-          <button class="modal-window-group__button add-btn" [disabled]="myForm.invalid">Сохранить</button>
-          <button class="modal-window-group__button cancel-btn">Отмена</button>
+          <button class="modal-window-group__button add-btn" [disabled]="myForm.invalid" #TCMSave>Сохранить</button>
+          <button class="modal-window-group__button cancel-btn" #TCMCancel>Отмена</button>
         </div>
       </div>
     </form>
   </div>
 
   <div class="modal-window" [ngClass]="{'modal-window_show': editModal.active}">
-    <h3 class="modal-window__caption">Редактировать клиента</h3>
+    <h3 class="modal-window__caption" #TEMCaption>Редактировать клиента</h3>
     <form [formGroup]="myForm" class="modal-window__form">
       <div class="modal-window__group">
         <div class="modal-window-group">
-          <label class="modal-window-group__label">Загрузить аватар</label>
+          <label class="modal-window-group__label" #TEMAvatar>Загрузить аватар</label>
           <img class="modal-window-group__picture" src="{{ myForm.controls.avatar.value }}" alt="" #avatarEdit>
           <input type="file" class="modal-window-group__input" name="avatar" (change)="handlerUploadFile($event, avatarEdit)">
         </div>
       </div>
       <div class="modal-window__group">
         <div class="modal-window-group">
-          <label class="modal-window-group__label">Введите новое имя</label>
+          <label class="modal-window-group__label" #TEMName>Введите новое имя</label>
           <input type="text" class="modal-window-group__input"
              formControlName="name"
              [ngClass]="{
@@ -92,7 +92,7 @@
       </div>
       <div class="modal-window__group">
         <div class="modal-window-group">
-          <label class="modal-window-group__label">Введите новый email</label>
+          <label class="modal-window-group__label" #TEMEmail>Введите новый email</label>
           <input type="text" class="modal-window-group__input"
             formControlName="email"
             [ngClass]="{
@@ -104,7 +104,7 @@
       </div>
       <div class="modal-window__group">
         <div class="modal-window-group">
-          <label class="modal-window-group__label">Изменить день рождения</label>
+          <label class="modal-window-group__label" #TEMBirth>Изменить день рождения</label>
           <input type="date" class="modal-window-group__input"
             value="{{ myForm.controls.birth.value }}"
             formControlName="birth"
@@ -117,7 +117,7 @@
       </div>
       <div class="modal-window__group">
         <div class="modal-window-group">
-          <label class="modal-window-group__label">Изменить расчётное время</label>
+          <label class="modal-window-group__label" #TEMTime>Изменить расчётное время</label>
           <input type="date" class="modal-window-group__input"
             value="{{ myForm.controls.date.value }}"
             formControlName="date"
@@ -130,8 +130,8 @@
       </div>
       <div class="modal-window__group modal-window__group_control">
         <div class="modal-window-group modal-window-group_control" (click)="handlerControls($event)">
-          <button class="modal-window-group__button add-btn" [disabled]="myForm.invalid">Сохранить</button>
-          <button class="modal-window-group__button cancel-btn">Отмена</button>
+          <button class="modal-window-group__button add-btn" [disabled]="myForm.invalid" #TEMSave>Сохранить</button>
+          <button class="modal-window-group__button cancel-btn" #TEMCancel>Отмена</button>
         </div>
       </div>
       <input type="hidden" class="id-input">
@@ -139,11 +139,11 @@
   </div>
 
   <div class="modal-window" [ngClass]="{'modal-window_show': confirmModal.active}">
-    <h3 class="modal-window__caption">Есть изменения. Сохранить?</h3>
+    <h3 class="modal-window__caption" #TAMCaption>Есть изменения. Сохранить?</h3>
     <div class="modal-window__group modal-window__group_control">
       <div class="modal-window-group modal-window-group_control" (click)="handlerControls($event)">
-        <button class="modal-window-group__button ok">Сохранить</button>
-        <button class="modal-window-group__button cancel">Отмена</button>
+        <button class="modal-window-group__button ok" #TAMSave>Сохранить</button>
+        <button class="modal-window-group__button cancel" #TAMCancel>Отмена</button>
       </div>
     </div>
   </div>

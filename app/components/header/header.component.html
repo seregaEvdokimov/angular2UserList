@@ -4,19 +4,19 @@
       <div class="header-menu__switch">
         <div class="switch-notify">
           <input type="checkbox" class="switch-notify__checkbox" id="switch" value="on">
-          <label class="switch-notify__label" for="switch">Выключить оповещение</label>
+          <label class="switch-notify__label" for="switch" #TNotifySwitch>Выключить оповещение</label>
         </div>
       </div>
-      <div class="header-menu__language" (click)="handlerChangeLanguage($event)">
-        <div class="language">
-          <a class="language__link null" data-language="en">EN</a>
-          <a class="language__link language__link_active" data-language="ru">RU</a>
+      <div class="header-menu__language">
+        <div class="language" (click)="handlerChangeLanguage($event)">
+          <a class="language__link" [ngClass]="{'language__link_active': en}" data-language="en">EN</a>
+          <a class="language__link" [ngClass]="{'language__link_active': ru}" data-language="ru">RU</a>
         </div>
       </div>
       <div class="header-menu__search">
         <div class="search">
           <input class="search__input" name="search">
-          <button class="search__button">Поиск</button>
+          <button class="search__button" #TSearchBtn>Поиск</button>
         </div>
       </div>
     </div>
