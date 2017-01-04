@@ -180,57 +180,70 @@ function addResponseHeaders(obj) {
     obj.header('Access-Control-Allow-Headers', 'Content-Type');
 }
 
-//
-// var socketIntervals = {};
-// function checkForUpdates(socket) {
-//     socketIntervals.createUserInterval = setInterval(function() {
-//         var user = {
-//             id: null,
-//             name: faker.name.findName(),
-//             email: faker.internet.email(),
-//             date: faker.date.future(),
-//             birth: faker.date.recent(),
-//             avatar: faker.image.avatar(),
-//             timePassed: false
-//         };
-//
-//         var res = JSON.parse(backAPI.user('create', user));
-//         socket.emit('new user', res);
-//     }, 1500000);
-//
-//     socketIntervals.timePassedInterval = setInterval(function() {
-//         var result = backAPI.userData.reduce(function(acc, item) {
-//             if(item.timePassed) return acc;
-//
-//             var startTime = Date.now();
-//             var finishTime = new Date(item.date).getTime();
-//
-//             if(startTime > finishTime) {
-//                 item.timePassed = true;
-//                 backAPI.user('update', item);
-//                 acc.push(item);
-//             }
-//
-//             return acc;
-//         }, []);
-//
-//         if(result.length) socket.emit('time passed', result);
-//     }, 1000);
-// }
-// function clearUpdateIntervals() {
-//     for(var index in socketIntervals) {
-//         var interval = socketIntervals[index];
-//         clearInterval(interval);
-//     }
-// }
-//
-// io.on('connection', function(socket) {
-//     console.log('connect');
-//     socket.emit('connect');
-//     checkForUpdates(socket);
-//
-//     socket.on('disconnect', function () {
-//         clearUpdateIntervals();
-//         console.log('disconnect');
-//     });
-// });
+
+var socketIntervals = {};
+function checkForUpdates(socket) {
+    socketIntervals.createUserInterval = setInterval(function() {
+
+        var date = new Date(faker.date.future());
+        var dateMonth = (date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+        var dateDay = (date.getDate() < 10) ? '0' + date.getDate() : date.getDate();
+
+        var birth = new Date(faker.date.recent());
+        var birthMonth = (birth.getMonth() + 1 < 10) ? '0' + (birth.getMonth() + 1) : birth.getMonth() + 1;
+        var birthDay = (birth.getDate() < 10) ? '0' + birth.getDate() : birth.getDate();
+
+        // 2017-03-26
+        var dateStr = date.getFullYear() + '-' + dateMonth + '-' + dateDay;
+        var birthStr = birth.getFullYear() + '-' + birthMonth + '-' + birthDay;
+
+        var user = {
+          id: null,
+          name: faker.name.findName(),
+          email: faker.internet.email(),
+          date: dateStr,
+          birth: birthStr,
+          avatar: faker.image.avatar(),
+          timePassed: false
+        };
+
+        var res = JSON.parse(backAPI.user('create', user));
+        socket.emit('new user', res);
+    }, 100000);
+
+    socketIntervals.timePassedInterval = setInterval(function() {
+        var result = backAPI.userData.reduce(function(acc, item) {
+            if(item.timePassed) return acc;
+
+            var startTime = Date.now();
+            var finishTime = new Date(item.date).getTime();
+
+            if(startTime > finishTime) {
+                item.timePassed = true;
+                backAPI.user('update', item);
+                acc.push(item);
+            }
+
+            return acc;
+        }, []);
+
+        if(result.length) socket.emit('time passed', result);
+    }, 1000);
+}
+function clearUpdateIntervals() {
+    for(var index in socketIntervals) {
+        var interval = socketIntervals[index];
+        clearInterval(interval);
+    }
+}
+
+io.on('connection', function(socket) {
+    console.log('connect');
+    socket.emit('connect');
+    checkForUpdates(socket);
+
+    socket.on('disconnect', function () {
+        clearUpdateIntervals();
+        console.log('disconnect');
+    });
+});

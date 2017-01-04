@@ -7,7 +7,7 @@
           <label class="switch-notify__label" for="switch">Выключить оповещение</label>
         </div>
       </div>
-      <div class="header-menu__language">
+      <div class="header-menu__language" (click)="handlerChangeLanguage($event)">
         <div class="language">
           <a class="language__link null" data-language="en">EN</a>
           <a class="language__link language__link_active" data-language="ru">RU</a>

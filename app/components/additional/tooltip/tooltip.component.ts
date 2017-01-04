@@ -2,7 +2,7 @@
  * Created by s.evdokimov on 03.01.2017.
  */
 
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import {TOOLTIP_MOVE, TOOLTIP_HIDE, TOOLTIP_SHOW} from './actions';
 
 
@@ -13,7 +13,9 @@ import {TOOLTIP_MOVE, TOOLTIP_HIDE, TOOLTIP_SHOW} from './actions';
   styleUrls: ['tooltip.component.css']
 })
 
-export class TooltipComponent {
+export class TooltipComponent implements  AfterViewInit{
+  @ViewChild('elTooltip') elTooltip: ElementRef;
+
   @Output() onAction = new EventEmitter();
   @Input()
   set props(props: any) {
@@ -57,6 +59,10 @@ export class TooltipComponent {
 
   constructor() {}
 
+  ngAfterViewInit() {
+    // this.elTooltip = this.elTooltip.nativeElement;
+  }
+
   show(data: any) {
     this.reset();
     switch(data.type) {
@@ -71,14 +77,21 @@ export class TooltipComponent {
         break;
     }
 
-    this.tooltip.coords.x = data.coords.x + 'px';
-    this.tooltip.coords.y = data.coords.y + 'px';
     this.tooltip.active = true;
+
+    let x = this.getX(data.coords.x);
+    let y = this.getY(data.coords.y);
+
+    this.tooltip.coords.x = x;
+    this.tooltip.coords.y = y;
   }
 
   move(data: any) {
-    this.tooltip.coords.x = data.coords.x + 'px';
-    this.tooltip.coords.y = data.coords.y + 'px';
+    let x = this.getX(data.coords.x);
+    let y = this.getY(data.coords.y);
+
+    this.tooltip.coords.x = x;
+    this.tooltip.coords.y = y;
   }
 
   hide(data: any) {
@@ -99,31 +112,26 @@ export class TooltipComponent {
     this.tooltipName.active = false;
   }
 
-  // getX (x) {
-  //   let {tooltip} = this.refs;
-  //   if(tooltip) {
-  //     let widthEl = tooltip.clientWidth;
-  //     let widthPage = window.innerWidth < document.body.clientWidth ? window.innerWidth : document.body.clientWidth;
-  //
-  //     if((x + widthEl) > widthPage) {
-  //       x = (x - widthEl < 0) ? 0: x - widthEl;
-  //     }
-  //   }
-  //
-  //   return x + 'px';
-  // };
-  //
-  // getY (y) {
-  //   let {tooltip} = this.refs;
-  //   if(tooltip) {
-  //     var heightEl = tooltip.clientHeight;
-  //     var heightPage = window.innerHeight < document.body.clientHeight ? window.innerHeight : document.body.clientHeight;
-  //
-  //     if ((y + heightEl) > heightPage) {
-  //       y = (y - heightEl < 0) ? 0 : y - heightEl;
-  //     }
-  //   }
-  //
-  //   return y + 'px';
-  // };
+
+  getX (x: number): string {
+    let widthEl = this.elTooltip.nativeElement.getBoundingClientRect().width;
+    let widthPage = window.innerWidth < document.body.clientWidth ? window.innerWidth : document.body.clientWidth;
+
+    if((x + widthEl) > widthPage) {
+      x = (x - widthEl < 0) ? 0: x - widthEl;
+    }
+
+    return x + 'px';
+  };
+
+  getY (y: number): string {
+    var heightEl = this.elTooltip.nativeElement.getBoundingClientRect().height;
+    var heightPage = window.innerHeight < document.body.clientHeight ? window.innerHeight : document.body.clientHeight;
+
+    if ((y + heightEl) > heightPage) {
+      y = (y - heightEl < 0) ? 0 : y - heightEl;
+    }
+
+    return y + 'px';
+  };
 }

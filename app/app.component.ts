@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {StoreService} from './config/store.service';
 import {UserService} from './assets/services/user.service';
 import {TooltipService} from './assets/services/tooltip.service';
+import {middlewareSharedWorker} from './config/sharedWorker';
 
 import {FETCH_USER_LIST} from './components/content/user-list/actions'
 
@@ -25,6 +26,11 @@ import {FETCH_USER_LIST} from './components/content/user-list/actions'
         [props]="tooltipProps"  
         (onAction)="onAction($event)"
       ></tooltip-component>
+      
+      <notify-component
+        [props]="notifyProps"  
+        (onAction)="onAction($event)"
+      ></notify-component>
     </div> 
   `,
   providers: [StoreService, UserService, TooltipService]
@@ -34,6 +40,7 @@ export class AppComponent  {
   modalProps: any = null;
   userListProps: any = null;
   tooltipProps: any = null;
+  notifyProps: any = null;
 
   constructor(
     private store: StoreService,
@@ -48,12 +55,15 @@ export class AppComponent  {
       userList: this.setUserList.bind(this),
       modal: this.setModal.bind(this),
       tooltip: this.setTooltip.bind(this),
+      notify: this.setNotify.bind(this),
     });
 
     this.store.dispatch({
       type: FETCH_USER_LIST,
       payload: {start: 0, limit: 10}
     });
+
+    middlewareSharedWorker(this.store, window);
   }
 
   onAction(params: any): void {
@@ -66,6 +76,10 @@ export class AppComponent  {
 
   setTooltip(state: any): void {
     this.tooltipProps = state;
+  }
+
+  setNotify(state: any): void {
+    this.notifyProps = state;
   }
 
   setModal(state: any): void {

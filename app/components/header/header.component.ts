@@ -13,4 +13,13 @@ import {Component} from '@angular/core';
 
 export class HeaderComponent {
 
+
+  constructor() {
+
+  }
+
+  handlerChangeLanguage($event: any): boolean {
+    return true;
+  }
+
 }

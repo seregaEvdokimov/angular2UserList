@@ -1,6 +1,7 @@
 <div class="tooltip"
   [ngClass]="{'tooltip_show': tooltip.active}"
   [ngStyle]="{'left': tooltip.coords.x, 'top': tooltip.coords.y}"
+  #elTooltip
 >
   <div class="tooltip__item tooltip_name" [ngClass]="{'tooltip__item_show': tooltipName.active}">
     <img class="tooltip__picture" src="{{ tooltipName.content.avatar }}" />

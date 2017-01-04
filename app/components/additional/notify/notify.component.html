@@ -1,0 +1,5 @@
+<section class="notify-wrapper" (click)="handlerClick($event)">
+  <div class="notify" *ngFor="let item of items">
+    <span class="notify__hidden">{{ item.id }}</span>{{ item.message }}
+  </div>
+</section>

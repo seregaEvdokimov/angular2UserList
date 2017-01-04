@@ -6,7 +6,7 @@ import {Injectable} from '@angular/core';
 import {Http, URLSearchParams} from '@angular/http';
 
 import {IUser} from '../interfaces/user';
-import {FETCH_USER_LIST} from '../../components/content/user-list/actions';
+import {FETCH_USER_LIST, USER_NEW} from '../../components/content/user-list/actions';
 
 @Injectable()
 export class UserService {
@@ -35,9 +35,18 @@ export class UserService {
 
   createUser(payload: any, callback: any): any {
     this.http.post('http://localhost:4001/user', payload.user).subscribe(res => {
-      this.users.push(res.json());
+      let user = res.json();
+      this.users.push(user);
       this.users = this.equivalent(this.users);
-      callback(this.users);
+
+      callback({
+        type: FETCH_USER_LIST,
+        payload: {users: this.users}
+      });
+      callback({
+        type: USER_NEW,
+        payload: {user: user}
+      });
     });
   }
 

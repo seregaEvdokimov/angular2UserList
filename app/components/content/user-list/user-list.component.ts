@@ -86,21 +86,21 @@ export class UserlistComponent {
   handlerMouse($event: any): boolean {
     let type = $event.type;
     let el = $event.target;
-    let id = parseInt(this.getRow(el).querySelector('.row__link').textContent);
     let tooltip = el.dataset.tooltip;
 
     if(tooltip) {
+      let id = parseInt(this.getRow(el).querySelector('.row__link').textContent);
       switch(type) {
         case 'mousemove':
           this.onAction.emit({
             type: TOOLTIP_MOVE,
-            payload: {coords: {x: $event.pageX, y: $event.pageY}}
+            payload: {coords: {x: $event.pageX + 15, y: $event.pageY + 15}}
           });
           break;
         case 'mouseover':
           this.onAction.emit({
             type: TOOLTIP_SHOW,
-            payload: {id: id, type: tooltip, coords: {x: $event.pageX, y: $event.pageY}}
+            payload: {id: id, type: tooltip, coords: {x: $event.pageX + 15, y: $event.pageY + 15}}
           });
           break;
         case 'mouseout':

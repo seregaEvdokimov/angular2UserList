@@ -8,6 +8,7 @@ import { HeaderComponent }  from './components/header/header.component';
 import { UserlistComponent }  from './components/content/user-list/user-list.component';
 import { ModalComponent }  from './components/additional/modal/modal.component';
 import { TooltipComponent }  from './components/additional/tooltip/tooltip.component';
+import { NotifyComponent }  from './components/additional/notify/notify.component';
 
 import {LivetimeDirective} from './assets/directives/livetime.directive';
 
@@ -19,6 +20,7 @@ import {LivetimeDirective} from './assets/directives/livetime.directive';
     UserlistComponent,
     ModalComponent,
     TooltipComponent,
+    NotifyComponent,
 
     LivetimeDirective
   ],
