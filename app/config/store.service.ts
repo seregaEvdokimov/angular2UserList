@@ -95,6 +95,7 @@ export class StoreService {
         });
         break;
       case USER_NEW:
+        this.userService.newUser(action.payload);
         this.callbacks.userList({
           type: USER_NEW,
           payload: action.payload

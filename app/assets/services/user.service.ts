@@ -48,6 +48,10 @@ export class UserService {
     });
   }
 
+  newUser(payload: any) {
+    this.users.push(payload.user);
+  }
+
   createUser(payload: any, callback: any): any {
     this.http.post(this.url, payload.user).subscribe(res => {
       let user = res.json();
