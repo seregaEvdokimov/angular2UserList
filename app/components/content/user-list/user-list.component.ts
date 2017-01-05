@@ -2,7 +2,8 @@
  * Created by s.evdokimov on 23.12.2016.
  */
 
-import {Component, ElementRef, ViewChild, AfterViewInit, OnInit} from '@angular/core';
+import {Component, ElementRef, ViewChild, AfterViewInit, OnInit, OnDestroy} from '@angular/core';
+import { Subscription }   from 'rxjs/Subscription';
 
 import {IUser} from '../../../assets/interfaces/user';
 
@@ -23,7 +24,7 @@ import {USER_LIST_PAGINATION, USER_LIST_SORT, USER_DELETE, FETCH_USER_LIST, USER
 })
 
 
-export class UserlistComponent implements AfterViewInit, OnInit {
+export class UserlistComponent implements AfterViewInit, OnInit, OnDestroy {
   // nodes to translate
   @ViewChild('TId')      TId: ElementRef;
   @ViewChild('TName')    TName: ElementRef;
@@ -37,9 +38,11 @@ export class UserlistComponent implements AfterViewInit, OnInit {
 
   newItem: IUser;
   userList: IUser[] = [];
+  intervalId: any = null;
+  subscription: Subscription;
 
   constructor(private dictionary: DictionaryService, private communication: CommunicateService) {
-    communication.userListOn.subscribe((props: any) => {
+    this.subscription = communication.userListOn.subscribe((props: any) => {
       switch(props.type) {
         case FETCH_USER_LIST:
           this.userList = props.payload.users;
@@ -59,6 +62,10 @@ export class UserlistComponent implements AfterViewInit, OnInit {
       type: FETCH_USER_LIST,
       payload: {start: 0, limit: 10}
     });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -126,12 +133,15 @@ export class UserlistComponent implements AfterViewInit, OnInit {
           });
           break;
         case 'mouseover':
-          this.communication.appCmpEmit({
-            type: TOOLTIP_SHOW,
-            payload: {id: id, type: tooltip, coords: {x: $event.pageX + 15, y: $event.pageY + 15}}
-          });
+          this.intervalId = setTimeout(() => {
+            this.communication.appCmpEmit({
+              type: TOOLTIP_SHOW,
+              payload: {id: id, type: tooltip, coords: {x: $event.pageX + 15, y: $event.pageY + 15}}
+            });
+          }, 1000);
           break;
         case 'mouseout':
+          clearTimeout(this.intervalId);
           this.communication.appCmpEmit({
             type: TOOLTIP_HIDE,
             payload: {type: tooltip}

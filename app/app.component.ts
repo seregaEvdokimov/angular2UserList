@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Subscription }   from 'rxjs/Subscription';
 
 import {StoreService} from './config/store.service';
 import {UserService} from './assets/services/user.service';
@@ -39,12 +40,13 @@ import {FETCH_USER_LIST} from './components/content/user-list/actions'
   providers: [StoreService, UserService, TooltipService, CommunicateService]
 })
 
-export class AppComponent  {
+export class AppComponent implements OnDestroy {
   modalProps: any = null;
   userListProps: any = null;
   headerProps: any = null;
   tooltipProps: any = null;
   notifyProps: any = null;
+  subscription: Subscription;
 
   constructor(
     private store: StoreService,
@@ -67,11 +69,15 @@ export class AppComponent  {
       notify: this.setNotify.bind(this),
     });
 
-    this.communication.appCmpOn.subscribe((params: any) => {
+    this.subscription = this.communication.appCmpOn.subscribe((params: any) => {
       this.store.dispatch(params);
     });
 
     middlewareSharedWorker(this.store, window);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   onAction(params: any): void {

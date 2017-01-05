@@ -68,9 +68,17 @@ var backAPI = {
     getUsers: function(data) {
         var start = (data.start == 1) ? 0 : data.start;
         var limit = data.limit;
-        var result = this.userData.filter(function (item, index) {
+        var result = [];
+
+        if(data.id) {
+          result = this.userData.filter(function (item) {
+            return item.id == data.id;
+          })[0];
+        } else {
+          result = this.userData.filter(function (item, index) {
             return index >= start && index < limit;
-        });
+          });
+        }
 
         return JSON.stringify(result);
     },

@@ -4,7 +4,6 @@
 
 import {Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {Location} from '@angular/common';
 import { Subscription }   from 'rxjs/Subscription';
 
 import {IUser} from '../../../assets/interfaces/user';
@@ -24,14 +23,22 @@ import {FETCH_PERSON_INFORM} from './actions';
 
 export class PersonComponent implements OnDestroy {
   params: any;
-  person: IUser = null;
   subscription: Subscription;
+  person: IUser = {
+    id: null,
+    name: null,
+    email: null,
+    date: null,
+    birth: null,
+    avatar: null,
+    timePassed: null
+  };
 
-  constructor(private route: ActivatedRoute, private location: Location, private communicate: CommunicateService) {
+
+  constructor(private route: ActivatedRoute, private communicate: CommunicateService) {
     this.subscription = this.communicate.personOn.subscribe((props: any) => {
       switch(props.type) {
         case FETCH_PERSON_INFORM:
-          if(props.payload.length !== undefined && !props.payload.length) this.location.back();
           this.person = props.payload;
           break;
       }

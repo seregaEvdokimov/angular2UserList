@@ -35,14 +35,14 @@ export class ModalComponent implements AfterViewInit {
   @ViewChild('TCMCancel')  TCMCancel: ElementRef;
   @ViewChild('TCMSave')    TCMSave: ElementRef;
 
-  @ViewChild('TEMCaption') TEMCaption: ElementRef;
-  @ViewChild('TEMAvatar')  TEMAvatar: ElementRef;
-  @ViewChild('TEMName')    TEMName: ElementRef;
-  @ViewChild('TEMEmail')   TEMEmail: ElementRef;
-  @ViewChild('TEMBirth')   TEMBirth: ElementRef;
-  @ViewChild('TEMTime')    TEMTime: ElementRef;
-  @ViewChild('TEMCancel')  TEMCancel: ElementRef;
-  @ViewChild('TEMSave')    TEMSave: ElementRef;
+  // @ViewChild('TEMCaption') TEMCaption: ElementRef;
+  // @ViewChild('TEMAvatar')  TEMAvatar: ElementRef;
+  // @ViewChild('TEMName')    TEMName: ElementRef;
+  // @ViewChild('TEMEmail')   TEMEmail: ElementRef;
+  // @ViewChild('TEMBirth')   TEMBirth: ElementRef;
+  // @ViewChild('TEMTime')    TEMTime: ElementRef;
+  // @ViewChild('TEMCancel')  TEMCancel: ElementRef;
+  // @ViewChild('TEMSave')    TEMSave: ElementRef;
 
   @ViewChild('TAMCaption') TAMCaption: ElementRef;
   @ViewChild('TAMSave')    TAMSave: ElementRef;
@@ -108,11 +108,11 @@ export class ModalComponent implements AfterViewInit {
   constructor(public uploader: UploadFileService, private dictionary: DictionaryService) {
     this.myForm = new FormGroup({
       avatar: new FormControl(),
-      name: new FormControl([Validators.required, Validators.pattern(/^\w+\s*\w*$/i)]),
-      email: new FormControl([Validators.required, Validators.pattern(/^[\w\.]+@\w+\.\w+$/i)]),
-      birth: new FormControl([Validators.required]),
-      date: new FormControl([Validators.required]),
-      id: new FormControl([Validators.required, Validators.pattern(/^\d+$/i)])
+      name: new FormControl(null, [Validators.required, Validators.pattern(/^\w+\s*\w*$/i)]),
+      email: new FormControl(null, [Validators.required, Validators.pattern(/^[\w\.]+@\w+\.\w+$/i)]),
+      birth: new FormControl(null, [Validators.required]),
+      date: new FormControl(null, [Validators.required]),
+      id: new FormControl(null, [Validators.required, Validators.pattern(/^\d+$/i)])
     });
   }
 
@@ -241,14 +241,14 @@ export class ModalComponent implements AfterViewInit {
     this.TCMCancel.nativeElement.textContent  = this.dictionary.t(['modal', 'create', 'cancel']);
     this.TCMSave.nativeElement.textContent    = this.dictionary.t(['modal', 'create', 'save']);
 
-    this.TEMCaption.nativeElement.textContent = this.dictionary.t(['modal', 'edit', 'caption']);
-    this.TEMAvatar.nativeElement.textContent  = this.dictionary.t(['modal', 'edit', 'avatar']);
-    this.TEMName.nativeElement.textContent    = this.dictionary.t(['modal', 'edit', 'name']);
-    this.TEMEmail.nativeElement.textContent   = this.dictionary.t(['modal', 'edit', 'email']);
-    this.TEMBirth.nativeElement.textContent   = this.dictionary.t(['modal', 'edit', 'birth']);
-    this.TEMTime.nativeElement.textContent    = this.dictionary.t(['modal', 'edit', 'time']);
-    this.TEMCancel.nativeElement.textContent  = this.dictionary.t(['modal', 'edit', 'cancel']);
-    this.TEMSave.nativeElement.textContent    = this.dictionary.t(['modal', 'edit', 'save']);
+    // this.TEMCaption.nativeElement.textContent = this.dictionary.t(['modal', 'edit', 'caption']);
+    // this.TEMAvatar.nativeElement.textContent  = this.dictionary.t(['modal', 'edit', 'avatar']);
+    // this.TEMName.nativeElement.textContent    = this.dictionary.t(['modal', 'edit', 'name']);
+    // this.TEMEmail.nativeElement.textContent   = this.dictionary.t(['modal', 'edit', 'email']);
+    // this.TEMBirth.nativeElement.textContent   = this.dictionary.t(['modal', 'edit', 'birth']);
+    // this.TEMTime.nativeElement.textContent    = this.dictionary.t(['modal', 'edit', 'time']);
+    // this.TEMCancel.nativeElement.textContent  = this.dictionary.t(['modal', 'edit', 'cancel']);
+    // this.TEMSave.nativeElement.textContent    = this.dictionary.t(['modal', 'edit', 'save']);
 
     this.TAMCaption.nativeElement.textContent = this.dictionary.t(['modal', 'confirm', 'message']);
     this.TAMSave.nativeElement.textContent    = this.dictionary.t(['modal', 'confirm', 'save']);

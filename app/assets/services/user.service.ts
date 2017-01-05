@@ -7,20 +7,21 @@ import {Http, URLSearchParams} from '@angular/http';
 
 import {IUser} from '../interfaces/user';
 
+import {FETCH_PERSON_INFORM} from '../../components/content/person/actions';
 import {FETCH_USER_LIST, USER_NEW} from '../../components/content/user-list/actions';
 
 @Injectable()
 export class UserService {
   url: string = 'http://localhost:4001/user';
-  users: IUser[];
-  count: number;
+  users: IUser[] = [];
+  count: number = null;
 
   sortType: string = 'id';
   sortDirection: string = 'asc';
 
   constructor(private http: Http) {}
 
-  getUsers(payload: any, callback: any): void {
+  loadUsers(payload: any, callback: any): void {
     let params = new URLSearchParams();
     params.set('start', payload.start + '');
     params.set('limit', payload.limit + '');
@@ -32,6 +33,18 @@ export class UserService {
         type: this.sortType,
         direction: this.sortDirection
       }, callback);
+    });
+  }
+
+  loadUser(id: number, callback: any): void {
+    let params = new URLSearchParams();
+    params.set('id', id + '');
+
+    this.http.get(this.url, {search: params}).subscribe(res => {
+      callback({
+        type: FETCH_PERSON_INFORM,
+        payload: res.json()
+      });
     });
   }
 
@@ -165,7 +178,13 @@ export class UserService {
     return this.users;
   }
 
-  getById(id: number): any {
-    return (this.users !== undefined) ? this.users.filter(item => item.id === id)[0] : [];
+  getById(id: number, callback?: any): any {
+    let user = this.users.filter(item => item.id === id)[0];
+
+    if(!user) {
+      this.loadUser(id, callback);
+    } else {
+      return user;
+    }
   }
 }

@@ -65,7 +65,9 @@
 .modal-window__group_control {
    clear: both;
    min-width: 100%;
- }
+   display: flex;
+   justify-content: center;
+}
 
 .modal-window-group {}
 

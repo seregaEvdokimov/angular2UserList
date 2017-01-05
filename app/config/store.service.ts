@@ -56,14 +56,22 @@ export class StoreService {
 
       // USER
       case FETCH_USER_LIST:
-        this.userService.getUsers(action.payload, this.callbacks.userList);
+        let users = this.userService.getAll();
+        if(!users.length) {
+          this.userService.loadUsers(action.payload, this.callbacks.userList);
+        } else {
+          this.callbacks.userList({
+            type: FETCH_USER_LIST,
+            payload: {users: users}
+          })
+        }
         break;
       case USER_LIST_SORT:
         this.userService.sort(action.payload, this.callbacks.userList);
         break;
       case USER_LIST_PAGINATION:
         let limit = this.userService.getCount() + 10;
-        this.userService.getUsers({start: 0, limit:limit}, this.callbacks.userList);
+        this.userService.loadUsers({start: 0, limit:limit}, this.callbacks.userList);
         break;
       case SHOULD_UPDATE_USER:
         let status = this.userService.compare(action.payload.user);
@@ -114,11 +122,13 @@ export class StoreService {
 
       // PERSON
       case FETCH_PERSON_INFORM:
-        user = this.userService.getById(parseInt(action.payload.id)) || null;
-        this.callbacks.person({
-          type: FETCH_PERSON_INFORM,
-          payload: user
-        });
+        user = this.userService.getById(parseInt(action.payload.id), this.callbacks.person);
+        if(user) {
+          this.callbacks.person({
+            type: FETCH_PERSON_INFORM,
+            payload: user
+          });
+        }
         break;
 
       // MODAL
