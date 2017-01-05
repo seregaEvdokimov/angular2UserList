@@ -6,6 +6,8 @@ import {Component, Input, Output, EventEmitter, ElementRef, ViewChild, AfterView
 
 import {DictionaryService} from '../../assets/services/dictionary.service'
 
+import {TRANSLATE, SEARCH} from './actions';
+import {NOTIFY_SWITCH} from '../additional/notify/actions';
 
 @Component({
   moduleId: module.id,
@@ -26,7 +28,7 @@ export class HeaderComponent implements AfterViewInit{
     if(!props) return;
 
     switch(props.type) {
-      case 'TRANSLATE':
+      case TRANSLATE:
         this.heighlight();
         this.translate();
         break;
@@ -48,8 +50,27 @@ export class HeaderComponent implements AfterViewInit{
 
     let langCode = el.dataset.language;
     this.onAction.emit({
-      type: 'TRANSLATE',
+      type: TRANSLATE,
       payload: {langCode: langCode}
+    });
+  }
+
+  handlernotifyswitch($event: any) {
+    let el: any = $event.target;
+    this.onAction.emit({
+      type: NOTIFY_SWITCH,
+      payload: {check: el.checked}
+    })
+  }
+
+  handlerSearch($event: any) {
+    let el = $event.target;
+    let input = el.previousElementSibling;
+    let value = input.value;
+
+    this.onAction.emit({
+      type: SEARCH,
+      payload: {search: value}
     });
   }
 

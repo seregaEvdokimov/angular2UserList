@@ -4,7 +4,7 @@
 
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 
-import {NOTIFY_ADD} from './actions';
+import {NOTIFY_ADD, NOTIFY_SWITCH} from './actions';
 
 @Component({
   moduleId: module.id,
@@ -23,10 +23,14 @@ export class NotifyComponent {
       case NOTIFY_ADD:
         this.add(props.payload);
         break;
+      case NOTIFY_SWITCH:
+        this.swwitcher(props.payload);
+        break;
     }
   }
 
   items: any = [];
+  display: boolean = true;
 
   constructor() {
     setInterval(() => {
@@ -57,7 +61,9 @@ export class NotifyComponent {
     }, []);
   }
 
-  add(data: any): void {
+  add(data: any): boolean {
+    if(!this.display) return false;
+
     let id = (this.items.length) ? this.items[this.items.length - 1].id + 1 : 1;
     let item = {
       id: id,
@@ -66,5 +72,9 @@ export class NotifyComponent {
     };
 
     this.items.push(item);
+  }
+
+  swwitcher(data: any): void {
+    this.display = !data.check;
   }
 }

@@ -2,12 +2,14 @@
  * Created by s.evdokimov on 23.12.2016.
  */
 
-import {Component, Input ,Output, EventEmitter, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, ElementRef, ViewChild, AfterViewInit, OnInit} from '@angular/core';
 
 import {IUser} from '../../../assets/interfaces/user';
 
 import {DictionaryService} from '../../../assets/services/dictionary.service';
+import {CommunicateService} from '../../../assets/services/communicate.service';
 
+import {TRANSLATE} from '../../header/actions';
 import {MODAL_CREATE_SHOW, MODAL_EDIT_SHOW} from '../../additional/modal/actions';
 import {TOOLTIP_SHOW, TOOLTIP_HIDE, TOOLTIP_MOVE} from '../../additional/tooltip/actions';
 import {USER_LIST_PAGINATION, USER_LIST_SORT, USER_DELETE, FETCH_USER_LIST, USER_NEW} from './actions';
@@ -21,7 +23,7 @@ import {USER_LIST_PAGINATION, USER_LIST_SORT, USER_DELETE, FETCH_USER_LIST, USER
 })
 
 
-export class UserlistComponent implements AfterViewInit {
+export class UserlistComponent implements AfterViewInit, OnInit {
   // nodes to translate
   @ViewChild('TId')      TId: ElementRef;
   @ViewChild('TName')    TName: ElementRef;
@@ -33,28 +35,31 @@ export class UserlistComponent implements AfterViewInit {
   @ViewChild('TBody')    TBody: ElementRef;
   @ViewChild('TAddUser') TAddUser: ElementRef;
 
-  @Output() onAction = new EventEmitter();
-  @Input()
-  set props(props: any) {
-    if(!props) return;
-
-    switch(props.type) {
-      case FETCH_USER_LIST:
-        this.userList = props.payload.users;
-        break;
-      case USER_NEW:
-        this.newItem = props.payload.user;
-        break;
-      case 'TRANSLATE':
-        this.translate();
-        break;
-    }
-  }
-
   newItem: IUser;
   userList: IUser[] = [];
 
-  constructor(private dictionary: DictionaryService) {}
+  constructor(private dictionary: DictionaryService, private communication: CommunicateService) {
+    communication.userListOn.subscribe((props: any) => {
+      switch(props.type) {
+        case FETCH_USER_LIST:
+          this.userList = props.payload.users;
+          break;
+        case USER_NEW:
+          this.newItem = props.payload.user;
+          break;
+        case TRANSLATE:
+          this.translate();
+          break;
+      }
+    });
+  }
+
+  ngOnInit() {
+    this.communication.appCmpEmit({
+      type: FETCH_USER_LIST,
+      payload: {start: 0, limit: 10}
+    });
+  }
 
   ngAfterViewInit() {
     this.translate();
@@ -67,7 +72,7 @@ export class UserlistComponent implements AfterViewInit {
     let maxScroll = el.scrollHeight;
 
     if(currentScroll == maxScroll) {
-      this.onAction.emit({type: USER_LIST_PAGINATION});
+      this.communication.appCmpEmit({type: USER_LIST_PAGINATION});
     }
   }
 
@@ -77,7 +82,7 @@ export class UserlistComponent implements AfterViewInit {
 
     let sortType = el.dataset['sortBy'];
     let sortDirection = el.dataset['directionBy'];
-    this.onAction.emit({
+    this.communication.appCmpEmit({
       type: USER_LIST_SORT,
       payload: {type: sortType, direction: sortDirection}
     });
@@ -115,19 +120,19 @@ export class UserlistComponent implements AfterViewInit {
       let id = parseInt(this.getRow(el).querySelector('.row__link').textContent);
       switch(type) {
         case 'mousemove':
-          this.onAction.emit({
+          this.communication.appCmpEmit({
             type: TOOLTIP_MOVE,
             payload: {coords: {x: $event.pageX + 15, y: $event.pageY + 15}}
           });
           break;
         case 'mouseover':
-          this.onAction.emit({
+          this.communication.appCmpEmit({
             type: TOOLTIP_SHOW,
             payload: {id: id, type: tooltip, coords: {x: $event.pageX + 15, y: $event.pageY + 15}}
           });
           break;
         case 'mouseout':
-          this.onAction.emit({
+          this.communication.appCmpEmit({
             type: TOOLTIP_HIDE,
             payload: {type: tooltip}
           });
@@ -141,7 +146,7 @@ export class UserlistComponent implements AfterViewInit {
   editUser($event: any) {
     let el: HTMLElement = this.getRow($event.target);
     let id = parseInt(el.querySelector('.row__link').textContent);
-    this.onAction.emit({
+    this.communication.appCmpEmit({
       type: MODAL_EDIT_SHOW,
       payload: {id: id}
     });
@@ -150,14 +155,14 @@ export class UserlistComponent implements AfterViewInit {
   deleteUser($event: any) {
     let el: HTMLElement = this.getRow($event.target);
     let id = parseInt(el.querySelector('.row__link').textContent);
-    this.onAction.emit({
+    this.communication.appCmpEmit({
       type: USER_DELETE,
       payload: {id: id}
     });
   }
 
   addUser($event: any) {
-    this.onAction.emit({type: MODAL_CREATE_SHOW});
+    this.communication.appCmpEmit({type: MODAL_CREATE_SHOW});
   }
 
   getRow(el:any): HTMLElement {

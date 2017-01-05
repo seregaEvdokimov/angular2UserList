@@ -3,7 +3,7 @@
     <div class="header-menu">
       <div class="header-menu__switch">
         <div class="switch-notify">
-          <input type="checkbox" class="switch-notify__checkbox" id="switch" value="on">
+          <input type="checkbox" class="switch-notify__checkbox" id="switch" (change)="handlernotifyswitch($event)">
           <label class="switch-notify__label" for="switch" #TNotifySwitch>Выключить оповещение</label>
         </div>
       </div>
@@ -16,7 +16,7 @@
       <div class="header-menu__search">
         <div class="search">
           <input class="search__input" name="search">
-          <button class="search__button" #TSearchBtn>Поиск</button>
+          <button class="search__button" #TSearchBtn (click)="handlerSearch($event)">Поиск</button>
         </div>
       </div>
     </div>

@@ -74,6 +74,14 @@ export class UserService {
     }
   }
 
+  searchUser(data: any): IUser[] {
+    let search = this.users.filter(function(item) {
+      return item.name.indexOf(data.search) !== -1;
+    });
+
+    return search;
+  }
+
   deleteUser(payload: any, callback: any): any {
     let params = new URLSearchParams();
     params.set('id', payload.id + '');
@@ -157,9 +165,7 @@ export class UserService {
     return this.users;
   }
 
-  getById(id: number): IUser {
-    return this.users.filter(function(item) {
-      return item.id === id;
-    })[0];
+  getById(id: number): any {
+    return (this.users !== undefined) ? this.users.filter(item => item.id === id)[0] : [];
   }
 }

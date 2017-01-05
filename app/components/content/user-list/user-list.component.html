@@ -23,7 +23,7 @@
       <!--NEW USER-->
       <tr *ngIf="newItem" class="row row_type_body row_display_type_row">
         <td class="row__id">
-          <a class="row__link" href="#/user/813">{{ newItem.id }}</a>
+          <a class="row__link" routerLink="/user/{{ newItem.id }}">{{ newItem.id }}</a>
         </td>
         <td class="row__name" data-tooltip="name">{{ newItem.name }}</td>
         <td class="row__email" data-tooltip="email">{{ newItem.email }}</td>
@@ -47,7 +47,7 @@
       <!--USER LIST-->
       <tr *ngFor="let user of userList" class="row row_type_body row_display_type_row">
         <td class="row__id">
-          <a class="row__link" href="#/user/813">{{ user.id }}</a>
+          <a class="row__link" routerLink="/user/{{ user.id }}">{{ user.id }}</a>
         </td>
         <td class="row__name" data-tooltip="name">{{ user.name }}</td>
         <td class="row__email" data-tooltip="email">{{ user.email }}</td>

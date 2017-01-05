@@ -186,6 +186,10 @@
   text-align: left;
 }
 
+.row_display_type_row .row__birth {
+  text-align: center;
+}
+
 .row_display_type_row .left-time {
   font-size: 10px;
 }

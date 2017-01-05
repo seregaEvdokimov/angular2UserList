@@ -10,7 +10,9 @@ import {UserService} from '../assets/services/user.service';
 import {TooltipService} from '../assets/services/tooltip.service';
 import {DictionaryService} from '../assets/services/dictionary.service';
 
-import {NOTIFY_ADD} from '../components/additional/notify/actions';
+import {SEARCH, TRANSLATE} from '../components/header/actions';
+import {FETCH_PERSON_INFORM} from '../components/content/person/actions';
+import {NOTIFY_ADD, NOTIFY_SWITCH} from '../components/additional/notify/actions';
 import {TOOLTIP_SHOW, TOOLTIP_HIDE, TOOLTIP_MOVE} from '../components/additional/tooltip/actions';
 import {MODAL_EDIT_SHOW, MODAL_CREATE_SHOW, MODAL_ALL_HIDE, MODAL_CONFIRM_SHOW} from '../components/additional/modal/actions';
 import {FETCH_USER_LIST, USER_LIST_SORT, USER_LIST_PAGINATION, USER_UPDATE, SHOULD_UPDATE_USER, USER_TIME_PASSED, USER_CREATE, USER_DELETE, USER_NEW} from '../components/content/user-list/actions';
@@ -34,13 +36,22 @@ export class StoreService {
   }
 
   dispatch(action: any): void {
+    let user: IUser;
     // console.log('DISPATCH', action);
     switch(action.type) {
-      case 'TRANSLATE':
+      // HEADER
+      case TRANSLATE:
         this.dictionaryService.currentLang = action.payload.langCode;
-        this.callbacks.header({type: 'TRANSLATE'});
-        this.callbacks.userList({type: 'TRANSLATE'});
-        this.callbacks.modal({type: 'TRANSLATE'});
+        this.callbacks.header({type: TRANSLATE});
+        this.callbacks.userList({type: TRANSLATE});
+        this.callbacks.modal({type: TRANSLATE});
+        break;
+      case SEARCH:
+        let searchUsers = this.userService.searchUser(action.payload);
+        this.callbacks.userList({
+          type: FETCH_USER_LIST,
+          payload: {users: searchUsers}
+        });
         break;
 
       // USER
@@ -93,7 +104,7 @@ export class StoreService {
         });
         break;
       case USER_DELETE:
-        let user: IUser = this.userService.getById(action.payload.id);
+        user = this.userService.getById(action.payload.id);
         this.callbacks.notify({
           type: NOTIFY_ADD,
           payload: {message: this.dictionaryService.getMessage(user, ['notify', 'deleteUser'])}
@@ -101,9 +112,18 @@ export class StoreService {
         this.userService.deleteUser(action.payload, this.callbacks.userList);
         break;
 
+      // PERSON
+      case FETCH_PERSON_INFORM:
+        user = this.userService.getById(parseInt(action.payload.id)) || null;
+        this.callbacks.person({
+          type: FETCH_PERSON_INFORM,
+          payload: user
+        });
+        break;
+
       // MODAL
       case MODAL_EDIT_SHOW:
-        let user: IUser = this.userService.getById(action.payload.id);
+        user = this.userService.getById(action.payload.id);
         this.callbacks.modal({
           type: MODAL_EDIT_SHOW,
           payload: {model: user}
@@ -134,6 +154,12 @@ export class StoreService {
         break;
 
       // NOTIFY
+      case NOTIFY_SWITCH:
+        this.callbacks.notify({
+          type: NOTIFY_SWITCH,
+          payload: action.payload
+        });
+        break;
     }
   }
 }

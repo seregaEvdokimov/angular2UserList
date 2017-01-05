@@ -10,6 +10,7 @@ import {IModal} from '../../../assets/interfaces/modal';
 import {UploadFileService} from '../../../assets/services/uploadFile.service';
 import {DictionaryService} from '../../../assets/services/dictionary.service';
 
+import {TRANSLATE} from '../../header/actions';
 import {SHOULD_UPDATE_USER, USER_CREATE, USER_UPDATE} from '../../content/user-list/actions';
 import {MODAL_EDIT_SHOW, MODAL_EDIT_HIDE, MODAL_CREATE_SHOW, MODAL_CREATE_HIDE, MODAL_CONFIRM_SHOW, MODAL_ALL_HIDE} from './actions';
 
@@ -79,7 +80,7 @@ export class ModalComponent implements AfterViewInit {
       case MODAL_ALL_HIDE:
         this.resetModals();
         break;
-      case 'TRANSLATE':
+      case TRANSLATE:
         this.translate();
         break;
     }

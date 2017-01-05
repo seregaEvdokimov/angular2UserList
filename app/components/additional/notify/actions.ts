@@ -3,3 +3,4 @@
  */
 
 export const NOTIFY_ADD = 'NOTIFY_ADD';
+export const NOTIFY_SWITCH = 'NOTIFY_SWITCH';

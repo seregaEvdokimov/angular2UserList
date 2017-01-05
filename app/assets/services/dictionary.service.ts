@@ -6,7 +6,7 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class DictionaryService {
-  currentLang = 'ru';
+  currentLang: string = 'ru';
 
   ru = {
     header: {

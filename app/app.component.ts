@@ -4,6 +4,7 @@ import {StoreService} from './config/store.service';
 import {UserService} from './assets/services/user.service';
 import {TooltipService} from './assets/services/tooltip.service';
 import {DictionaryService} from './assets/services/dictionary.service';
+import {CommunicateService} from './assets/services/communicate.service';
 import {middlewareSharedWorker} from './config/sharedWorker';
 
 import {FETCH_USER_LIST} from './components/content/user-list/actions'
@@ -17,10 +18,7 @@ import {FETCH_USER_LIST} from './components/content/user-list/actions'
         (onAction)="onAction($event)"
       ></header-component>
       
-      <user-list-component 
-        [props]="userListProps"  
-        (onAction)="onAction($event)"
-      ></user-list-component>
+      <router-outlet></router-outlet>
       
       <modal-component 
         [props]="modalProps"  
@@ -38,7 +36,7 @@ import {FETCH_USER_LIST} from './components/content/user-list/actions'
       ></notify-component>
     </div> 
   `,
-  providers: [StoreService, UserService, TooltipService]
+  providers: [StoreService, UserService, TooltipService, CommunicateService]
 })
 
 export class AppComponent  {
@@ -52,7 +50,8 @@ export class AppComponent  {
     private store: StoreService,
     private userService: UserService,
     private tooltipService: TooltipService,
-    private dictionaryService: DictionaryService
+    private dictionaryService: DictionaryService,
+    private communication: CommunicateService
   ) {
 
     this.store.init({
@@ -61,15 +60,15 @@ export class AppComponent  {
       dictionary: this.dictionaryService
     }, {
       userList: this.setUserList.bind(this),
+      person: this.setPerson.bind(this),
       header: this.setHeader.bind(this),
       modal: this.setModal.bind(this),
       tooltip: this.setTooltip.bind(this),
       notify: this.setNotify.bind(this),
     });
 
-    this.store.dispatch({
-      type: FETCH_USER_LIST,
-      payload: {start: 0, limit: 10}
+    this.communication.appCmpOn.subscribe((params: any) => {
+      this.store.dispatch(params);
     });
 
     middlewareSharedWorker(this.store, window);
@@ -80,7 +79,11 @@ export class AppComponent  {
   }
 
   setUserList(state: any): void {
-    this.userListProps = state;
+    this.communication.userListEmit(state);
+  }
+
+  setPerson(state: any): void {
+    this.communication.personEmit(state);
   }
 
   setHeader(state: any): void {
