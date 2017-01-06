@@ -96,7 +96,7 @@ export class StoreService {
         users = this.userService.newUser(action.payload);
         this.callbacks.userList({
           type: FETCH_USER_LIST,
-          payload: {users}
+          payload: {users: users}
         });
         this.callbacks.notify({
           type: NOTIFY_ADD,
