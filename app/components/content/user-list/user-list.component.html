@@ -20,30 +20,6 @@
         (mouseout)="handlerMouse($event)"
          #TBody
       >
-      <!--NEW USER-->
-      <tr *ngIf="newItem" class="row row_type_body row_display_type_row">
-        <td class="row__id">
-          <a class="row__link" routerLink="/user/{{ newItem.id }}">{{ newItem.id }}</a>
-        </td>
-        <td class="row__name" data-tooltip="name">{{ newItem.name }}</td>
-        <td class="row__email" data-tooltip="email">{{ newItem.email }}</td>
-        <td class="row__birth">{{ newItem.startDate }}</td>
-        <td class="row__date" livetime
-            [startDate]="newItem.birth"
-            [finishDate]="newItem.date"
-            [counterTag]="leftTime"
-            [progressBarTag]="overlay"
-        >
-          <div #leftTime class="left-time"></div>
-          <div #overlay class="overlay"></div>
-        </td>
-        <td class="row__del">
-          <a class="row__button delete-btn">Удалить</a>
-        </td>
-        <td class="row__edit">
-          <a class="row__button edit-btn">Редактировать</a>
-        </td>
-      </tr>
       <!--USER LIST-->
       <tr *ngFor="let user of userList" class="row row_type_body row_display_type_row">
         <td class="row__id">

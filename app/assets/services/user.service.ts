@@ -49,7 +49,9 @@ export class UserService {
   }
 
   newUser(payload: any) {
-    this.users.push(payload.user);
+    let user = this.equivalent([payload.user])[0];
+    this.users.unshift(user);
+    return this.users;
   }
 
   createUser(payload: any, callback: any): any {

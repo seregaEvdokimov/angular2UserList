@@ -37,6 +37,7 @@ export class StoreService {
 
   dispatch(action: any): void {
     let user: IUser;
+    let users: IUser[];
     // console.log('DISPATCH', action);
     switch(action.type) {
       // HEADER
@@ -53,7 +54,7 @@ export class StoreService {
 
       // USER
       case FETCH_USER_LIST:
-        let users = this.userService.getAll();
+        users = this.userService.getAll();
         if(!users.length) {
           this.userService.loadUsers(action.payload, this.callbacks.userList);
         } else {
@@ -92,10 +93,10 @@ export class StoreService {
         });
         break;
       case USER_NEW:
-        this.userService.newUser(action.payload);
+        users = this.userService.newUser(action.payload);
         this.callbacks.userList({
-          type: USER_NEW,
-          payload: action.payload
+          type: FETCH_USER_LIST,
+          payload: {users}
         });
         this.callbacks.notify({
           type: NOTIFY_ADD,

@@ -36,7 +36,6 @@ export class UserlistComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('TBody')    TBody: ElementRef;
   @ViewChild('TAddUser') TAddUser: ElementRef;
 
-  newItem: IUser;
   userList: IUser[] = [];
   intervalId: any = null;
   subscription: Subscription;
@@ -46,9 +45,6 @@ export class UserlistComponent implements AfterViewInit, OnInit, OnDestroy {
       switch(props.type) {
         case FETCH_USER_LIST:
           this.userList = props.payload.users;
-          break;
-        case USER_NEW:
-          this.newItem = props.payload.user;
           break;
         case TRANSLATE:
           this.translate();
