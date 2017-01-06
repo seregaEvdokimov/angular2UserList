@@ -68,9 +68,7 @@ export class UserlistComponent implements AfterViewInit, OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  ngAfterViewInit() {
-    this.translate();
-  }
+  ngAfterViewInit() {}
 
   handlerScroll($event: any) {
     let el: HTMLElement = $event.target;
@@ -181,19 +179,19 @@ export class UserlistComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   translate(): void {
-    this.TId.nativeElement.textContent = this.dictionary.t(['userTable','tHead','id']);
-    this.TName.nativeElement.textContent = this.dictionary.t(['userTable','tHead','name']);
-    this.TEmail.nativeElement.textContent = this.dictionary.t(['userTable','tHead','email']);
-    this.TBirth.nativeElement.textContent = this.dictionary.t(['userTable','tHead','birth']);
-    this.TDate.nativeElement.textContent = this.dictionary.t(['userTable','tHead','time']);
-    this.TDelete.nativeElement.textContent = this.dictionary.t(['userTable','tHead','delete']);
-    this.TEdit.nativeElement.textContent = this.dictionary.t(['userTable','tHead','edit']);
-    this.TAddUser.nativeElement.textContent = this.dictionary.t(['option','adduser']);
+    this.TId.nativeElement.textContent = this.dictionary.t(['content','userTable_headId']);
+    this.TName.nativeElement.textContent = this.dictionary.t(['content','userTable_headName']);
+    this.TEmail.nativeElement.textContent = this.dictionary.t(['content','userTable_headEmail']);
+    this.TBirth.nativeElement.textContent = this.dictionary.t(['content','userTable_headBirth']);
+    this.TDate.nativeElement.textContent = this.dictionary.t(['content','userTable_headTime']);
+    this.TDelete.nativeElement.textContent = this.dictionary.t(['content','userTable_headDelete']);
+    this.TEdit.nativeElement.textContent = this.dictionary.t(['content','userTable_headEdit']);
+    this.TAddUser.nativeElement.textContent = this.dictionary.t(['content','footer_addUser']);
 
     for (var i = 0, len = this.TBody.nativeElement.children.length; i < len; i++) {
       let el = this.TBody.nativeElement.children[i];
-      el.querySelector('.row__del a').textContent = this.dictionary.t(['userTable','tBody','delete']);
-      el.querySelector('.row__edit a').textContent = this.dictionary.t(['userTable','tBody','edit']);
+      el.querySelector('.row__del a').textContent = this.dictionary.t(['content','userTable_bodyDelete']);
+      el.querySelector('.row__edit a').textContent = this.dictionary.t(['content','userTable_bodyEdit']);
     }
   }
 }

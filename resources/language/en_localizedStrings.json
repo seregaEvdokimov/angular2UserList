@@ -1,0 +1,50 @@
+{
+  "content": {
+    "header_notifySwitcher": "Turn off notifications",
+    "header_searchButton": "Search",
+
+    "userTable_headId": "ID",
+    "userTable_headName": "Name",
+    "userTable_headEmail": "Email",
+    "userTable_headBirth": "Date of birth",
+    "userTable_headTime": "Estimated time",
+    "userTable_headDelete": "Delete",
+    "userTable_headEdit": "Edit",
+    "userTable_bodyDelete": "Delete",
+    "userTable_bodyEdit": "Edit",
+
+    "footer_addUser": "Add client"
+  },
+  "forms": {
+    "create_caption": "Add new client",
+    "create_avatar": "Upload Avatar",
+    "create_name": "Enter name",
+    "create_email": "Enter email",
+    "create_birth": "Enter birthday",
+    "create_time": "Enter the estimated time",
+    "create_save": "Save",
+    "create_cancel": "Cancel",
+
+    "edit_caption": "Edit client",
+    "edit_avatar": "Upload Avatar",
+    "edit_name": "Enter name",
+    "edit_email": "Enter email",
+    "edit_birth": "Enter birthday",
+    "edit_time": "Enter the estimated time",
+    "edit_save": "Save",
+    "edit_cancel": "Cancel",
+
+    "confirm_message": "There are changes. Save?",
+    "confirm_save": "Save",
+    "confirm_cancel": "Cancel"
+  },
+  "notify": {
+    "createUser": "User added: %name",
+    "updateUser": "User %name (№ %id) updated",
+    "timePassed": "User Name %name (№ %id) came time!",
+    "deleteUser": "Deleted user: %name (№ %id)"
+  },
+  "tooltip": {
+    "email": "The number of unread message: %number"
+  }
+}

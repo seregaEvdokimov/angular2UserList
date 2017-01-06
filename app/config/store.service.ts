@@ -10,9 +10,9 @@ import {UserService} from '../assets/services/user.service';
 import {TooltipService} from '../assets/services/tooltip.service';
 import {DictionaryService} from '../assets/services/dictionary.service';
 
-import {SEARCH, TRANSLATE} from '../components/header/actions';
 import {FETCH_PERSON_INFORM} from '../components/content/person/actions';
 import {NOTIFY_ADD, NOTIFY_SWITCH} from '../components/additional/notify/actions';
+import {SEARCH, TRANSLATE, FETCH_LOCALIZATION_STRINGS} from '../components/header/actions';
 import {TOOLTIP_SHOW, TOOLTIP_HIDE, TOOLTIP_MOVE} from '../components/additional/tooltip/actions';
 import {MODAL_EDIT_SHOW, MODAL_CREATE_SHOW, MODAL_ALL_HIDE, MODAL_CONFIRM_SHOW} from '../components/additional/modal/actions';
 import {FETCH_USER_LIST, USER_LIST_SORT, USER_LIST_PAGINATION, USER_UPDATE, SHOULD_UPDATE_USER, USER_TIME_PASSED, USER_CREATE, USER_DELETE, USER_NEW} from '../components/content/user-list/actions';
@@ -40,11 +40,8 @@ export class StoreService {
     // console.log('DISPATCH', action);
     switch(action.type) {
       // HEADER
-      case TRANSLATE:
-        this.dictionaryService.currentLang = action.payload.langCode;
-        this.callbacks.header({type: TRANSLATE});
-        this.callbacks.userList({type: TRANSLATE});
-        this.callbacks.modal({type: TRANSLATE});
+      case FETCH_LOCALIZATION_STRINGS:
+        this.dictionaryService.loadLocalization(action.payload, this.callbacks);
         break;
       case SEARCH:
         let searchUsers = this.userService.searchUser(action.payload);

@@ -1,0 +1,50 @@
+{
+  "content": {
+    "header_notifySwitcher": "Выключить оповещение",
+    "header_searchButton": "Поиск",
+
+    "userTable_headId": "№",
+    "userTable_headName": "Имя",
+    "userTable_headEmail": "Email",
+    "userTable_headBirth": "День рождения",
+    "userTable_headTime": "Расчетное время",
+    "userTable_headDelete": "Удалить",
+    "userTable_headEdit": "Редактировать",
+    "userTable_bodyDelete": "Удалить",
+    "userTable_bodyEdit": "Редактировать",
+
+    "footer_addUser": "Добавить клиента"
+  },
+  "forms": {
+    "create_caption": "Добавить нового клиента",
+    "create_avatar": "Загрузить аватар",
+    "create_name": "Введите имя",
+    "create_email": "Введите email",
+    "create_birth": "Укажите день рождения",
+    "create_time": "Укажите расчётное время",
+    "create_save": "Сохранить",
+    "create_cancel": "Отмена",
+
+    "edit_caption": "Редактировать клиента",
+    "edit_avatar": "Загрузить аватар",
+    "edit_name": "Введите новое имя",
+    "edit_email": "Введите новый email",
+    "edit_birth": "Изменить день рождения",
+    "edit_time": "Изменить расчётное время",
+    "edit_save": "Сохранить",
+    "edit_cancel": "Отмена",
+
+    "confirm_message": "Есть изменения. Сохранить?",
+    "confirm_save": "Сохранить",
+    "confirm_cancel": "Отмена"
+  },
+  "notify": {
+    "createUser": "Добавлен пользователь: %name",
+    "updateUser": "Пользователь %name (№ %id) обновлён",
+    "timePassed": "У пользователя %name (№ %id) вышло время!",
+    "deleteUser": "Удалён пользователь: %name (№ %id)"
+  },
+  "tooltip": {
+    "email": "Количество непрочитанных сообщение: %number"
+  }
+}

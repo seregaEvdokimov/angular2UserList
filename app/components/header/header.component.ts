@@ -6,7 +6,7 @@ import {Component, Input, Output, EventEmitter, ElementRef, ViewChild, AfterView
 
 import {DictionaryService} from '../../assets/services/dictionary.service'
 
-import {TRANSLATE, SEARCH} from './actions';
+import {TRANSLATE, SEARCH, FETCH_LOCALIZATION_STRINGS} from './actions';
 import {NOTIFY_SWITCH} from '../additional/notify/actions';
 
 @Component({
@@ -40,18 +40,16 @@ export class HeaderComponent implements AfterViewInit{
 
   constructor(private dictionary: DictionaryService) {}
 
-  ngAfterViewInit() {
-    this.translate();
-  }
+  ngAfterViewInit() {}
 
   handlerChangeLanguage($event: any): boolean {
     let el = $event.target;
     if(el.tagName !== 'A') return false;
 
-    let langCode = el.dataset.language;
+    let lang = el.dataset.language;
     this.onAction.emit({
-      type: TRANSLATE,
-      payload: {langCode: langCode}
+      type: FETCH_LOCALIZATION_STRINGS,
+      payload: {lang: lang}
     });
   }
 
@@ -88,7 +86,7 @@ export class HeaderComponent implements AfterViewInit{
   }
 
   translate() {
-    this.TNotifySwitch.nativeElement.textContent = this.dictionary.t(['header', 'settings', 'label']);
-    this.TSearchBtn.nativeElement.textContent = this.dictionary.t(['header', 'search', 'button']);
+    this.TNotifySwitch.nativeElement.textContent = this.dictionary.t(['content', 'header_notifySwitcher']);
+    this.TSearchBtn.nativeElement.textContent = this.dictionary.t(['content', 'header_searchButton']);
   }
 }

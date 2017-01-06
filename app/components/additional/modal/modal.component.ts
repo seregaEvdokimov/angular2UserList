@@ -121,9 +121,7 @@ export class ModalComponent implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
-    this.translate();
-  }
+  ngAfterViewInit() {}
 
   show(): void {
     this.myForm.patchValue({
@@ -237,26 +235,26 @@ export class ModalComponent implements AfterViewInit {
   }
 
   translate() {
-    this.TCMCaption.nativeElement.textContent = this.dictionary.t(['modal', 'create', 'caption']);
-    this.TCMAvatar.nativeElement.textContent  = this.dictionary.t(['modal', 'create', 'avatar']);
-    this.TCMName.nativeElement.textContent    = this.dictionary.t(['modal', 'create', 'name']);
-    this.TCMEmail.nativeElement.textContent   = this.dictionary.t(['modal', 'create', 'email']);
-    this.TCMBirth.nativeElement.textContent   = this.dictionary.t(['modal', 'create', 'birth']);
-    this.TCMTime.nativeElement.textContent    = this.dictionary.t(['modal', 'create', 'time']);
-    this.TCMCancel.nativeElement.textContent  = this.dictionary.t(['modal', 'create', 'cancel']);
-    this.TCMSave.nativeElement.textContent    = this.dictionary.t(['modal', 'create', 'save']);
+    this.TCMCaption.nativeElement.textContent = this.dictionary.t(['forms', 'create_caption']);
+    this.TCMAvatar.nativeElement.textContent  = this.dictionary.t(['forms', 'create_avatar']);
+    this.TCMName.nativeElement.textContent    = this.dictionary.t(['forms', 'create_name']);
+    this.TCMEmail.nativeElement.textContent   = this.dictionary.t(['forms', 'create_email']);
+    this.TCMBirth.nativeElement.textContent   = this.dictionary.t(['forms', 'create_birth']);
+    this.TCMTime.nativeElement.textContent    = this.dictionary.t(['forms', 'create_time']);
+    this.TCMCancel.nativeElement.textContent  = this.dictionary.t(['forms', 'create_cancel']);
+    this.TCMSave.nativeElement.textContent    = this.dictionary.t(['forms', 'create_save']);
 
-    this.TEMCaption.nativeElement.textContent = this.dictionary.t(['modal', 'edit', 'caption']);
-    this.TEMAvatar.nativeElement.textContent  = this.dictionary.t(['modal', 'edit', 'avatar']);
-    this.TEMName.nativeElement.textContent    = this.dictionary.t(['modal', 'edit', 'name']);
-    this.TEMEmail.nativeElement.textContent   = this.dictionary.t(['modal', 'edit', 'email']);
-    this.TEMBirth.nativeElement.textContent   = this.dictionary.t(['modal', 'edit', 'birth']);
-    this.TEMTime.nativeElement.textContent    = this.dictionary.t(['modal', 'edit', 'time']);
-    this.TEMCancel.nativeElement.textContent  = this.dictionary.t(['modal', 'edit', 'cancel']);
-    this.TEMSave.nativeElement.textContent    = this.dictionary.t(['modal', 'edit', 'save']);
+    this.TEMCaption.nativeElement.textContent = this.dictionary.t(['forms', 'edit_caption']);
+    this.TEMAvatar.nativeElement.textContent  = this.dictionary.t(['forms', 'edit_avatar']);
+    this.TEMName.nativeElement.textContent    = this.dictionary.t(['forms', 'edit_name']);
+    this.TEMEmail.nativeElement.textContent   = this.dictionary.t(['forms', 'edit_email']);
+    this.TEMBirth.nativeElement.textContent   = this.dictionary.t(['forms', 'edit_birth']);
+    this.TEMTime.nativeElement.textContent    = this.dictionary.t(['forms', 'edit_time']);
+    this.TEMCancel.nativeElement.textContent  = this.dictionary.t(['forms', 'edit_cancel']);
+    this.TEMSave.nativeElement.textContent    = this.dictionary.t(['forms', 'edit_save']);
 
-    this.TAMCaption.nativeElement.textContent = this.dictionary.t(['modal', 'confirm', 'message']);
-    this.TAMSave.nativeElement.textContent    = this.dictionary.t(['modal', 'confirm', 'save']);
-    this.TAMCancel.nativeElement.textContent  = this.dictionary.t(['modal', 'confirm', 'cancel']);
+    this.TAMCaption.nativeElement.textContent = this.dictionary.t(['forms', 'confirm_message']);
+    this.TAMSave.nativeElement.textContent    = this.dictionary.t(['forms', 'confirm_save']);
+    this.TAMCancel.nativeElement.textContent  = this.dictionary.t(['forms', 'confirm_cancel']);
   }
 }

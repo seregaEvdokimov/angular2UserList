@@ -11,17 +11,20 @@ var faker = require("faker");
 
 var siteUrl = "http://localhost:3000";
 var backAPI = {
-    pathToUsersList: "data/users.json",
+    pathToUsersList: "resources/data/users.json",
+    pathToLocalization: "resources/language/",
+
     userData: [],
+    localizationData: {},
 
     init: function() {
-        var self = this;
-        fs.readFile(this.pathToUsersList, 'utf8', function (err, data) {
-            if (err) return console.log(err);
-            self.userData = JSON.parse(data);
-        });
+      var self = this;
+      fs.readFile(this.pathToUsersList, 'utf8', function (err, data) {
+          if (err) return console.log(err);
+          self.userData = JSON.parse(data);
+      });
 
-        return this;
+      return this;
     },
     rewriteData: function(type, data) {
         var pathToFile = '';
@@ -64,6 +67,16 @@ var backAPI = {
         }
 
         return result;
+    },
+    language: function(type, data) {
+      var result = [];
+      switch(type) {
+        case 'get':
+          result = this.getLanguage(data);
+          break;
+      }
+
+      return result;
     },
     getUsers: function(data) {
         var start = (data.start == 1) ? 0 : data.start;
@@ -139,6 +152,15 @@ var backAPI = {
         }
 
         return JSON.stringify(result);
+    },
+    getLanguage: function(data) {
+
+      if(!this.localizationData.hasOwnProperty(data.lang)) {
+        var path = this.pathToLocalization + data.lang + '_localizedStrings.json';
+        this.localizationData[data.lang] = JSON.parse(fs.readFileSync(path, 'utf8'));
+      }
+
+      return JSON.stringify(this.localizationData[data.lang]);
     }
 }.init();
 
@@ -174,6 +196,12 @@ app.get('/user', function (req, res) {
     var result = backAPI.user('get', req.query);
     addResponseHeaders(res);
     res.end(result);
+});
+
+app.get('/language', function (req, res) {
+  var result = backAPI.language('get', req.query);
+  addResponseHeaders(res);
+  res.end(result);
 });
 
 app.get('/tooltip', function (req, res) {

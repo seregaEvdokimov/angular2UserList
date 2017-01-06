@@ -8,7 +8,7 @@ import {DictionaryService} from './assets/services/dictionary.service';
 import {CommunicateService} from './assets/services/communicate.service';
 import {middlewareSharedWorker} from './config/sharedWorker';
 
-import {FETCH_USER_LIST} from './components/content/user-list/actions'
+import {FETCH_LOCALIZATION_STRINGS} from './components/header/actions'
 
 @Component({
   selector: 'my-app',
@@ -71,6 +71,11 @@ export class AppComponent implements OnDestroy {
 
     this.subscription = this.communication.appCmpOn.subscribe((params: any) => {
       this.store.dispatch(params);
+    });
+
+    this.store.dispatch({
+      type: FETCH_LOCALIZATION_STRINGS,
+      payload: {lang: 'ru'}
     });
 
     middlewareSharedWorker(this.store, window);
