@@ -1,0 +1,69 @@
+<div class="modal-window" [ngClass]="{'modal-window_show': active, 'modal-window_disabled': disabled}">
+  <h3 class="modal-window__caption" #TCaption>Редактировать клиента</h3>
+  <form [formGroup]="updateForm" class="modal-window__form">
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label" #TAvatar>Загрузить аватар</label>
+        <img class="picture" alt="" #picture>
+        <button class="modal-window-group__button" #TAvatarBtn (click)="uploadAvatar($event)">Загрузить</button>
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label" #TName>Введите новое имя</label>
+        <input type="text" class="modal-window-group__input"
+          formControlName="name"
+          [ngClass]="{
+            'error': updateForm.controls.name.dirty && updateForm.controls.name.invalid,
+            'success': updateForm.controls.name.dirty && updateForm.controls.name.valid
+          }"
+        >
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label" #TEmail>Введите новый email</label>
+        <input type="text" class="modal-window-group__input"
+          formControlName="email"
+          [ngClass]="{
+            'error': updateForm.controls.email.dirty && updateForm.controls.email.invalid,
+            'success': updateForm.controls.email.dirty && updateForm.controls.email.valid
+          }"
+        >
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label" #TBirth>Изменить день рождения</label>
+        <input type="date" class="modal-window-group__input"
+          value="{{ updateForm.controls.birth.value }}"
+          formControlName="birth"
+          [ngClass]="{
+            'error': updateForm.controls.birth.dirty && updateForm.controls.birth.invalid,
+            'success': updateForm.controls.birth.dirty && updateForm.controls.birth.valid
+          }"
+        >
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label" #TTime>Изменить расчётное время</label>
+        <input type="date" class="modal-window-group__input"
+          value="{{ updateForm.controls.date.value }}"
+          formControlName="date"
+          [ngClass]="{
+            'error': updateForm.controls.date.dirty && updateForm.controls.date.invalid,
+            'success': updateForm.controls.date.dirty && updateForm.controls.date.valid
+          }"
+        >
+      </div>
+    </div>
+    <div class="modal-window__group modal-window__group_control">
+      <div class="modal-window-group modal-window-group_control" (click)="handlerControls($event)">
+        <button class="modal-window-group__button add-btn" [disabled]="updateForm.invalid" #TSave>Сохранить</button>
+        <button class="modal-window-group__button cancel-btn" #TCancel>Отмена</button>
+      </div>
+    </div>
+    <input type="hidden" class="id-input" formControlName="id">
+  </form>
+</div>

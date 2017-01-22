@@ -18,6 +18,7 @@
   "forms": {
     "create_caption": "Добавить нового клиента",
     "create_avatar": "Загрузить аватар",
+    "create_avatar_btn": "Загрузить",
     "create_name": "Введите имя",
     "create_email": "Введите email",
     "create_birth": "Укажите день рождения",
@@ -27,6 +28,7 @@
 
     "edit_caption": "Редактировать клиента",
     "edit_avatar": "Загрузить аватар",
+    "edit_avatar_btn": "Загрузить",
     "edit_name": "Введите новое имя",
     "edit_email": "Введите новый email",
     "edit_birth": "Изменить день рождения",
@@ -36,7 +38,12 @@
 
     "confirm_message": "Есть изменения. Сохранить?",
     "confirm_save": "Сохранить",
-    "confirm_cancel": "Отмена"
+    "confirm_cancel": "Отмена",
+
+    "upload_caption": "Загрузить изображение",
+    "upload_picture": "Загрузить",
+    "upload_save": "Сохранить",
+    "upload_cancel": "Отмена"
   },
   "notify": {
     "createUser": "Добавлен пользователь: %name",

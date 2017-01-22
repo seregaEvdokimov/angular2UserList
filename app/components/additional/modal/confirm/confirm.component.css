@@ -1,27 +1,9 @@
-.modal-bg {
-  position: absolute;
-  left: 0;
-  top: 0;
-  background: rgba(0, 0, 0, .4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  visibility: hidden;
-  z-index: 3;
-}
-
-.modal-bg_show {
-   visibility: visible;
- }
-
-
-
+/*TODO refactor style*/
 .modal-window {
   position: absolute;
   z-index: 3;
   top: -50%;
+  left: 50%;
   background: #333;
   padding: 20px;
   width: 430px;
@@ -29,13 +11,24 @@
   justify-content: flex-start;
   align-items: flex-end;
   flex-flow: row wrap;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
   transition: all .65s;
   box-shadow: 0 0 30px rgba(0, 0, 0, 1);
 }
 
 .modal-window_show {
-   top: 50%;
+  top: 50%;
+}
+
+.modal-window_disabled:after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .8);
+  z-index: 999;
 }
 
 .modal-window__caption {
@@ -48,15 +41,9 @@
 .modal-window__form {
   display: flex;
   flex-flow: row wrap;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 
-.modal-window__debug {
-  max-width: 100%;
-  word-break: break-all;
-  color: #fff;
-  font-size: 14px;
-}
 
 .modal-window__group {
   margin: 10px;
@@ -64,10 +51,10 @@
 }
 
 .modal-window__group_control {
-   clear: both;
-   min-width: 100%;
-   display: flex;
-   justify-content: center;
+  clear: both;
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .modal-window-group {}
@@ -149,15 +136,15 @@
 }
 
 .modal-window-group__input.error {
-   border-color: red !important;
+  border-color: red !important;
 }
 
 .modal-window-group__input.success {
-   border-color: green;
+  border-color: green;
 }
 
 .modal-window-group__input:focus {
-   outline: 0;
+  outline: 0;
 }
 
 
@@ -173,14 +160,14 @@
 }
 
 .modal-window-group__button:hover {
-   background: #222;
+  background: #222;
 }
 
 .modal-window-group__button:focus {
-   outline: 0;
+  outline: 0;
 }
 
 .modal-window-group__button_control {
-   display: table;
-   margin: 0 auto;
+  display: table;
+  margin: 0 auto;
 }

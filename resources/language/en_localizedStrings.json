@@ -18,6 +18,7 @@
   "forms": {
     "create_caption": "Add new client",
     "create_avatar": "Upload Avatar",
+    "create_avatar_btn": "Upload",
     "create_name": "Enter name",
     "create_email": "Enter email",
     "create_birth": "Enter birthday",
@@ -27,6 +28,7 @@
 
     "edit_caption": "Edit client",
     "edit_avatar": "Upload Avatar",
+    "edit_avatar_btn": "Upload",
     "edit_name": "Enter name",
     "edit_email": "Enter email",
     "edit_birth": "Enter birthday",
@@ -36,7 +38,12 @@
 
     "confirm_message": "There are changes. Save?",
     "confirm_save": "Save",
-    "confirm_cancel": "Cancel"
+    "confirm_cancel": "Cancel",
+
+    "upload_caption": "To load the image",
+    "upload_picture": "Upload",
+    "upload_save": "Save",
+    "upload_cancel": "Cancel"
   },
   "notify": {
     "createUser": "User added: %name",

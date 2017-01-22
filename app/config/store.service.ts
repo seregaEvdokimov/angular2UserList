@@ -14,8 +14,8 @@ import {FETCH_PERSON_INFORM} from '../components/content/person/actions';
 import {NOTIFY_ADD, NOTIFY_SWITCH} from '../components/additional/notify/actions';
 import {SEARCH, TRANSLATE, FETCH_LOCALIZATION_STRINGS} from '../components/header/actions';
 import {TOOLTIP_SHOW, TOOLTIP_HIDE, TOOLTIP_MOVE} from '../components/additional/tooltip/actions';
-import {MODAL_EDIT_SHOW, MODAL_CREATE_SHOW, MODAL_ALL_HIDE, MODAL_CONFIRM_SHOW} from '../components/additional/modal/actions';
 import {FETCH_USER_LIST, USER_LIST_SORT, USER_LIST_PAGINATION, USER_UPDATE, SHOULD_UPDATE_USER, USER_TIME_PASSED, USER_CREATE, USER_DELETE, USER_NEW} from '../components/content/user-list/actions';
+import {MODAL_EDIT_SHOW, MODAL_CREATE_SHOW, MODAL_CREATE_HIDE, MODAL_ALL_HIDE, MODAL_CONFIRM_SHOW, MODAL_CONFIRM_HIDE, MODAL_UPLOAD_SHOW, MODAL_UPLOAD_HIDE, MODAL_EDIT_HIDE} from '../components/additional/modal/actions';
 
 
 @Injectable()
@@ -72,10 +72,8 @@ export class StoreService {
         this.userService.loadUsers({start: 0, limit:limit}, this.callbacks.userList);
         break;
       case SHOULD_UPDATE_USER:
-        let status = this.userService.compare(action.payload.user);
-        let type = status ? MODAL_ALL_HIDE : MODAL_CONFIRM_SHOW;
         this.callbacks.modal({
-          type: type,
+          type: SHOULD_UPDATE_USER,
           payload: {model: action.payload.user}
         });
         break;
@@ -138,11 +136,29 @@ export class StoreService {
           payload: {model: user}
         });
         break;
+      case MODAL_EDIT_HIDE:
+        this.callbacks.modal({type: MODAL_EDIT_HIDE});
+        break;
       case MODAL_CREATE_SHOW:
         this.callbacks.modal({type: MODAL_CREATE_SHOW});
         break;
-      case MODAL_ALL_HIDE:
-        this.callbacks.modal({type: MODAL_ALL_HIDE});
+      case MODAL_CREATE_HIDE:
+        this.callbacks.modal({type: MODAL_CREATE_HIDE});
+        break;
+      case MODAL_UPLOAD_SHOW:
+        this.callbacks.modal({
+          type: MODAL_UPLOAD_SHOW,
+          payload: action.payload
+        });
+        break;
+      case MODAL_UPLOAD_HIDE:
+        this.callbacks.modal({
+          type: MODAL_UPLOAD_HIDE,
+          payload: action.payload
+        });
+        break;
+      case MODAL_CONFIRM_HIDE:
+        this.callbacks.modal({type: MODAL_CONFIRM_HIDE});
         break;
 
       // TOOLTIP

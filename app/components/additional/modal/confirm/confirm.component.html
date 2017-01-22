@@ -1,0 +1,9 @@
+<div class="modal-window" [ngClass]="{'modal-window_show': active, 'modal-window_disabled': disabled}">
+  <h3 class="modal-window__caption" #TCaption>Есть изменения. Сохранить?</h3>
+  <div class="modal-window__group modal-window__group_control">
+    <div class="modal-window-group modal-window-group_control" (click)="handlerControls($event)">
+      <button class="modal-window-group__button ok" #TSave>Сохранить</button>
+      <button class="modal-window-group__button cancel" #TCancel>Отмена</button>
+    </div>
+  </div>
+</div>

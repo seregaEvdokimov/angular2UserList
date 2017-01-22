@@ -1,11 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 
-import {StoreService} from './config/store.service';
-import {UserService} from './assets/services/user.service';
-import {TooltipService} from './assets/services/tooltip.service';
-import {DictionaryService} from './assets/services/dictionary.service';
 import {CommunicateService} from './assets/services/communicate.service';
+import {DictionaryService} from './assets/services/dictionary.service';
+import {StoreService} from './config/store.service';
+import {TooltipService} from './assets/services/tooltip.service';
+import {UserService} from './assets/services/user.service';
 import {middlewareSharedWorker} from './config/sharedWorker';
 
 import {FETCH_LOCALIZATION_STRINGS} from './components/header/actions'
@@ -37,36 +37,32 @@ import {FETCH_LOCALIZATION_STRINGS} from './components/header/actions'
       ></notify-component>
     </div> 
   `,
-  providers: [StoreService, UserService, TooltipService, CommunicateService]
+  providers: [CommunicateService, StoreService, TooltipService, UserService]
 })
 
 export class AppComponent implements OnDestroy {
-  modalProps: any = null;
-  userListProps: any = null;
-  headerProps: any = null;
-  tooltipProps: any = null;
-  notifyProps: any = null;
+
   subscription: Subscription;
 
   constructor(
-    private store: StoreService,
-    private userService: UserService,
-    private tooltipService: TooltipService,
     private dictionaryService: DictionaryService,
-    private communication: CommunicateService
+    private communication: CommunicateService,
+    private store: StoreService,
+    private tooltipService: TooltipService,
+    private userService: UserService,
   ) {
 
     this.store.init({
-      user: this.userService,
+      dictionary: this.dictionaryService,
       tooltip: this.tooltipService,
-      dictionary: this.dictionaryService
+      user: this.userService,
     }, {
-      userList: this.setUserList.bind(this),
-      person: this.setPerson.bind(this),
       header: this.setHeader.bind(this),
       modal: this.setModal.bind(this),
-      tooltip: this.setTooltip.bind(this),
       notify: this.setNotify.bind(this),
+      person: this.setPerson.bind(this),
+      tooltip: this.setTooltip.bind(this),
+      userList: this.setUserList.bind(this)
     });
 
     this.subscription = this.communication.appCmpOn.subscribe((params: any) => {
@@ -97,18 +93,22 @@ export class AppComponent implements OnDestroy {
     this.communication.personEmit(state);
   }
 
+  headerProps: any = null;
   setHeader(state: any): void {
     this.headerProps = state;
   }
 
+  tooltipProps: any = null;
   setTooltip(state: any): void {
     this.tooltipProps = state;
   }
 
+  notifyProps: any = null;
   setNotify(state: any): void {
     this.notifyProps = state;
   }
 
+  modalProps: any = null;
   setModal(state: any): void {
     this.modalProps = state;
   }

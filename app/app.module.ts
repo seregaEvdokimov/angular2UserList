@@ -1,5 +1,11 @@
 import { NgModule } from '@angular/core';
-import {imports, declarations, providers, bootstrap} from './config/config';
+
+import {
+  bootstrap,
+  declarations,
+  imports,
+  providers,
+} from './config/config';
 
 @NgModule({
   imports: imports,

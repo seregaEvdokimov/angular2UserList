@@ -57,16 +57,12 @@ export class UserService {
   createUser(payload: any, callback: any): any {
     this.http.post(this.url, payload.user).subscribe(res => {
       let user = res.json();
-      this.users.push(user);
+      this.users.unshift(user);
       this.users = this.equivalent(this.users);
 
       callback({
         type: FETCH_USER_LIST,
         payload: {users: this.users}
-      });
-      callback({
-        type: USER_NEW,
-        payload: {user: user}
       });
     });
   }

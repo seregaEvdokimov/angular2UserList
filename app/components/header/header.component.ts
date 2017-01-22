@@ -53,7 +53,7 @@ export class HeaderComponent implements AfterViewInit{
     });
   }
 
-  handlernotifyswitch($event: any) {
+  handlerNotifySwitch($event: any) {
     let el: any = $event.target;
     this.onAction.emit({
       type: NOTIFY_SWITCH,

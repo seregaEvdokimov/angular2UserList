@@ -1,0 +1,68 @@
+<div class="modal-window" [ngClass]="{'modal-window_show': active, 'modal-window_disabled': disabled}">
+  <h3 class="modal-window__caption" #TCaption>Добавить нового клиента</h3>
+  <form [formGroup]="createForm" class="modal-window__form">
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label" #TAvatar>Загрузить аватар</label>
+        <img class="picture" alt="" #picture>
+        <button class="modal-window-group__button" #TAvatarBtn (click)="uploadAvatar($event)">Загрузить</button>
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label" #TName>Введите имя</label>
+        <input type="text" class="modal-window-group__input"
+          formControlName="name"
+          [ngClass]="{
+            'error': createForm.controls.name.dirty && createForm.controls.name.invalid,
+            'success': createForm.controls.name.dirty && createForm.controls.name.valid
+          }"
+        >
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label" #TEmail>Введите email</label>
+        <input type="text" class="modal-window-group__input"
+          formControlName="email"
+          [ngClass]="{
+            'error': createForm.controls.email.dirty && createForm.controls.email.invalid,
+            'success': createForm.controls.email.dirty && createForm.controls.email.valid
+           }"
+        >
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label" #TBirth>Укажите день рождения</label>
+        <input type="date" class="modal-window-group__input"
+          value="{{ createForm.controls.birth.value }}"
+          formControlName="birth"
+          [ngClass]="{
+            'error': createForm.controls.birth.dirty && createForm.controls.birth.invalid,
+            'success': createForm.controls.birth.dirty && createForm.controls.birth.valid
+          }"
+        >
+      </div>
+    </div>
+    <div class="modal-window__group">
+      <div class="modal-window-group">
+        <label class="modal-window-group__label" #TTime>Укажите расчётное время</label>
+        <input type="date" class="modal-window-group__input"
+          value="{{ createForm.controls.date.value }}"
+          formControlName="date"
+          [ngClass]="{
+            'error': createForm.controls.date.dirty && createForm.controls.date.invalid,
+            'success': createForm.controls.date.dirty && createForm.controls.date.valid
+          }"
+        >
+      </div>
+    </div>
+    <div class="modal-window__group modal-window__group_control">
+      <div class="modal-window-group modal-window-group_control" (click)="handlerControls($event)">
+        <button class="modal-window-group__button add-btn" [disabled]="createForm.invalid" #TSave>Сохранить</button>
+        <button class="modal-window-group__button cancel-btn" #TCancel>Отмена</button>
+      </div>
+    </div>
+  </form>
+</div>
