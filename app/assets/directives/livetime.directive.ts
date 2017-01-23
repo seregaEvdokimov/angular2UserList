@@ -11,20 +11,17 @@ import {ProgressBarService} from '../services/progressbar.service';
 
 @Directive({
   selector: '[livetime]',
-  providers: [ProgressBarService]
+  providers: [ProgressBarService, TimerService]
 })
 
 
 export class LivetimeDirective implements OnInit, OnDestroy {
-  timer: TimerService;
   @Input() startDate: string;
   @Input() finishDate: string;
   @Input() counterTag: HTMLElement;
   @Input() progressBarTag: HTMLElement;
 
-  constructor(el: ElementRef, public progress: ProgressBarService) {
-    this.timer = new TimerService();
-  }
+  constructor(el: ElementRef, public progress: ProgressBarService, private timer: TimerService) {}
 
   ngOnInit(): void {
     this.init();

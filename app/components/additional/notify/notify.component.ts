@@ -14,6 +14,9 @@ import {NOTIFY_ADD, NOTIFY_SWITCH} from './actions';
 })
 
 export class NotifyComponent {
+
+  // INIT
+
   @Output() onAction = new EventEmitter();
   @Input()
   set props(props: any) {
@@ -24,7 +27,7 @@ export class NotifyComponent {
         this.add(props.payload);
         break;
       case NOTIFY_SWITCH:
-        this.swwitcher(props.payload);
+        this.switcher(props.payload);
         break;
     }
   }
@@ -38,6 +41,8 @@ export class NotifyComponent {
     }, 1000);
   }
 
+  // LISTENERS
+
   handlerClick($event: any): boolean {
     let el = $event.target;
 
@@ -45,6 +50,8 @@ export class NotifyComponent {
     let id: number = parseInt(el.querySelector('span').textContent);
     this.remove(id);
   }
+
+  // METHODS
 
   liveCycle() {
     let now = Date.now();
@@ -55,10 +62,9 @@ export class NotifyComponent {
   }
 
   remove(id: number): void {
-    this.items = this.items.reduce(function(acc: any, item: any) {
-      if(item.id !== id) acc.push(item);
-      return acc;
-    }, []);
+    this.items = this.items.filter(function(item: any) {
+      return item.id !== id;
+    });
   }
 
   add(data: any): boolean {
@@ -74,7 +80,7 @@ export class NotifyComponent {
     this.items.push(item);
   }
 
-  swwitcher(data: any): void {
+  switcher(data: any): void {
     this.display = !data.check;
   }
 }

@@ -22,6 +22,9 @@ import {FETCH_PERSON_INFORM} from './actions';
 
 
 export class PersonComponent implements OnDestroy {
+
+  // INIT
+
   params: any;
   subscription: Subscription;
   person: IUser = {
@@ -52,6 +55,8 @@ export class PersonComponent implements OnDestroy {
       });
     });
   }
+
+  // LIFECYCLE HOOKS
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

@@ -5,25 +5,27 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 
 import {TRANSLATE} from '../../header/actions';
-import {SHOULD_UPDATE_USER} from '../../content/user-list/actions';
 import {
   MODAL_EDIT_SHOW,
   MODAL_EDIT_HIDE,
+
   MODAL_CREATE_SHOW,
   MODAL_CREATE_HIDE,
+
   MODAL_UPLOAD_SHOW,
   MODAL_UPLOAD_HIDE,
   MODAL_UPLOAD_FILE,
+
   MODAL_CONFIRM_SHOW,
-  MODAL_CONFIRM_HIDE
+  MODAL_CONFIRM_HIDE,
+
+  MODAL_ALL_HIDE
 } from './actions';
 
-// TODO почистить компонент и удалить логи
-// TODO refactor all modal components
 @Component({
   selector: 'modal-component',
   template: `
-    <section class="modal-bg" [ngClass]="{'modal-bg_show': active}">
+    <section class="modal-bg" [ngClass]="{'modal-bg_show': active}" (click)="handlerCloseModals($event)">
       <create-modal  
         [props]="createProps"  
         (onAction)="onModalAction($event)">    
@@ -61,10 +63,10 @@ import {
     }`
   ]
 })
-// (click)="closeModals($event)"
-
 
 export class ModalComponent {
+
+  // INIT
 
   @Output() onAction = new EventEmitter();
   @Input()
@@ -108,17 +110,21 @@ export class ModalComponent {
             break;
         }
         break;
-      case SHOULD_UPDATE_USER:
-        this.confirmProps = {
-          type: MODAL_CONFIRM_SHOW,
-          payload: props.payload
-        };
+      case MODAL_CONFIRM_SHOW:
+        this.confirmProps = props;
         break;
       case MODAL_CONFIRM_HIDE:
         this.confirmProps = {type: MODAL_CONFIRM_HIDE};
         this.updateProps = {type: MODAL_EDIT_HIDE};
         this.hide();
             break;
+      case MODAL_ALL_HIDE:
+        this.createProps = {type: MODAL_CREATE_HIDE};
+        this.updateProps = {type: MODAL_EDIT_HIDE};
+        this.confirmProps = {type: MODAL_CONFIRM_HIDE};
+        this.uploadProps = {type: MODAL_UPLOAD_HIDE};
+        this.hide();
+        break;
       case TRANSLATE:
         this.createProps = {type: TRANSLATE};
         this.updateProps = {type: TRANSLATE};
@@ -135,6 +141,16 @@ export class ModalComponent {
   active: boolean = false;
 
   constructor() {}
+
+  // LISTENERS
+
+  handlerCloseModals($event: any) {
+    let el = $event.target;
+
+    if(el.tagName === 'SECTION') this.onAction.emit({type: MODAL_ALL_HIDE});
+  }
+
+  // METHODS
 
   onModalAction(params: any) {
     this.onAction.emit(params);

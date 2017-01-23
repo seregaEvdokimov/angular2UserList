@@ -8,7 +8,13 @@ import {DictionaryService} from '../../../../assets/services/dictionary.service'
 
 import {TRANSLATE} from '../../../header/actions';
 import {USER_CREATE} from '../../../content/user-list/actions';
-import {MODAL_CREATE_SHOW, MODAL_CREATE_HIDE, MODAL_UPLOAD_SHOW, MODAL_UPLOAD_FILE} from '../actions';
+import {
+  MODAL_CREATE_SHOW,
+  MODAL_CREATE_HIDE,
+
+  MODAL_UPLOAD_SHOW,
+  MODAL_UPLOAD_FILE
+} from '../actions';
 
 
 @Component({
@@ -20,6 +26,9 @@ import {MODAL_CREATE_SHOW, MODAL_CREATE_HIDE, MODAL_UPLOAD_SHOW, MODAL_UPLOAD_FI
 
 
 export class CreateModalComponent {
+
+  // INIT
+
   // nodes to translate
   @ViewChild('TCaption')   TCaption: ElementRef;
   @ViewChild('TAvatar')    TAvatar: ElementRef;
@@ -66,11 +75,40 @@ export class CreateModalComponent {
     });
   }
 
+  // LISTENERS
+
+  handlerControls($event: any) {
+    let el: HTMLElement = $event.target;
+    if(el.tagName !== 'BUTTON') return false;
+
+    let classes = el.classList;
+    switch(classes[1]) {
+      case 'add-btn':
+        let user = this.createForm.value;
+        user.avatar = this.picture.nativeElement.getAttribute('src');
+
+        this.onAction.emit({
+          type: USER_CREATE,
+          payload: {user: user}
+        });
+
+        this.onAction.emit({type: MODAL_CREATE_HIDE});
+        break;
+      case 'cancel-btn':
+        this.onAction.emit({type: MODAL_CREATE_HIDE});
+        break;
+    }
+  }
+
+  // METHODS
+
   show() {
+    this.disabled = false;
     this.active = true;
   }
 
   hide() {
+    this.disabled = false;
     this.active = false;
   }
 
@@ -84,38 +122,15 @@ export class CreateModalComponent {
     if(data.file) this.picture.nativeElement.setAttribute('src', data.file);
   }
 
-  handlerControls($event: any) {
-      let el: HTMLElement = $event.target;
-      if(el.tagName !== 'BUTTON') return false;
-
-      let classes = el.classList;
-      switch(classes[1]) {
-        case 'add-btn':
-          let user = this.createForm.value;
-          user.avatar = this.picture.nativeElement.getAttribute('src');
-
-          this.onAction.emit({
-            type: USER_CREATE,
-            payload: {user: user}
-          });
-
-          this.onAction.emit({type: MODAL_CREATE_HIDE});
-          break;
-        case 'cancel-btn':
-          this.onAction.emit({type: MODAL_CREATE_HIDE});
-          break;
-      }
-  }
-
   translate() {
-    this.TCaption.nativeElement.textContent = this.dictionary.t(['forms', 'create_caption']);
-    this.TAvatar.nativeElement.textContent  = this.dictionary.t(['forms', 'create_avatar']);
-    this.TAvatarBtn.nativeElement.textContent  = this.dictionary.t(['forms', 'create_avatar_btn']);
-    this.TName.nativeElement.textContent    = this.dictionary.t(['forms', 'create_name']);
-    this.TEmail.nativeElement.textContent   = this.dictionary.t(['forms', 'create_email']);
-    this.TBirth.nativeElement.textContent   = this.dictionary.t(['forms', 'create_birth']);
-    this.TTime.nativeElement.textContent    = this.dictionary.t(['forms', 'create_time']);
-    this.TSave.nativeElement.textContent  = this.dictionary.t(['forms', 'create_save']);
+    this.TCaption.nativeElement.textContent   = this.dictionary.t(['forms', 'create_caption']);
+    this.TAvatar.nativeElement.textContent    = this.dictionary.t(['forms', 'create_avatar']);
+    this.TAvatarBtn.nativeElement.textContent = this.dictionary.t(['forms', 'create_avatar_btn']);
+    this.TName.nativeElement.textContent      = this.dictionary.t(['forms', 'create_name']);
+    this.TEmail.nativeElement.textContent     = this.dictionary.t(['forms', 'create_email']);
+    this.TBirth.nativeElement.textContent     = this.dictionary.t(['forms', 'create_birth']);
+    this.TTime.nativeElement.textContent      = this.dictionary.t(['forms', 'create_time']);
+    this.TSave.nativeElement.textContent      = this.dictionary.t(['forms', 'create_save']);
     this.TCancel.nativeElement.textContent    = this.dictionary.t(['forms', 'create_cancel']);
   }
 }

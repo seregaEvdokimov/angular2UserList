@@ -11,9 +11,22 @@ import {DictionaryService} from '../../../assets/services/dictionary.service';
 import {CommunicateService} from '../../../assets/services/communicate.service';
 
 import {TRANSLATE} from '../../header/actions';
-import {MODAL_CREATE_SHOW, MODAL_EDIT_SHOW} from '../../additional/modal/actions';
-import {TOOLTIP_SHOW, TOOLTIP_HIDE, TOOLTIP_MOVE} from '../../additional/tooltip/actions';
-import {USER_LIST_PAGINATION, USER_LIST_SORT, USER_DELETE, FETCH_USER_LIST, USER_NEW} from './actions';
+import {
+  MODAL_CREATE_SHOW,
+  MODAL_EDIT_SHOW
+} from '../../additional/modal/actions';
+import {
+  TOOLTIP_SHOW,
+  TOOLTIP_HIDE,
+  TOOLTIP_MOVE
+} from '../../additional/tooltip/actions';
+import {
+  USER_READ,
+  USER_DELETE,
+
+  USER_LIST_PAGINATION,
+  USER_LIST_SORT,
+} from './actions';
 
 
 @Component({
@@ -25,6 +38,9 @@ import {USER_LIST_PAGINATION, USER_LIST_SORT, USER_DELETE, FETCH_USER_LIST, USER
 
 
 export class UserlistComponent implements AfterViewInit, OnInit, OnDestroy {
+
+  // INIT
+
   // nodes to translate
   @ViewChild('TId')      TId: ElementRef;
   @ViewChild('TName')    TName: ElementRef;
@@ -43,7 +59,7 @@ export class UserlistComponent implements AfterViewInit, OnInit, OnDestroy {
   constructor(private dictionary: DictionaryService, private communication: CommunicateService) {
     this.subscription = communication.userListOn.subscribe((props: any) => {
       switch(props.type) {
-        case FETCH_USER_LIST:
+        case USER_READ:
           this.userList = props.payload.users;
           break;
         case TRANSLATE:
@@ -53,9 +69,11 @@ export class UserlistComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
+  // LIFECYCLE HOOKS
+
   ngOnInit() {
     this.communication.appCmpEmit({
-      type: FETCH_USER_LIST,
+      type: USER_READ,
       payload: {start: 0, limit: 10}
     });
   }
@@ -65,6 +83,8 @@ export class UserlistComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {}
+
+  // LISTENERS
 
   handlerScroll($event: any) {
     let el: HTMLElement = $event.target;
@@ -147,6 +167,8 @@ export class UserlistComponent implements AfterViewInit, OnInit, OnDestroy {
     return true;
   }
 
+  // METHODS
+
   editUser($event: any) {
     let el: HTMLElement = this.getRow($event.target);
     let id = parseInt(el.querySelector('.row__link').textContent);
@@ -175,13 +197,13 @@ export class UserlistComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   translate(): void {
-    this.TId.nativeElement.textContent = this.dictionary.t(['content','userTable_headId']);
-    this.TName.nativeElement.textContent = this.dictionary.t(['content','userTable_headName']);
-    this.TEmail.nativeElement.textContent = this.dictionary.t(['content','userTable_headEmail']);
-    this.TBirth.nativeElement.textContent = this.dictionary.t(['content','userTable_headBirth']);
-    this.TDate.nativeElement.textContent = this.dictionary.t(['content','userTable_headTime']);
-    this.TDelete.nativeElement.textContent = this.dictionary.t(['content','userTable_headDelete']);
-    this.TEdit.nativeElement.textContent = this.dictionary.t(['content','userTable_headEdit']);
+    this.TId.nativeElement.textContent      = this.dictionary.t(['content','userTable_headId']);
+    this.TName.nativeElement.textContent    = this.dictionary.t(['content','userTable_headName']);
+    this.TEmail.nativeElement.textContent   = this.dictionary.t(['content','userTable_headEmail']);
+    this.TBirth.nativeElement.textContent   = this.dictionary.t(['content','userTable_headBirth']);
+    this.TDate.nativeElement.textContent    = this.dictionary.t(['content','userTable_headTime']);
+    this.TDelete.nativeElement.textContent  = this.dictionary.t(['content','userTable_headDelete']);
+    this.TEdit.nativeElement.textContent    = this.dictionary.t(['content','userTable_headEdit']);
     this.TAddUser.nativeElement.textContent = this.dictionary.t(['content','footer_addUser']);
 
     for (var i = 0, len = this.TBody.nativeElement.children.length; i < len; i++) {

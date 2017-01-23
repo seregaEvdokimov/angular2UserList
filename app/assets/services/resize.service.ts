@@ -6,6 +6,8 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class ResizeServices {
 
+  // INIT
+
   resizeContainer: HTMLElement = null;
   resizeArea: HTMLElement = null;
   imageNew: any;
@@ -16,22 +18,7 @@ export class ResizeServices {
 
   constructor() {}
 
-  init(imageEl: any, areaEl: any, callback: any) {
-    this.resizeArea = areaEl;
-
-    this.imageNew = new Image();
-    this.imageNew.src = imageEl.src;
-    this.imageTarget = imageEl;
-
-    this.event_state = {};
-    this.callback = callback;
-    this.resize_canvas = document.createElement('canvas');
-
-    this.resizeContainer = imageEl.parentNode.querySelector('.picture-resize');
-    this.resizeContainer.classList.remove('picture-resize_display-none');
-
-    this.resizeContainer.addEventListener('mousedown', this.startResize.bind(this));
-  }
+  // LISTENERS
 
   startResize(e: any) {
     let target: any = e.target;
@@ -64,6 +51,25 @@ export class ResizeServices {
   endMoving(handler: any, e: any) {
     e.preventDefault();
     document.removeEventListener('mousemove', handler);
+  }
+
+  // METHODS
+
+  init(imageEl: any, areaEl: any, callback: any) {
+    this.resizeArea = areaEl;
+
+    this.imageNew = new Image();
+    this.imageNew.src = imageEl.src;
+    this.imageTarget = imageEl;
+
+    this.event_state = {};
+    this.callback = callback;
+    this.resize_canvas = document.createElement('canvas');
+
+    this.resizeContainer = imageEl.parentNode.querySelector('.picture-resize');
+    this.resizeContainer.classList.remove('picture-resize_display-none');
+
+    this.resizeContainer.addEventListener('mousedown', this.startResize.bind(this));
   }
 
   saveEventState(e: any) {
@@ -136,10 +142,10 @@ export class ResizeServices {
     }
 
     let crop_canvas: any,
-        left = (parentLeft * -1) + this.resizeArea.offsetLeft,
-        top = (parentTop * -1) + this.resizeArea.offsetTop,
-        width = this.resizeArea.getBoundingClientRect().width,
-        height = this.resizeArea.getBoundingClientRect().height;
+      left = (parentLeft * -1) + this.resizeArea.offsetLeft,
+      top = (parentTop * -1) + this.resizeArea.offsetTop,
+      width = this.resizeArea.getBoundingClientRect().width,
+      height = this.resizeArea.getBoundingClientRect().height;
 
     crop_canvas = document.createElement('canvas');
     crop_canvas.width = width;
@@ -147,5 +153,12 @@ export class ResizeServices {
 
     crop_canvas.getContext('2d').drawImage(this.imageNew, left, top, width, height, 0, 0, width, height);
     return crop_canvas.toDataURL("image/png");
+  }
+
+  clear() {
+    this.resizeContainer.classList.add('picture-resize_display-none');
+
+    let parent: any = this.resizeContainer.parentNode;
+    parent.style.transform = "translate(0px, 0px)";
   }
 }

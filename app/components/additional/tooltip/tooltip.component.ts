@@ -18,6 +18,9 @@ import {TOOLTIP_MOVE, TOOLTIP_HIDE, TOOLTIP_SHOW} from './actions';
 
 
 export class TooltipComponent implements  AfterViewInit{
+
+  // INIT
+
   @ViewChild('elTooltip') elTooltip: ElementRef;
 
   @Output() onAction = new EventEmitter();
@@ -63,7 +66,11 @@ export class TooltipComponent implements  AfterViewInit{
 
   constructor(private dictionary: DictionaryService) {}
 
+  // LIFECYCLE HOOKS
+
   ngAfterViewInit() {}
+
+  // METHODS
 
   show(data: any) {
     this.reset();

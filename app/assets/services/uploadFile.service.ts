@@ -7,11 +7,15 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class UploadFileService {
 
+  // INIT
+
   fileReader: any = new FileReader();
   callback: any;
   input: HTMLElement;
 
   constructor() {}
+
+  // METHODS
 
   read(input: HTMLElement, callback: any) {
     this.input = input;

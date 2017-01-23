@@ -42,6 +42,12 @@ import {FETCH_LOCALIZATION_STRINGS} from './components/header/actions'
 
 export class AppComponent implements OnDestroy {
 
+  // INIT
+
+  headerProps: any = null;
+  tooltipProps: any = null;
+  notifyProps: any = null;
+  modalProps: any = null;
   subscription: Subscription;
 
   constructor(
@@ -77,9 +83,13 @@ export class AppComponent implements OnDestroy {
     middlewareSharedWorker(this.store, window);
   }
 
+  // LIFECYCLE HOOKS
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+
+  // METHODS
 
   onAction(params: any): void {
     this.store.dispatch(params);
@@ -93,22 +103,18 @@ export class AppComponent implements OnDestroy {
     this.communication.personEmit(state);
   }
 
-  headerProps: any = null;
   setHeader(state: any): void {
     this.headerProps = state;
   }
 
-  tooltipProps: any = null;
   setTooltip(state: any): void {
     this.tooltipProps = state;
   }
 
-  notifyProps: any = null;
   setNotify(state: any): void {
     this.notifyProps = state;
   }
 
-  modalProps: any = null;
   setModal(state: any): void {
     this.modalProps = state;
   }

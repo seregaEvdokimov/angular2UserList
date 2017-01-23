@@ -6,6 +6,7 @@ import {Component, Input, Output, EventEmitter, ElementRef, ViewChild, AfterView
 
 import {UploadFileService} from '../../../../assets/services/uploadFile.service';
 import {ResizeServices} from '../../../../assets/services/resize.service';
+import {DictionaryService} from '../../../../assets/services/dictionary.service';
 
 import {TRANSLATE} from '../../../header/actions';
 import {MODAL_UPLOAD_HIDE, MODAL_UPLOAD_SHOW} from '../actions';
@@ -20,6 +21,9 @@ import {MODAL_UPLOAD_HIDE, MODAL_UPLOAD_SHOW} from '../actions';
 
 
 export class UploadModalComponent implements AfterViewInit{
+
+  // INIT
+
   // nodes to translate
   @ViewChild('TCaption') TCaption: ElementRef;
   @ViewChild('TPicture') TPicture: ElementRef;
@@ -51,31 +55,13 @@ export class UploadModalComponent implements AfterViewInit{
   active: boolean = false;
   forEntity: string = '';
 
-  constructor(private uploader: UploadFileService, private resizer: ResizeServices) {}
+  constructor(private uploader: UploadFileService, private resizer: ResizeServices, private dictionary: DictionaryService) {}
+
+  // LIFECYCLE HOOKS
 
   ngAfterViewInit() {}
 
-  show() {
-    this.active = true;
-  }
-
-  hide() {
-    this.active = false;
-  }
-
-  handlerUploadFile($event: any) {
-    let input: HTMLElement = $event.target;
-    this.uploader.read(input, this.insertImage.bind(this));
-  }
-
-  insertImage(file: string) {
-    this.picture.nativeElement.setAttribute('src', file);
-    this.resizer.init(this.picture.nativeElement, this.area.nativeElement, this.resizeImage.bind(this));
-  }
-
-  resizeImage(file: string) {
-    this.picture.nativeElement.setAttribute('src', file);
-  }
+  // LISTENERS
 
   handlerControls($event: any) {
     let el: HTMLElement = $event.target;
@@ -97,10 +83,39 @@ export class UploadModalComponent implements AfterViewInit{
         });
         break;
     }
+
+    this.resizer.clear();
+  }
+
+  handlerUploadFile($event: any) {
+    let input: HTMLElement = $event.target;
+    this.uploader.read(input, this.insertImage.bind(this));
+  }
+
+  // METHODS
+
+  show() {
+    this.active = true;
+  }
+
+  hide() {
+    this.active = false;
+    this.picture.nativeElement.setAttribute('src', '');
+  }
+
+  insertImage(file: string) {
+    this.picture.nativeElement.setAttribute('src', file);
+    this.resizer.init(this.picture.nativeElement, this.area.nativeElement, this.resizeImage.bind(this));
+  }
+
+  resizeImage(file: string) {
+    this.picture.nativeElement.setAttribute('src', file);
   }
 
   translate() {
-
+    this.TCaption.nativeElement.textContent = this.dictionary.t(['forms', 'upload_caption']);
+    this.TPicture.nativeElement.textContent = this.dictionary.t(['forms', 'upload_picture']);
+    this.TSave.nativeElement.textContent    = this.dictionary.t(['forms', 'upload_save']);
+    this.TCancel.nativeElement.textContent  = this.dictionary.t(['forms', 'upload_cancel']);
   }
-
 }

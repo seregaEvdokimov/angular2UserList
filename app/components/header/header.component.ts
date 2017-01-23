@@ -18,9 +18,12 @@ import {NOTIFY_SWITCH} from '../additional/notify/actions';
 
 
 export class HeaderComponent implements AfterViewInit{
+
+  // INIT
+
   // nodes to translate
   @ViewChild('TNotifySwitch') TNotifySwitch: ElementRef;
-  @ViewChild('TSearchBtn') TSearchBtn: ElementRef;
+  @ViewChild('TSearchBtn')    TSearchBtn: ElementRef;
 
   @Output() onAction = new EventEmitter();
   @Input()
@@ -40,7 +43,11 @@ export class HeaderComponent implements AfterViewInit{
 
   constructor(private dictionary: DictionaryService) {}
 
+  // LIFECYCLE HOOKS
+
   ngAfterViewInit() {}
+
+  // LISTENERS
 
   handlerChangeLanguage($event: any): boolean {
     let el = $event.target;
@@ -72,6 +79,8 @@ export class HeaderComponent implements AfterViewInit{
     });
   }
 
+  // METHODS
+
   heighlight(): void {
     switch(this.dictionary.currentLang) {
       case 'en':
@@ -87,6 +96,6 @@ export class HeaderComponent implements AfterViewInit{
 
   translate() {
     this.TNotifySwitch.nativeElement.textContent = this.dictionary.t(['content', 'header_notifySwitcher']);
-    this.TSearchBtn.nativeElement.textContent = this.dictionary.t(['content', 'header_searchButton']);
+    this.TSearchBtn.nativeElement.textContent    = this.dictionary.t(['content', 'header_searchButton']);
   }
 }

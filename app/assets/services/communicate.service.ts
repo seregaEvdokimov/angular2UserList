@@ -9,25 +9,22 @@ import {Subject} from 'rxjs/subject';
 export class CommunicateService {
   constructor() {}
 
-  // Observable string sources
   private appCmpSource = new Subject();
-  private personSource = new Subject();
-  private userListSource = new Subject();
-
-  // Observable string streams
   appCmpOn = this.appCmpSource.asObservable();
-  personOn = this.personSource.asObservable();
-  userListOn = this.userListSource.asObservable();
-
-  // Service message commands
   appCmpEmit(data: any) {
     this.appCmpSource.next(data);
   }
 
+
+  private personSource = new Subject();
+  personOn = this.personSource.asObservable();
   personEmit(data: any) {
     this.personSource.next(data);
   }
 
+
+  private userListSource = new Subject();
+  userListOn = this.userListSource.asObservable();
   userListEmit(data: any) {
     this.userListSource.next(data);
   }

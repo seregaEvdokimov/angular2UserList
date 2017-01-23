@@ -8,10 +8,11 @@ import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {DictionaryService} from '../../../../assets/services/dictionary.service';
 
 import {TRANSLATE} from '../../../header/actions';
-import {USER_UPDATE, SHOULD_UPDATE_USER} from '../../../content/user-list/actions';
+import {USER_UPDATE, USER_SHOULD_UPDATE} from '../../../content/user-list/actions';
 import {
   MODAL_EDIT_SHOW,
   MODAL_EDIT_HIDE,
+
   MODAL_UPLOAD_SHOW,
   MODAL_UPLOAD_FILE
 } from '../actions';
@@ -26,6 +27,9 @@ import {
 
 
 export class UpdateModalComponent {
+
+  // INIT
+
   // nodes to translate
   @ViewChild('TCaption')   TCaption: ElementRef;
   @ViewChild('TAvatar')    TAvatar: ElementRef;
@@ -73,33 +77,7 @@ export class UpdateModalComponent {
     });
   }
 
-  show(data: any) {
-    this.picture.nativeElement.setAttribute('src', data.model.avatar);
-    this.updateForm.patchValue({
-      name: data.model.name,
-      date: data.model.date,
-      birth: data.model.birth,
-      email: data.model.email,
-      id: data.model.id
-    });
-
-    this.active = true;
-  }
-
-  hide() {
-    this.disabled = false;
-    this.active = false;
-  }
-
-  uploadAvatar($event: any) {
-    this.disabled = true;
-    this.onAction.emit({type: MODAL_UPLOAD_SHOW, payload: {form: 'update'}});
-  }
-
-  uploadedAvatar(data: any) {
-    this.disabled = false;
-    if(data.file) this.picture.nativeElement.setAttribute('src', data.file);
-  }
+  // LISTENERS
 
   handlerControls($event: any) {
     let el: HTMLElement = $event.target;
@@ -122,11 +100,42 @@ export class UpdateModalComponent {
         this.disabled = true;
 
         this.onAction.emit({
-          type: SHOULD_UPDATE_USER,
+          type: USER_SHOULD_UPDATE,
           payload: {user: user}
         });
         break;
     }
+  }
+
+  // METHODS
+
+  show(data: any) {
+    this.picture.nativeElement.setAttribute('src', data.avatar);
+    this.updateForm.patchValue({
+      name: data.name,
+      date: data.date,
+      birth: data.birth,
+      email: data.email,
+      id: data.id
+    });
+
+    this.disabled = false;
+    this.active = true;
+  }
+
+  hide() {
+    this.disabled = false;
+    this.active = false;
+  }
+
+  uploadAvatar($event: any) {
+    this.disabled = true;
+    this.onAction.emit({type: MODAL_UPLOAD_SHOW, payload: {form: 'update'}});
+  }
+
+  uploadedAvatar(data: any) {
+    this.disabled = false;
+    if(data.file) this.picture.nativeElement.setAttribute('src', data.file);
   }
 
   translate() {

@@ -10,7 +10,11 @@ import {TOOLTIP_SHOW} from '../../components/additional/tooltip/actions';
 @Injectable()
 export class TooltipService {
 
+  // INIT
+
   constructor(private http: Http) {}
+
+  // METHODS
 
   getData(payload: any, callback: any) {
     let params = new URLSearchParams();

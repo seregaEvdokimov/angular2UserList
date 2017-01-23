@@ -9,6 +9,9 @@ import {TRANSLATE} from '../../components/header/actions'
 
 @Injectable()
 export class DictionaryService {
+
+  // INIT
+
   currentLang: string = '';
   localizationStrings: any = {};
 
@@ -21,6 +24,8 @@ export class DictionaryService {
   url: string = 'http://localhost:4001/language';
 
   constructor(private http: Http) {}
+
+  // METHODS
 
   loadLocalization(data: any, callbacks: any) {
     this.currentLang = data.lang;

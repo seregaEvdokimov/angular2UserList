@@ -5,6 +5,9 @@
 import {ITimer} from '../interfaces/timer';
 
 export class TimerService {
+
+  // INIT
+
   startTime: number;
   finishTime: number;
   intervalId: any;
@@ -12,6 +15,8 @@ export class TimerService {
   callback: any;
 
   constructor() {}
+
+  // METHODS
 
   init(data: ITimer, callback: any):void {
     this.startTime = new Date(data.start).getTime();

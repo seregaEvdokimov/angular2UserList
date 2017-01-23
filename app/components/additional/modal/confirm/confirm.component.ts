@@ -20,16 +20,18 @@ import {MODAL_CONFIRM_SHOW, MODAL_CONFIRM_HIDE} from '../actions';
 
 
 export class ConfirmModalComponent {
+
+  //INIT
+
   // nodes to translate
   @ViewChild('TCaption') TCaption: ElementRef;
-  @ViewChild('TSave') TSave: ElementRef;
-  @ViewChild('TCancel') TCancel: ElementRef;
+  @ViewChild('TSave')    TSave: ElementRef;
+  @ViewChild('TCancel')  TCancel: ElementRef;
 
   @Output() onAction = new EventEmitter();
   @Input()
   set props(props: any) {
     if(!props) return;
-    console.log('confirm modal', props);
 
     switch(props.type) {
       case TRANSLATE:
@@ -51,14 +53,7 @@ export class ConfirmModalComponent {
 
   constructor(private dictionary: DictionaryService) {}
 
-  show() {
-    this.active = true;
-  }
-
-  hide() {
-    this.active = false;
-  }
-
+  // LISTENERS
 
   handlerControls($event: any) {
     let el: HTMLElement = $event.target;
@@ -69,7 +64,7 @@ export class ConfirmModalComponent {
       case 'ok':
         this.onAction.emit({
           type: USER_UPDATE,
-          payload: {user: this.payload.model}
+          payload: {user: this.payload}
         });
 
         this.onAction.emit({type: MODAL_CONFIRM_HIDE});
@@ -78,6 +73,16 @@ export class ConfirmModalComponent {
         this.onAction.emit({type: MODAL_CONFIRM_HIDE});
         break;
     }
+  }
+
+  // METHODS
+
+  show() {
+    this.active = true;
+  }
+
+  hide() {
+    this.active = false;
   }
 
   translate() {

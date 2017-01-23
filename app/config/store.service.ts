@@ -12,20 +12,54 @@ import {DictionaryService} from '../assets/services/dictionary.service';
 
 import {FETCH_PERSON_INFORM} from '../components/content/person/actions';
 import {NOTIFY_ADD, NOTIFY_SWITCH} from '../components/additional/notify/actions';
-import {SEARCH, TRANSLATE, FETCH_LOCALIZATION_STRINGS} from '../components/header/actions';
-import {TOOLTIP_SHOW, TOOLTIP_HIDE, TOOLTIP_MOVE} from '../components/additional/tooltip/actions';
-import {FETCH_USER_LIST, USER_LIST_SORT, USER_LIST_PAGINATION, USER_UPDATE, SHOULD_UPDATE_USER, USER_TIME_PASSED, USER_CREATE, USER_DELETE, USER_NEW} from '../components/content/user-list/actions';
-import {MODAL_EDIT_SHOW, MODAL_CREATE_SHOW, MODAL_CREATE_HIDE, MODAL_ALL_HIDE, MODAL_CONFIRM_SHOW, MODAL_CONFIRM_HIDE, MODAL_UPLOAD_SHOW, MODAL_UPLOAD_HIDE, MODAL_EDIT_HIDE} from '../components/additional/modal/actions';
+import {SEARCH, FETCH_LOCALIZATION_STRINGS} from '../components/header/actions';
+import {
+  TOOLTIP_SHOW,
+  TOOLTIP_HIDE,
+  TOOLTIP_MOVE
+} from '../components/additional/tooltip/actions';
+import {
+  USER_READ,
+  USER_NEW,
+  USER_CREATE,
+  USER_SHOULD_UPDATE,
+  USER_UPDATE,
+  USER_DELETE,
+
+  USER_LIST_SORT,
+  USER_LIST_PAGINATION,
+  USER_TIME_PASSED,
+} from '../components/content/user-list/actions';
+import {
+  MODAL_CREATE_SHOW,
+  MODAL_CREATE_HIDE,
+
+  MODAL_EDIT_SHOW,
+  MODAL_EDIT_HIDE,
+
+  MODAL_CONFIRM_SHOW,
+  MODAL_CONFIRM_HIDE,
+
+  MODAL_UPLOAD_SHOW,
+  MODAL_UPLOAD_HIDE,
+
+  MODAL_ALL_HIDE
+} from '../components/additional/modal/actions';
 
 
 @Injectable()
 export class StoreService {
+
+  // INIT
+
   userService: UserService;
   tooltipService: TooltipService;
   dictionaryService: DictionaryService;
   callbacks: any;
 
   constructor() {}
+
+  // METHODS
 
   init(services: any, callbacks: any): void {
     this.userService = services.user;
@@ -45,21 +79,17 @@ export class StoreService {
         this.dictionaryService.loadLocalization(action.payload, this.callbacks);
         break;
       case SEARCH:
-        let searchUsers = this.userService.searchUser(action.payload);
-        this.callbacks.userList({
-          type: FETCH_USER_LIST,
-          payload: {users: searchUsers}
-        });
+        this.userService.searchUser(action.payload, this.callbacks.userList);
         break;
 
       // USER
-      case FETCH_USER_LIST:
+      case USER_READ:
         users = this.userService.getAll();
         if(!users.length) {
           this.userService.loadUsers(action.payload, this.callbacks.userList);
         } else {
           this.callbacks.userList({
-            type: FETCH_USER_LIST,
+            type: USER_READ,
             payload: {users: users}
           })
         }
@@ -71,16 +101,16 @@ export class StoreService {
         let limit = this.userService.getCount() + 10;
         this.userService.loadUsers({start: 0, limit:limit}, this.callbacks.userList);
         break;
-      case SHOULD_UPDATE_USER:
-        this.callbacks.modal({
-          type: SHOULD_UPDATE_USER,
-          payload: {model: action.payload.user}
-        });
-        break;
       case USER_TIME_PASSED:
         this.callbacks.notify({
           type: NOTIFY_ADD,
           payload: {message: this.dictionaryService.getMessage(action.payload.user, ['notify', 'timePassed'])}
+        });
+        break;
+      case USER_SHOULD_UPDATE:
+        this.callbacks.modal({
+          type: MODAL_CONFIRM_SHOW,
+          payload: action.payload
         });
         break;
       case USER_UPDATE:
@@ -91,11 +121,7 @@ export class StoreService {
         });
         break;
       case USER_NEW:
-        users = this.userService.newUser(action.payload);
-        this.callbacks.userList({
-          type: FETCH_USER_LIST,
-          payload: {users: users}
-        });
+        this.userService.newUser(action.payload, this.callbacks.userList);
         this.callbacks.notify({
           type: NOTIFY_ADD,
           payload: {message: this.dictionaryService.getMessage(action.payload.user, ['notify', 'createUser'])}
@@ -109,23 +135,16 @@ export class StoreService {
         });
         break;
       case USER_DELETE:
-        user = this.userService.getById(action.payload.id);
+        user = this.userService.deleteUser(action.payload.id, this.callbacks.userList);
         this.callbacks.notify({
           type: NOTIFY_ADD,
           payload: {message: this.dictionaryService.getMessage(user, ['notify', 'deleteUser'])}
         });
-        this.userService.deleteUser(action.payload, this.callbacks.userList);
         break;
 
       // PERSON
       case FETCH_PERSON_INFORM:
-        user = this.userService.getById(parseInt(action.payload.id), this.callbacks.person);
-        if(user) {
-          this.callbacks.person({
-            type: FETCH_PERSON_INFORM,
-            payload: user
-          });
-        }
+        this.userService.loadUser(parseInt(action.payload.id), this.callbacks.person);
         break;
 
       // MODAL
@@ -133,7 +152,7 @@ export class StoreService {
         user = this.userService.getById(action.payload.id);
         this.callbacks.modal({
           type: MODAL_EDIT_SHOW,
-          payload: {model: user}
+          payload: user
         });
         break;
       case MODAL_EDIT_HIDE:
@@ -159,6 +178,9 @@ export class StoreService {
         break;
       case MODAL_CONFIRM_HIDE:
         this.callbacks.modal({type: MODAL_CONFIRM_HIDE});
+        break;
+      case MODAL_ALL_HIDE:
+        this.callbacks.modal({type: MODAL_ALL_HIDE});
         break;
 
       // TOOLTIP

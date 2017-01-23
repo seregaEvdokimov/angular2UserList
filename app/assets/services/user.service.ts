@@ -8,10 +8,13 @@ import {Http, URLSearchParams} from '@angular/http';
 import {IUser} from '../interfaces/user';
 
 import {FETCH_PERSON_INFORM} from '../../components/content/person/actions';
-import {FETCH_USER_LIST, USER_NEW} from '../../components/content/user-list/actions';
+import {USER_READ} from '../../components/content/user-list/actions';
 
 @Injectable()
 export class UserService {
+
+  // INIT
+
   url: string = 'http://localhost:4001/user';
   users: IUser[] = [];
   count: number = null;
@@ -20,6 +23,8 @@ export class UserService {
   sortDirection: string = 'asc';
 
   constructor(private http: Http) {}
+
+  // METHODS
 
   loadUsers(payload: any, callback: any): void {
     let params = new URLSearchParams();
@@ -37,21 +42,33 @@ export class UserService {
   }
 
   loadUser(id: number, callback: any): void {
-    let params = new URLSearchParams();
-    params.set('id', id + '');
-
-    this.http.get(this.url, {search: params}).subscribe(res => {
+    let user = this.getById(id);
+    if(user) {
       callback({
         type: FETCH_PERSON_INFORM,
-        payload: res.json()
+        payload: user
       });
-    });
+    } else {
+      let params = new URLSearchParams();
+      params.set('id', id + '');
+
+      this.http.get(this.url, {search: params}).subscribe(res => {
+        callback({
+          type: FETCH_PERSON_INFORM,
+          payload: res.json()
+        });
+      });
+    }
   }
 
-  newUser(payload: any) {
+  newUser(payload: any, callback: any) {
     let user = this.equivalent([payload.user])[0];
     this.users.unshift(user);
-    return this.users;
+
+    callback({
+      type: USER_READ,
+      payload: {users: this.users}
+    });
   }
 
   createUser(payload: any, callback: any): any {
@@ -61,7 +78,7 @@ export class UserService {
       this.users = this.equivalent(this.users);
 
       callback({
-        type: FETCH_USER_LIST,
+        type: USER_READ,
         payload: {users: this.users}
       });
     });
@@ -77,41 +94,49 @@ export class UserService {
         });
         this.users = this.equivalent(this.users);
         callback({
-          type: FETCH_USER_LIST,
+          type: USER_READ,
           payload: {users: this.users}
         });
       });
     } else {
       callback({
-        type: FETCH_USER_LIST,
+        type: USER_READ,
         payload: {users: this.users}
       });
     }
   }
 
-  searchUser(data: any): IUser[] {
+  searchUser(data: any, callback: any) {
     let search = this.users.filter(function(item) {
       return item.name.indexOf(data.search) !== -1;
     });
 
-    return search;
+    callback({
+      type: USER_READ,
+      payload: {users: search}
+    });
   }
 
-  deleteUser(payload: any, callback: any): any {
+  deleteUser(id: number, callback: any): any {
+
+    let user = this.getById(id);
     let params = new URLSearchParams();
-    params.set('id', payload.id + '');
+    params.set('id', id + '');
 
     this.http.delete(this.url, {search: params}).subscribe(res => {
       this.users = this.users.reduce(function(acc, item) {
         if(item.id !== res.json().id) acc.push(item);
         return acc;
       }, []);
+
       this.users = this.equivalent(this.users);
       callback({
-        type: FETCH_USER_LIST,
+        type: USER_READ,
         payload: {users: this.users}
       });
     });
+
+    return user;
   }
 
 
@@ -167,7 +192,7 @@ export class UserService {
     });
 
     callback({
-      type: FETCH_USER_LIST,
+      type: USER_READ,
       payload: {users: this.users}
     });
   }
@@ -180,13 +205,7 @@ export class UserService {
     return this.users;
   }
 
-  getById(id: number, callback?: any): any {
-    let user = this.users.filter(item => item.id === id)[0];
-
-    if(!user) {
-      this.loadUser(id, callback);
-    } else {
-      return user;
-    }
+  getById(id: number) {
+    return this.users.filter(item => item.id === id)[0];
   }
 }

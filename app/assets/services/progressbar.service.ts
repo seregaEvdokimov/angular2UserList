@@ -10,6 +10,9 @@ import {TimerService} from './timer.service';
 
 @Injectable()
 export class ProgressBarService {
+
+  // INIT
+
   timer: TimerService;
   element: HTMLElement;
   startTime: number;
@@ -20,6 +23,8 @@ export class ProgressBarService {
   constructor() {
     this.timer = new TimerService();
   }
+
+  // METHODS
 
   init(data: ITimer, element: HTMLElement): void {
     this.startTime = new Date(data.start).getTime();
