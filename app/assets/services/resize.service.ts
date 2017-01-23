@@ -10,26 +10,39 @@ export class ResizeServices {
 
   area: HTMLElement = null;
   image: HTMLElement = null;
-  // event_state: any;
-  // resize_canvas: any;
+  event_state: any = {};
 
   constructor() {}
 
   // LISTENERS
 
   startResize(e: any) {
+    let target: any = e.target;
+
     e.preventDefault();
     e.stopPropagation();
+    this.saveEventState(e);
 
-    let moveFunc = this.moving.bind(this);
-    document.addEventListener('mousemove', moveFunc);
-    document.addEventListener('mouseup', this.endMoving.bind(this, moveFunc));
+    switch (target.tagName) {
+      case 'DIV':
+        let moveFunc = this.moving.bind(this);
+
+        document.addEventListener('mousemove', moveFunc);
+        document.addEventListener('mouseup', this.endMoving.bind(this, moveFunc));
+        break;
+      case 'SPAN':
+        let resizeFunc = this.resizing.bind(this);
+
+        document.addEventListener('mousemove', resizeFunc);
+        document.addEventListener('mouseup', this.endResize.bind(this, moveFunc));
+        break;
+    }
   }
 
-  // endResize(handler: any, e: any) {
-  //   e.preventDefault();
-  //   document.removeEventListener('mousemove', handler);
-  // }
+  endResize(handler: any, e: any) {
+    e.preventDefault();
+    document.removeEventListener('mousemove', handler);
+  }
 
   endMoving(handler: any, e: any) {
     e.preventDefault();
@@ -56,64 +69,68 @@ export class ResizeServices {
     this.area.style.top = top;
   }
 
-  // saveEventState(e: any) {
-  //
-  //   this.event_state.container_width = this.area.clientWidth;
-  //   this.event_state.container_height = this.area.clientHeight;
-  //   this.event_state.container_left = this.area.offsetLeft;
-  //   this.event_state.container_top = this.area.offsetTop;
-  //
-  //   this.event_state.mouse_x = e.clientX;
-  //   this.event_state.mouse_y = e.clientY;
-  //   this.event_state.evnt = e;
-  // }
+  saveEventState(e: any) {
+    this.event_state.mouse_x = e.clientX;
+    this.event_state.mouse_y = e.clientY;
+    this.event_state.evnt = e;
+  }
 
-  // resizing(e: any) {
-    // let width: number, height: number, target: any = this.event_state.evnt.target;
-    //
-    // switch(target.classList[1]) {
-    //   case 'resize-handle-nw':
-    //     width = this.event_state.container_width - (e.clientX - this.event_state.container_left);
-    //     height = this.event_state.container_height - (e.clientY - this.event_state.container_top);
-    //     break;
-    //   case 'resize-handle-ne':
-    //     width = e.clientX - this.event_state.container_left;
-    //     height = this.event_state.container_height - (e.clientY - this.event_state.container_top);
-    //     break;
-    //   case 'resize-handle-se':
-    //     width = e.clientX - this.event_state.container_left;
-    //     height = e.clientY - this.event_state.container_top;
-    //     break;
-    //   case 'resize-handle-sw':
-    //     width = this.event_state.container_width - (e.clientX - this.event_state.container_left);
-    //     height = e.clientY - this.event_state.container_top;
-    //     break;
-    // }
-    //
-    // this.resizeImage(width, height);
-  // }
+  resizing(newEvent: any) {
+    let width: number = (this.area.style.width) ? parseInt(this.area.style.width.slice(0, -2)) : 135;
+    let height: number = (this.area.style.height) ? parseInt(this.area.style.height.slice(0, -2)) : 195;
 
-  // resizeImage(width: number, height: number) {
-  //   this.resize_canvas.width = width;
-  //   this.resize_canvas.height = height;
-  //   this.resize_canvas.getContext('2d').drawImage(this.imageNew, 0, 0, width, height);
-  //
-  //   let res = this.resize_canvas.toDataURL("image/png");
-  //   this.imageNew.setAttribute('src', res);
-  //   this.callback(res);
-  // }
+    let oldEvent: any = this.event_state.evnt;
+    let target: any = oldEvent.target;
+
+    let wDirection: string;
+    let hDirection: string;
+
+    switch(target.classList[1]) {
+      case 'resize-handle-n':
+        hDirection = (newEvent.clientY < oldEvent.clientY) ? 'positive' : 'negative';
+        break;
+      case 'resize-handle-s':
+        hDirection = (newEvent.clientY > oldEvent.clientY) ? 'positive' : 'negative';
+        break;
+      case 'resize-handle-w':
+        wDirection = (newEvent.clientX < oldEvent.clientX) ? 'positive' : 'negative';
+        break;
+      case 'resize-handle-e':
+        wDirection = (newEvent.clientX > oldEvent.clientX) ? 'positive' : 'negative';
+        break;
+      case 'resize-handle-ne':
+        wDirection = (newEvent.clientX > oldEvent.clientX) ? 'positive' : 'negative';
+        hDirection = (newEvent.clientY < oldEvent.clientY) ? 'positive' : 'negative';
+        break;
+      case 'resize-handle-nw':
+        wDirection = (newEvent.clientX < oldEvent.clientX) ? 'positive' : 'negative';
+        hDirection = (newEvent.clientY < oldEvent.clientY) ? 'positive' : 'negative';
+        break;
+      case 'resize-handle-se':
+        wDirection = (newEvent.clientX > oldEvent.clientX) ? 'positive' : 'negative';
+        hDirection = (newEvent.clientY > oldEvent.clientY) ? 'positive' : 'negative';
+        break;
+      case 'resize-handle-sw':
+        wDirection = (newEvent.clientX < oldEvent.clientX) ? 'positive' : 'negative';
+        hDirection = (newEvent.clientY > oldEvent.clientY) ? 'positive' : 'negative';
+        break;
+    }
+
+    (wDirection === 'negative') ? --width: (wDirection === 'positive') ? ++width: false;
+    (hDirection === 'negative') ? --height: (hDirection === 'positive') ? ++height: false;
+
+    this.area.style.width = width + 'px';
+    this.area.style.height = height + 'px';
+  }
 
   crop() {
     if(!this.image) return false;
 
-    let leftOffset: number = (this.area.style.left) ? parseInt(this.area.style.left.slice(0, -2)) : 0;
-    let topOffset: number = (this.area.style.top) ? parseInt(this.area.style.top.slice(0, -2)) : 0;
-
     let crop_canvas: any,
-      left = leftOffset,
-      top = topOffset,
-      width = this.area.getBoundingClientRect().width,
-      height = this.area.getBoundingClientRect().height;
+      left = (this.area.style.left) ? parseInt(this.area.style.left.slice(0, -2)) : 0,
+      top = (this.area.style.top) ? parseInt(this.area.style.top.slice(0, -2)) : 0,
+      width = (this.area.style.width) ? parseInt(this.area.style.width.slice(0, -2)) : 135,
+      height = (this.area.style.height) ? parseInt(this.area.style.height.slice(0, -2)) : 195;
 
     crop_canvas = document.createElement('canvas');
     crop_canvas.width = width;
@@ -121,5 +138,10 @@ export class ResizeServices {
 
     crop_canvas.getContext('2d').drawImage(this.image, left, top, width, height, 0, 0, width, height);
     return crop_canvas.toDataURL("image/png");
+  }
+
+  reset() {
+    this.area.style.width = '135px';
+    this.area.style.height = '195px';
   }
 }

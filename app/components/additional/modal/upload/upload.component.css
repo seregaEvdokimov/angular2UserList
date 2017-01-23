@@ -65,28 +65,60 @@
   z-index: 999;
 }
 
+.resize-area .resize-handle:active {
+  background: green;
+}
+
+.resize-area .resize-handle-n {
+  top: -5px;
+  left: 50%;
+  margin-left: -5px;
+  cursor: n-resize;
+}
+
+.resize-area .resize-handle-w {
+  top: 50%;
+  left: -5px;
+  margin-top: -5px;
+  cursor: w-resize;
+}
+
+.resize-area .resize-handle-e {
+  top: 50%;
+  right: -5px;
+  margin-top: -5px;
+  cursor: e-resize;
+}
+
+.resize-area .resize-handle-s {
+  bottom: -5px;
+  left: 50%;
+  margin-left: -5px;
+  cursor: s-resize;
+}
+
 .resize-area .resize-handle-nw {
   top: -5px;
   left: -5px;
-  /*cursor: nw-resize;*/
+  cursor: nw-resize;
 }
 
 .resize-area .resize-handle-sw {
   bottom: -5px;
   left: -5px;
-  /*cursor: sw-resize;*/
+  cursor: sw-resize;
 }
 
 .resize-area .resize-handle-ne {
   top: -5px;
   right: -5px;
-  /*cursor: ne-resize;*/
+  cursor: ne-resize;
 }
 
 .resize-area .resize-handle-se {
   bottom: -5px;
   right: -5px;
-  /*cursor: se-resize;*/
+  cursor: se-resize;
 }
 
 

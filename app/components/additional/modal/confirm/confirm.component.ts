@@ -64,7 +64,7 @@ export class ConfirmModalComponent {
       case 'ok':
         this.onAction.emit({
           type: USER_UPDATE,
-          payload: {user: this.payload}
+          payload: this.payload
         });
 
         this.onAction.emit({type: MODAL_CONFIRM_HIDE});

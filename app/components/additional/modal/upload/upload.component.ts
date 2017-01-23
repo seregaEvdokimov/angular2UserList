@@ -83,6 +83,8 @@ export class UploadModalComponent implements AfterViewInit{
         });
         break;
     }
+
+    this.resizer.reset();
   }
 
   handlerUploadFile($event: any) {
