@@ -103,6 +103,7 @@ export class CreateModalComponent {
   // METHODS
 
   show() {
+    this.picture.nativeElement.setAttribute('src', '');
     this.disabled = false;
     this.active = true;
   }
