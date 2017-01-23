@@ -146,7 +146,6 @@ export class ModalComponent {
 
   handlerCloseModals($event: any) {
     let el = $event.target;
-
     if(el.tagName === 'SECTION') this.onAction.emit({type: MODAL_ALL_HIDE});
   }
 

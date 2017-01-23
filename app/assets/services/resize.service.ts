@@ -8,45 +8,28 @@ export class ResizeServices {
 
   // INIT
 
-  resizeContainer: HTMLElement = null;
-  resizeArea: HTMLElement = null;
-  imageNew: any;
-  imageTarget: any;
-  event_state: any;
-  resize_canvas: any;
-  callback: any;
+  area: HTMLElement = null;
+  image: HTMLElement = null;
+  // event_state: any;
+  // resize_canvas: any;
 
   constructor() {}
 
   // LISTENERS
 
   startResize(e: any) {
-    let target: any = e.target;
-
     e.preventDefault();
     e.stopPropagation();
-    this.saveEventState(e);
 
-    switch(target.tagName) {
-      case 'DIV':
-        let moveFunc = this.moving.bind(this);
-
-        document.addEventListener('mousemove', moveFunc);
-        document.addEventListener('mouseup', this.endMoving.bind(this, moveFunc));
-        break;
-      case 'SPAN':
-        let resizingFunc = this.resizing.bind(this);
-
-        document.addEventListener('mousemove', resizingFunc);
-        document.addEventListener('mouseup', this.endResize.bind(this, resizingFunc));
-        break;
-    }
+    let moveFunc = this.moving.bind(this);
+    document.addEventListener('mousemove', moveFunc);
+    document.addEventListener('mouseup', this.endMoving.bind(this, moveFunc));
   }
 
-  endResize(handler: any, e: any) {
-    e.preventDefault();
-    document.removeEventListener('mousemove', handler);
-  }
+  // endResize(handler: any, e: any) {
+  //   e.preventDefault();
+  //   document.removeEventListener('mousemove', handler);
+  // }
 
   endMoving(handler: any, e: any) {
     e.preventDefault();
@@ -55,110 +38,88 @@ export class ResizeServices {
 
   // METHODS
 
-  init(imageEl: any, areaEl: any, callback: any) {
-    this.resizeArea = areaEl;
+  init(imageEl: any, areaEl: any) {
 
-    this.imageNew = new Image();
-    this.imageNew.src = imageEl.src;
-    this.imageTarget = imageEl;
+    this.image = imageEl;
+    this.area = areaEl;
+    this.area.style.left = '0';
+    this.area.style.top = '0';
 
-    this.event_state = {};
-    this.callback = callback;
-    this.resize_canvas = document.createElement('canvas');
-
-    this.resizeContainer = imageEl.parentNode.querySelector('.picture-resize');
-    this.resizeContainer.classList.remove('picture-resize_display-none');
-
-    this.resizeContainer.addEventListener('mousedown', this.startResize.bind(this));
-  }
-
-  saveEventState(e: any) {
-    this.event_state.container_width = this.resizeContainer.clientWidth;
-    this.event_state.container_height = this.resizeContainer.clientHeight;
-    this.event_state.container_left = this.resizeContainer.offsetLeft;
-    this.event_state.container_top = this.resizeContainer.offsetTop;
-
-    this.event_state.mouse_x = e.clientX;
-    this.event_state.mouse_y = e.clientY;
-    this.event_state.evnt = e;
+    this.area.addEventListener('mousedown', this.startResize.bind(this));
   }
 
   moving(e: any) {
-    let parent: any = this.resizeContainer.parentNode;
-    let left = (e.clientX - this.event_state.container_width) + 'px';
-    let top = (e.clientY - this.event_state.container_height) + 'px';
+    let left = (e.offsetX + 10) + 'px';
+    let top = (e.offsetY + 10) + 'px';
 
-    parent.style.transform = "translate(" + left + ", " + top + ")";
+    this.area.style.left = left;
+    this.area.style.top = top;
   }
 
-  resizing(e: any) {
-    let width: number, height: number, target: any = this.event_state.evnt.target;
+  // saveEventState(e: any) {
+  //
+  //   this.event_state.container_width = this.area.clientWidth;
+  //   this.event_state.container_height = this.area.clientHeight;
+  //   this.event_state.container_left = this.area.offsetLeft;
+  //   this.event_state.container_top = this.area.offsetTop;
+  //
+  //   this.event_state.mouse_x = e.clientX;
+  //   this.event_state.mouse_y = e.clientY;
+  //   this.event_state.evnt = e;
+  // }
 
-    switch(target.classList[1]) {
-      case 'resize-handle-nw':
-        width = this.event_state.container_width - (e.clientX - this.event_state.container_left);
-        height = this.event_state.container_height - (e.clientY - this.event_state.container_top);
-        break;
-      case 'resize-handle-ne':
-        width = e.clientX - this.event_state.container_left;
-        height = this.event_state.container_height - (e.clientY - this.event_state.container_top);
-        break;
-      case 'resize-handle-se':
-        width = e.clientX - this.event_state.container_left;
-        height = e.clientY - this.event_state.container_top;
-        break;
-      case 'resize-handle-sw':
-        width = this.event_state.container_width - (e.clientX - this.event_state.container_left);
-        height = e.clientY - this.event_state.container_top;
-        break;
-    }
+  // resizing(e: any) {
+    // let width: number, height: number, target: any = this.event_state.evnt.target;
+    //
+    // switch(target.classList[1]) {
+    //   case 'resize-handle-nw':
+    //     width = this.event_state.container_width - (e.clientX - this.event_state.container_left);
+    //     height = this.event_state.container_height - (e.clientY - this.event_state.container_top);
+    //     break;
+    //   case 'resize-handle-ne':
+    //     width = e.clientX - this.event_state.container_left;
+    //     height = this.event_state.container_height - (e.clientY - this.event_state.container_top);
+    //     break;
+    //   case 'resize-handle-se':
+    //     width = e.clientX - this.event_state.container_left;
+    //     height = e.clientY - this.event_state.container_top;
+    //     break;
+    //   case 'resize-handle-sw':
+    //     width = this.event_state.container_width - (e.clientX - this.event_state.container_left);
+    //     height = e.clientY - this.event_state.container_top;
+    //     break;
+    // }
+    //
+    // this.resizeImage(width, height);
+  // }
 
-    this.resizeImage(width, height);
-  }
-
-  resizeImage(width: number, height: number) {
-    this.resize_canvas.width = width;
-    this.resize_canvas.height = height;
-    this.resize_canvas.getContext('2d').drawImage(this.imageNew, 0, 0, width, height);
-
-    let res = this.resize_canvas.toDataURL("image/png");
-    this.imageNew.setAttribute('src', res);
-    this.callback(res);
-  }
+  // resizeImage(width: number, height: number) {
+  //   this.resize_canvas.width = width;
+  //   this.resize_canvas.height = height;
+  //   this.resize_canvas.getContext('2d').drawImage(this.imageNew, 0, 0, width, height);
+  //
+  //   let res = this.resize_canvas.toDataURL("image/png");
+  //   this.imageNew.setAttribute('src', res);
+  //   this.callback(res);
+  // }
 
   crop() {
-    if(!this.resizeContainer) return false;
+    if(!this.image) return false;
 
-    let parent: any = this.resizeContainer.parentNode;
-    let parentLeft: number = 0;
-    let parentTop: number = 0;
-
-    if(parent.style.transform) {
-      let res: any = parent.style.transform.match(/translate\((.*?)px, (.*?)px\)/i);
-      if(res) {
-        parentLeft = parseInt(res[1]);
-        parentTop = parseInt(res[2]);
-      }
-    }
+    let leftOffset: number = (this.area.style.left) ? parseInt(this.area.style.left.slice(0, -2)) : 0;
+    let topOffset: number = (this.area.style.top) ? parseInt(this.area.style.top.slice(0, -2)) : 0;
 
     let crop_canvas: any,
-      left = (parentLeft * -1) + this.resizeArea.offsetLeft,
-      top = (parentTop * -1) + this.resizeArea.offsetTop,
-      width = this.resizeArea.getBoundingClientRect().width,
-      height = this.resizeArea.getBoundingClientRect().height;
+      left = leftOffset,
+      top = topOffset,
+      width = this.area.getBoundingClientRect().width,
+      height = this.area.getBoundingClientRect().height;
 
     crop_canvas = document.createElement('canvas');
     crop_canvas.width = width;
     crop_canvas.height = height;
 
-    crop_canvas.getContext('2d').drawImage(this.imageNew, left, top, width, height, 0, 0, width, height);
+    crop_canvas.getContext('2d').drawImage(this.image, left, top, width, height, 0, 0, width, height);
     return crop_canvas.toDataURL("image/png");
-  }
-
-  clear() {
-    this.resizeContainer.classList.add('picture-resize_display-none');
-
-    let parent: any = this.resizeContainer.parentNode;
-    parent.style.transform = "translate(0px, 0px)";
   }
 }

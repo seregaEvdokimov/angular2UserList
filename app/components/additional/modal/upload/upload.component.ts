@@ -83,8 +83,6 @@ export class UploadModalComponent implements AfterViewInit{
         });
         break;
     }
-
-    this.resizer.clear();
   }
 
   handlerUploadFile($event: any) {
@@ -105,11 +103,7 @@ export class UploadModalComponent implements AfterViewInit{
 
   insertImage(file: string) {
     this.picture.nativeElement.setAttribute('src', file);
-    this.resizer.init(this.picture.nativeElement, this.area.nativeElement, this.resizeImage.bind(this));
-  }
-
-  resizeImage(file: string) {
-    this.picture.nativeElement.setAttribute('src', file);
+    this.resizer.init(this.picture.nativeElement, this.area.nativeElement);
   }
 
   translate() {
@@ -118,4 +112,5 @@ export class UploadModalComponent implements AfterViewInit{
     this.TSave.nativeElement.textContent    = this.dictionary.t(['forms', 'upload_save']);
     this.TCancel.nativeElement.textContent  = this.dictionary.t(['forms', 'upload_cancel']);
   }
+
 }
