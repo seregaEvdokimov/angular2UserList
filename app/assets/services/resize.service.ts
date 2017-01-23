@@ -62,11 +62,20 @@ export class ResizeServices {
   }
 
   moving(e: any) {
-    let left = (e.offsetX + 10) + 'px';
-    let top = (e.offsetY + 10) + 'px';
+    let left = e.offsetX + 3;
+    let top = e.offsetY + 3;
 
-    this.area.style.left = left;
-    this.area.style.top = top;
+    let areaWidth: number = (this.area.style.width) ? parseInt(this.area.style.width.slice(0, -2)) : 135;
+    let areaHeight: number = (this.area.style.height) ? parseInt(this.area.style.height.slice(0, -2)) : 195;
+
+    let widthContainer = this.image.clientWidth;
+    let heightContainer = this.image.clientHeight;
+
+    left = ((areaWidth + left) > widthContainer) ? widthContainer - areaWidth: (left < 0) ? 0: left;
+    top = ((areaHeight + top) > heightContainer) ? heightContainer - areaHeight: (top < 0) ? 0: top;
+
+    this.area.style.left = left + 'px';
+    this.area.style.top = top + 'px';
   }
 
   saveEventState(e: any) {
@@ -78,6 +87,9 @@ export class ResizeServices {
   resizing(newEvent: any) {
     let width: number = (this.area.style.width) ? parseInt(this.area.style.width.slice(0, -2)) : 135;
     let height: number = (this.area.style.height) ? parseInt(this.area.style.height.slice(0, -2)) : 195;
+
+    let widthContainer = this.image.clientWidth;
+    let heightContainer = this.image.clientHeight;
 
     let oldEvent: any = this.event_state.evnt;
     let target: any = oldEvent.target;
@@ -118,6 +130,9 @@ export class ResizeServices {
 
     (wDirection === 'negative') ? --width: (wDirection === 'positive') ? ++width: false;
     (hDirection === 'negative') ? --height: (hDirection === 'positive') ? ++height: false;
+
+    width = (width > widthContainer) ? widthContainer: (width < 100) ? 100 : width;
+    height = (height > heightContainer) ? heightContainer: (height < 150) ? 150 : height;
 
     this.area.style.width = width + 'px';
     this.area.style.height = height + 'px';
