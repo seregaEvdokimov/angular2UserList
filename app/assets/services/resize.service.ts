@@ -90,8 +90,8 @@ export class ResizeServices {
     let left = this.resize_state.area.left;
     let top = this.resize_state.area.top;
 
-    left = (wDirection === 'negative') ? left -= 1.5: (wDirection === 'positive') ? left += 1.5: 0;
-    top = (hDirection === 'negative') ? top -= 1.5: (hDirection === 'positive') ? top += 1.5: 0;
+    left = (wDirection === 'negative') ? left -= 2: (wDirection === 'positive') ? left += 2: left;
+    top = (hDirection === 'negative') ? top -= 2: (hDirection === 'positive') ? top += 2: top;
 
     left = ((areaWidth + left) > widthContainer) ? widthContainer - areaWidth: (left < 0) ? 0: left;
     top = ((areaHeight + top) > heightContainer) ? heightContainer - areaHeight: (top < 0) ? 0: top;
@@ -166,8 +166,8 @@ export class ResizeServices {
         break;
     }
 
-    (wDirection === 'negative') ? --width: (wDirection === 'positive') ? ++width: false;
-    (hDirection === 'negative') ? --height: (hDirection === 'positive') ? ++height: false;
+    width = (wDirection === 'negative') ? width -= 2: (wDirection === 'positive') ? width += 2: width;
+    height = (hDirection === 'negative') ? height -= 2: (hDirection === 'positive') ? height += 2: height;
 
     width = (width > widthContainer) ? widthContainer: (width < 100) ? 100 : width;
     height = (height > heightContainer) ? heightContainer: (height < 150) ? 150 : height;
