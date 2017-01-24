@@ -5,7 +5,7 @@
   left: 50%;
   background: #333;
   padding: 20px;
-  /*min-width: 680px;*/
+  width: 680px;
   transform: translate(-50%, -50%);
   transition: all .65s;
   box-shadow: 0 0 30px rgba(0, 0, 0, 1);
@@ -37,9 +37,10 @@
 
 
 .modal-window-group-picture {
-  display: inline-block;
+  display: table;
   position: relative;
   overflow: hidden;
+  margin: 0 auto;
 }
 
 .modal-window-group-picture .picture {
@@ -53,7 +54,7 @@
   z-index: 999;
   width: 135px;
   height: 195px;
-  border: 2px solid rgba(92, 206, 222, .8);
+  border: 2px solid #7E8688;
 }
 
 .resize-area .resize-handle {
@@ -61,12 +62,12 @@
   display: block;
   width: 10px;
   height: 10px;
-  background:  rgba(92, 206, 222, .9);
+  background:  #A8BBBA;
   z-index: 999;
 }
 
 .resize-area .resize-handle:active {
-  background: green;
+  background: #308b59;
 }
 
 .resize-area .resize-handle-n {

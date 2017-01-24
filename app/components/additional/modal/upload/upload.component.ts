@@ -89,7 +89,7 @@ export class UploadModalComponent implements AfterViewInit{
 
   handlerUploadFile($event: any) {
     let input: HTMLElement = $event.target;
-    this.uploader.read(input, this.insertImage.bind(this));
+    if(input['files'].length) this.uploader.read(input, this.insertImage.bind(this));
   }
 
   // METHODS
@@ -100,7 +100,7 @@ export class UploadModalComponent implements AfterViewInit{
 
   hide() {
     this.active = false;
-    this.picture.nativeElement.setAttribute('src', '');
+    this.resizer.reset();
   }
 
   insertImage(file: string) {

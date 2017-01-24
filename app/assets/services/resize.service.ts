@@ -10,7 +10,9 @@ export class ResizeServices {
 
   area: HTMLElement = null;
   image: HTMLElement = null;
+  newImage: HTMLElement = null;
   event_state: any = {};
+  resize_state: any = {container: {}, area: {}};
 
   constructor() {}
 
@@ -55,27 +57,56 @@ export class ResizeServices {
 
     this.image = imageEl;
     this.area = areaEl;
-    this.area.style.left = '0';
-    this.area.style.top = '0';
+
+    this.resize_state.container = {width: this.image.clientWidth, height: this.image.clientHeight};
+    this.saveResizeState();
+    this.drawNewImg();
 
     this.area.addEventListener('mousedown', this.startResize.bind(this));
   }
 
-  moving(e: any) {
-    let left = e.offsetX + 3;
-    let top = e.offsetY + 3;
+  drawNewImg() {
+    let resize_canvas = document.createElement('canvas');
+    resize_canvas.width = this.resize_state.container.width;
+    resize_canvas.height = this.resize_state.container.height;
+    resize_canvas.getContext('2d').drawImage(this.image, 0, 0, this.resize_state.container.width, this.resize_state.container.height);
 
-    let areaWidth: number = (this.area.style.width) ? parseInt(this.area.style.width.slice(0, -2)) : 135;
-    let areaHeight: number = (this.area.style.height) ? parseInt(this.area.style.height.slice(0, -2)) : 195;
+    this.newImage = document.createElement('img');
+    this.newImage['src'] = resize_canvas.toDataURL("image/png");
+  }
 
-    let widthContainer = this.image.clientWidth;
-    let heightContainer = this.image.clientHeight;
+  moving(newEvent: any) {
+    let oldEvent: any = this.event_state.evnt;
+
+    let areaWidth: number = this.resize_state.area.width;
+    let areaHeight: number = this.resize_state.area.height;
+
+    let widthContainer = this.resize_state.container.width;
+    let heightContainer = this.resize_state.container.height;
+
+    let wDirection = (newEvent.clientX > oldEvent.clientX) ? 'positive' : 'negative';
+    let hDirection = (newEvent.clientY > oldEvent.clientY) ? 'positive' : 'negative';
+
+    let left = this.resize_state.area.left;
+    let top = this.resize_state.area.top;
+
+    left = (wDirection === 'negative') ? left -= 1.5: (wDirection === 'positive') ? left += 1.5: 0;
+    top = (hDirection === 'negative') ? top -= 1.5: (hDirection === 'positive') ? top += 1.5: 0;
 
     left = ((areaWidth + left) > widthContainer) ? widthContainer - areaWidth: (left < 0) ? 0: left;
     top = ((areaHeight + top) > heightContainer) ? heightContainer - areaHeight: (top < 0) ? 0: top;
 
-    this.area.style.left = left + 'px';
-    this.area.style.top = top + 'px';
+    this.setAreaParams({left: left, top: top});
+    this.saveResizeState();
+  }
+
+  saveResizeState() {
+    this.resize_state.area = {
+      width: (this.area.style.width) ? parseInt(this.area.style.width.slice(0, -2)) : 135,
+      height: (this.area.style.height) ? parseInt(this.area.style.height.slice(0, -2)) : 195,
+      left: (this.area.style.left) ? parseInt(this.area.style.left.slice(0, -2)) : 0,
+      top: (this.area.style.top) ? parseInt(this.area.style.top.slice(0, -2)) : 0
+    };
   }
 
   saveEventState(e: any) {
@@ -84,12 +115,19 @@ export class ResizeServices {
     this.event_state.evnt = e;
   }
 
-  resizing(newEvent: any) {
-    let width: number = (this.area.style.width) ? parseInt(this.area.style.width.slice(0, -2)) : 135;
-    let height: number = (this.area.style.height) ? parseInt(this.area.style.height.slice(0, -2)) : 195;
+  setAreaParams(params: any) {
+    if(params.hasOwnProperty('width')) this.area.style.width = params.width + 'px';
+    if(params.hasOwnProperty('height')) this.area.style.height = params.height + 'px';
+    if(params.hasOwnProperty('left')) this.area.style.left = params.left + 'px';
+    if(params.hasOwnProperty('top')) this.area.style.top = params.top + 'px';
+  }
 
-    let widthContainer = this.image.clientWidth;
-    let heightContainer = this.image.clientHeight;
+  resizing(newEvent: any) {
+    let width: number = this.resize_state.area.width;
+    let height: number = this.resize_state.area.height;
+
+    let widthContainer = this.resize_state.container.width;
+    let heightContainer = this.resize_state.container.height;
 
     let oldEvent: any = this.event_state.evnt;
     let target: any = oldEvent.target;
@@ -134,29 +172,33 @@ export class ResizeServices {
     width = (width > widthContainer) ? widthContainer: (width < 100) ? 100 : width;
     height = (height > heightContainer) ? heightContainer: (height < 150) ? 150 : height;
 
-    this.area.style.width = width + 'px';
-    this.area.style.height = height + 'px';
+    this.setAreaParams({width: width, height: height});
+    this.saveResizeState();
   }
 
   crop() {
     if(!this.image) return false;
 
     let crop_canvas: any,
-      left = (this.area.style.left) ? parseInt(this.area.style.left.slice(0, -2)) : 0,
-      top = (this.area.style.top) ? parseInt(this.area.style.top.slice(0, -2)) : 0,
-      width = (this.area.style.width) ? parseInt(this.area.style.width.slice(0, -2)) : 135,
-      height = (this.area.style.height) ? parseInt(this.area.style.height.slice(0, -2)) : 195;
+      left = this.resize_state.area.left,
+      top = this.resize_state.area.top,
+      width = this.resize_state.area.width,
+      height = this.resize_state.area.height;
 
     crop_canvas = document.createElement('canvas');
     crop_canvas.width = width;
     crop_canvas.height = height;
 
-    crop_canvas.getContext('2d').drawImage(this.image, left, top, width, height, 0, 0, width, height);
+    crop_canvas.getContext('2d').drawImage(this.newImage, left, top, width, height, 0, 0, width, height);
     return crop_canvas.toDataURL("image/png");
   }
 
   reset() {
+    this.area.style.left = '0';
+    this.area.style.top = '0';
     this.area.style.width = '135px';
     this.area.style.height = '195px';
+
+    this.image.setAttribute('src', '');
   }
 }
