@@ -13,7 +13,6 @@ export class ResizeServices {
   newImage: HTMLElement = null;
   event_state: any = {};
   resize_state: any = {container: {}, area: {}};
-  event: any;
 
   constructor() {}
 
@@ -24,8 +23,6 @@ export class ResizeServices {
 
     e.preventDefault();
     e.stopPropagation();
-
-    this.event = e;
     this.saveEventState(e);
 
     switch (target.tagName) {
@@ -69,7 +66,7 @@ export class ResizeServices {
   }
 
   drawNewImg() {
-    let resize_canvas = document.createElement('canvas');
+    let resize_canvas: any = document.createElement('canvas');
     resize_canvas.width = this.resize_state.container.width;
     resize_canvas.height = this.resize_state.container.height;
     resize_canvas.getContext('2d').drawImage(this.image, 0, 0, this.resize_state.container.width, this.resize_state.container.height);
@@ -90,6 +87,7 @@ export class ResizeServices {
   saveEventState(e: any) {
     this.event_state.mouse_x = e.clientX;
     this.event_state.mouse_y = e.clientY;
+    this.event_state.evnt = e;
   }
 
   setAreaParams(params: any) {
@@ -127,10 +125,13 @@ export class ResizeServices {
     let width: number = this.resize_state.area.width;
     let height: number = this.resize_state.area.height;
 
+    let left = this.resize_state.area.left;
+    let top = this.resize_state.area.top;
+
     let widthContainer = this.resize_state.container.width;
     let heightContainer = this.resize_state.container.height;
 
-    let target: any = this.event.target;
+    let target: any = this.event_state.evnt.target;
 
     let wDirection: string;
     let hDirection: string;
@@ -138,12 +139,14 @@ export class ResizeServices {
     switch(target.classList[1]) {
       case 'resize-handle-n':
         hDirection = (newEvent.clientY < this.event_state.mouse_y) ? 'positive' : 'negative';
+        top -= 2;
         break;
       case 'resize-handle-s':
         hDirection = (newEvent.clientY > this.event_state.mouse_y) ? 'positive' : 'negative';
         break;
       case 'resize-handle-w':
         wDirection = (newEvent.clientX < this.event_state.mouse_x) ? 'positive' : 'negative';
+        left -= 2;
         break;
       case 'resize-handle-e':
         wDirection = (newEvent.clientX > this.event_state.mouse_x) ? 'positive' : 'negative';
@@ -151,10 +154,13 @@ export class ResizeServices {
       case 'resize-handle-ne':
         wDirection = (newEvent.clientX > this.event_state.mouse_x) ? 'positive' : 'negative';
         hDirection = (newEvent.clientY < this.event_state.mouse_y) ? 'positive' : 'negative';
+        top -= 2;
         break;
       case 'resize-handle-nw':
         wDirection = (newEvent.clientX < this.event_state.mouse_x) ? 'positive' : 'negative';
         hDirection = (newEvent.clientY < this.event_state.mouse_y) ? 'positive' : 'negative';
+        top -= 2;
+        left -= 2;
         break;
       case 'resize-handle-se':
         wDirection = (newEvent.clientX > this.event_state.mouse_x) ? 'positive' : 'negative';
@@ -163,6 +169,7 @@ export class ResizeServices {
       case 'resize-handle-sw':
         wDirection = (newEvent.clientX < this.event_state.mouse_x) ? 'positive' : 'negative';
         hDirection = (newEvent.clientY > this.event_state.mouse_y) ? 'positive' : 'negative';
+        left -= 2;
         break;
     }
 
@@ -172,7 +179,7 @@ export class ResizeServices {
     width = (width > widthContainer) ? widthContainer: (width < 100) ? 100 : width;
     height = (height > heightContainer) ? heightContainer: (height < 150) ? 150 : height;
 
-    this.setAreaParams({width: width, height: height});
+    this.setAreaParams({width: width, height: height, left: left, top: top});
     this.saveResizeState();
     this.saveEventState(newEvent);
   }

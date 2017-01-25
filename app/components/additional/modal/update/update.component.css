@@ -64,56 +64,9 @@
   position: relative;
 }
 
-.modal-window-group__picture .picture {
-
+.modal-window-group .picture {
+  max-width: 100%;
 }
-
-.modal-window-group__picture .picture-resize {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.picture-resize_display-none {
-  display: none;
-}
-
-.picture-resize .resize-handle {
-  position: absolute;
-  display: block;
-  width: 10px;
-  height: 10px;
-  background:  rgba(92, 206, 222, .9);
-  z-index: 999;
-}
-
-.picture-resize .resize-handle-nw {
-  top: -5px;
-  left: -5px;
-  cursor: nw-resize;
-}
-
-.picture-resize .resize-handle-sw {
-  bottom: -5px;
-  left: -5px;
-  cursor: sw-resize;
-}
-
-.picture-resize .resize-handle-ne {
-  top: -5px;
-  right: -5px;
-  cursor: ne-resize;
-}
-
-.picture-resize .resize-handle-se {
-  bottom: -5px;
-  right: -5px;
-  cursor: se-resize;
-}
-
-
 
 .modal-window-group__label {
   display: block;

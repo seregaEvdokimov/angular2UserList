@@ -54,15 +54,19 @@
   z-index: 999;
   width: 135px;
   height: 195px;
-  border: 2px solid #7E8688;
+  border: 2px solid #333;
+}
+
+.modal-window-group-picture  .resize-area:active {
+  cursor: pointer;
 }
 
 .resize-area .resize-handle {
   position: absolute;
   display: block;
-  width: 10px;
-  height: 10px;
-  background:  #A8BBBA;
+  width: 12px;
+  height: 12px;
+  background:  #999;
   z-index: 999;
 }
 
@@ -71,54 +75,54 @@
 }
 
 .resize-area .resize-handle-n {
-  top: -5px;
+  top: -6px;
   left: 50%;
-  margin-left: -5px;
+  margin-left: -6px;
   cursor: n-resize;
 }
 
 .resize-area .resize-handle-w {
   top: 50%;
-  left: -5px;
-  margin-top: -5px;
+  left: -6px;
+  margin-top: -6px;
   cursor: w-resize;
 }
 
 .resize-area .resize-handle-e {
   top: 50%;
-  right: -5px;
-  margin-top: -5px;
+  right: -6px;
+  margin-top: -6px;
   cursor: e-resize;
 }
 
 .resize-area .resize-handle-s {
-  bottom: -5px;
+  bottom: -6px;
   left: 50%;
-  margin-left: -5px;
+  margin-left: -6px;
   cursor: s-resize;
 }
 
 .resize-area .resize-handle-nw {
-  top: -5px;
-  left: -5px;
+  top: -6px;
+  left: -6px;
   cursor: nw-resize;
 }
 
 .resize-area .resize-handle-sw {
-  bottom: -5px;
-  left: -5px;
+  bottom: -6px;
+  left: -6px;
   cursor: sw-resize;
 }
 
 .resize-area .resize-handle-ne {
-  top: -5px;
-  right: -5px;
+  top: -6px;
+  right: -6px;
   cursor: ne-resize;
 }
 
 .resize-area .resize-handle-se {
-  bottom: -5px;
-  right: -5px;
+  bottom: -6px;
+  right: -6px;
   cursor: se-resize;
 }
 

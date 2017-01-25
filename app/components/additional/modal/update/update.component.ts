@@ -85,7 +85,7 @@ export class UpdateModalComponent {
 
     let classes = el.classList;
     let user = this.updateForm.value;
-    user.avatar = this.picture.nativeElement.getAttribute('src');
+    user.avatar = this.reDrawImage(this.picture.nativeElement);
 
     switch(classes[1]) {
       case 'add-btn':
@@ -136,6 +136,17 @@ export class UpdateModalComponent {
   uploadedAvatar(data: any) {
     this.disabled = false;
     if(data.file) this.picture.nativeElement.setAttribute('src', data.file);
+  }
+
+  reDrawImage(image: any) {
+    let width = image.clientWidth;
+    let height = image.clientHeight;
+
+    let image_canvas: any = document.createElement('canvas');
+    image_canvas.width = width;
+    image_canvas.height = height;
+    image_canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+    return image_canvas.toDataURL("image/png");
   }
 
   translate() {
