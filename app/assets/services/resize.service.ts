@@ -58,8 +58,19 @@ export class ResizeServices {
     this.image = imageEl;
     this.area = areaEl;
 
-    this.resize_state.container = {width: this.image.clientWidth, height: this.image.clientHeight};
-    this.saveResizeState();
+    let left: number = this.image.getBoundingClientRect().left;
+    let top: number = this.image.getBoundingClientRect().top;
+    let width: number = this.image.clientWidth;
+    let height: number = this.image.clientHeight;
+
+    this.resize_state.container = {
+      width: width,
+      height: height,
+      left: {start: left, finish: left + width},
+      top: {start: top, finish: top + height}
+    };
+
+    this.saveAreaParams();
     this.drawNewImg();
 
     this.area.addEventListener('mousedown', this.startResize.bind(this));
@@ -75,18 +86,20 @@ export class ResizeServices {
     this.newImage['src'] = resize_canvas.toDataURL("image/png");
   }
 
-  saveResizeState() {
-    this.resize_state.area = {
-      width: (this.area.style.width) ? parseInt(this.area.style.width.slice(0, -2)) : 135,
-      height: (this.area.style.height) ? parseInt(this.area.style.height.slice(0, -2)) : 195,
-      left: (this.area.style.left) ? parseInt(this.area.style.left.slice(0, -2)) : 0,
-      top: (this.area.style.top) ? parseInt(this.area.style.top.slice(0, -2)) : 0
-    };
-  }
-
   saveEventState(e: any) {
-    this.event_state.mouse_x = e.clientX;
-    this.event_state.mouse_y = e.clientY;
+    let left = 0;
+    let top = 0;
+
+    if(e.clientX >= this.resize_state.container.left.start && e.clientX <= this.resize_state.container.left.finish) {
+     left = e.clientX - this.resize_state.container.left.start;
+    }
+
+    if(e.clientY >= this.resize_state.container.top.start && e.clientY <= this.resize_state.container.top.finish) {
+      top = e.clientY - this.resize_state.container.top.start;
+    }
+
+    this.event_state.mouse_x = left;
+    this.event_state.mouse_y = top;
     this.event_state.evnt = e;
   }
 
@@ -95,92 +108,99 @@ export class ResizeServices {
     if(params.hasOwnProperty('height')) this.area.style.height = params.height + 'px';
     if(params.hasOwnProperty('left')) this.area.style.left = params.left + 'px';
     if(params.hasOwnProperty('top')) this.area.style.top = params.top + 'px';
+    if(params.hasOwnProperty('transform')) this.area.style.transform = "translate(" + params.transform.left + "px, " + params.transform.top + "px)";
+
+    this.saveAreaParams();
+  }
+
+  saveAreaParams() {
+    let transform = {left: 0, top: 0};
+    if(this.area.style.transform) {
+      let res: any = this.area.style.transform.match(/translate\((.*?)px, (.*?)px\)/);
+      transform.left = parseInt(res[1]);
+      transform.top = parseInt(res[2]);
+    }
+
+    this.resize_state.area = {
+      width: (this.area.style.width) ? parseInt(this.area.style.width.slice(0, -2)) : 135,
+      height: (this.area.style.height) ? parseInt(this.area.style.height.slice(0, -2)) : 195,
+      left: (this.area.style.left) ? parseInt(this.area.style.left.slice(0, -2)) : 0,
+      top: (this.area.style.top) ? parseInt(this.area.style.top.slice(0, -2)) : 0,
+      transform: transform
+    };
   }
 
   moving(newEvent: any) {
     let areaWidth: number = this.resize_state.area.width;
     let areaHeight: number = this.resize_state.area.height;
+    let transform: any = this.resize_state.area.transform;
 
     let widthContainer = this.resize_state.container.width;
     let heightContainer = this.resize_state.container.height;
 
-    let wDirection = (newEvent.clientX > this.event_state.mouse_x) ? 'positive' : 'negative';
-    let hDirection = (newEvent.clientY > this.event_state.mouse_y) ? 'positive' : 'negative';
+    let left = this.event_state.mouse_x;
+    let top = this.event_state.mouse_y;
 
-    let left = this.resize_state.area.left;
-    let top = this.resize_state.area.top;
+    left = ((areaWidth + left + transform.left) > widthContainer)
+        ? (widthContainer - areaWidth) + transform.left
+        : ((left + transform.left) < 0) ? transform.left: left;
 
-    left = (wDirection === 'negative') ? left -= 2: (wDirection === 'positive') ? left += 2: left;
-    top = (hDirection === 'negative') ? top -= 2: (hDirection === 'positive') ? top += 2: top;
+    top = ((areaHeight + top + transform.top) > heightContainer)
+        ? (heightContainer - areaHeight) + transform.top
+        : ((top + transform.top) < 0) ? transform.top: top;
 
-    left = ((areaWidth + left) > widthContainer) ? widthContainer - areaWidth: (left < 0) ? 0: left;
-    top = ((areaHeight + top) > heightContainer) ? heightContainer - areaHeight: (top < 0) ? 0: top;
-
-    this.setAreaParams({left: left, top: top});
-    this.saveResizeState();
+    this.setAreaParams({left: left, top: top, transform: {left:0, top: 0}});
     this.saveEventState(newEvent);
   }
 
   resizing(newEvent: any) {
     let width: number = this.resize_state.area.width;
     let height: number = this.resize_state.area.height;
-
-    let left = this.resize_state.area.left;
-    let top = this.resize_state.area.top;
+    let transform: any = this.resize_state.area.transform;
 
     let widthContainer = this.resize_state.container.width;
     let heightContainer = this.resize_state.container.height;
 
     let target: any = this.event_state.evnt.target;
 
-    let wDirection: string;
-    let hDirection: string;
+    let x = newEvent.clientX - this.resize_state.container.left.start;
+    let y = newEvent.clientY - this.resize_state.container.top.start;
+
+    let xDifference = x - this.event_state.mouse_x;
+    let yDifference = y - this.event_state.mouse_y;
 
     switch(target.classList[1]) {
       case 'resize-handle-n':
-        hDirection = (newEvent.clientY < this.event_state.mouse_y) ? 'positive' : 'negative';
-        top -= 2;
+        transform.top += yDifference;
         break;
       case 'resize-handle-s':
-        hDirection = (newEvent.clientY > this.event_state.mouse_y) ? 'positive' : 'negative';
         break;
       case 'resize-handle-w':
-        wDirection = (newEvent.clientX < this.event_state.mouse_x) ? 'positive' : 'negative';
-        left -= 2;
+        transform.left += xDifference;
         break;
       case 'resize-handle-e':
-        wDirection = (newEvent.clientX > this.event_state.mouse_x) ? 'positive' : 'negative';
         break;
       case 'resize-handle-ne':
-        wDirection = (newEvent.clientX > this.event_state.mouse_x) ? 'positive' : 'negative';
-        hDirection = (newEvent.clientY < this.event_state.mouse_y) ? 'positive' : 'negative';
-        top -= 2;
+        transform.top += yDifference;
         break;
       case 'resize-handle-nw':
-        wDirection = (newEvent.clientX < this.event_state.mouse_x) ? 'positive' : 'negative';
-        hDirection = (newEvent.clientY < this.event_state.mouse_y) ? 'positive' : 'negative';
-        top -= 2;
-        left -= 2;
+        transform.top += yDifference;
+        transform.left += xDifference;
         break;
       case 'resize-handle-se':
-        wDirection = (newEvent.clientX > this.event_state.mouse_x) ? 'positive' : 'negative';
-        hDirection = (newEvent.clientY > this.event_state.mouse_y) ? 'positive' : 'negative';
         break;
       case 'resize-handle-sw':
-        wDirection = (newEvent.clientX < this.event_state.mouse_x) ? 'positive' : 'negative';
-        hDirection = (newEvent.clientY > this.event_state.mouse_y) ? 'positive' : 'negative';
-        left -= 2;
+        transform.left += xDifference;
         break;
     }
 
-    width = (wDirection === 'negative') ? width -= 2: (wDirection === 'positive') ? width += 2: width;
-    height = (hDirection === 'negative') ? height -= 2: (hDirection === 'positive') ? height += 2: height;
+    width += xDifference;
+    height += yDifference;
 
     width = (width > widthContainer) ? widthContainer: (width < 100) ? 100 : width;
     height = (height > heightContainer) ? heightContainer: (height < 150) ? 150 : height;
 
-    this.setAreaParams({width: width, height: height, left: left, top: top});
-    this.saveResizeState();
+    this.setAreaParams({width: width, height: height, transform: transform});
     this.saveEventState(newEvent);
   }
 
