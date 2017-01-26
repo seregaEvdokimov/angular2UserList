@@ -11,17 +11,17 @@ export class UploadFileService {
 
   fileReader: any = new FileReader();
   callback: any;
-  input: HTMLElement;
+  node: HTMLElement;
 
   constructor() {}
 
   // METHODS
 
-  read(input: HTMLElement, callback: any) {
-    this.input = input;
+  read(node: HTMLElement, callback: any) {
+    this.node = node;
     this.callback = callback;
 
-    let fileList: FileList = input['files'];
+    let fileList: FileList = node['files'];
     this.fileReader.readAsDataURL(fileList[0]);
     this.fileReader.onload = this.insertImage.bind(this);
   }

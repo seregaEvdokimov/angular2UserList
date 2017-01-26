@@ -5,7 +5,7 @@
   left: 50%;
   background: #333;
   padding: 20px;
-  width: 680px;
+  width: 450px;
   transform: translate(-50%, -50%);
   transition: all .65s;
   box-shadow: 0 0 30px rgba(0, 0, 0, 1);
@@ -35,12 +35,14 @@
 
 .modal-window-group {}
 
+.modal-window-group__resize-layout {
+  display: table;
+  margin: 0 auto;
+}
 
 .modal-window-group-picture {
-  display: table;
   position: relative;
   overflow: hidden;
-  margin: 0 auto;
 }
 
 .modal-window-group-picture .picture {
@@ -127,6 +129,21 @@
 }
 
 
+.modal-window-group__drop-layout {
+  margin: 15px auto;
+  display: table;
+}
+
+.modal-window-group__drop-layout_hide {
+  display: none;
+}
+
+.modal-window-group-drop {
+  width: 150px;
+  height: 150px;
+  background: #222;
+  border: 1px solid #999;
+}
 
 .modal-window-group__label {
   display: block;

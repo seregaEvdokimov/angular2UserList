@@ -30,7 +30,8 @@ export class UploadModalComponent implements AfterViewInit{
   @ViewChild('TSave')    TSave: ElementRef;
   @ViewChild('TCancel')  TCancel: ElementRef;
 
-  @ViewChild('area') area: ElementRef;
+  @ViewChild('resizearea') resizeArea: ElementRef;
+  @ViewChild('droparea') dropArea: ElementRef;
   @ViewChild('picture') picture: ElementRef;
 
   @Output() onAction = new EventEmitter();
@@ -84,7 +85,8 @@ export class UploadModalComponent implements AfterViewInit{
         break;
     }
 
-    this.resizer.reset();
+    // this.resizer.reset();
+    // this.dropArea.nativeElement.classList.remove('modal-window-group__drop-layout_hide');
   }
 
   handlerUploadFile($event: any) {
@@ -101,11 +103,18 @@ export class UploadModalComponent implements AfterViewInit{
   hide() {
     this.active = false;
     this.resizer.reset();
+    this.dropArea.nativeElement.classList.remove('modal-window-group__drop-layout_hide');
+  }
+
+  dropImage(data: any) {
+    if(data.files.length) this.uploader.read(data, this.insertImage.bind(this));
   }
 
   insertImage(file: string) {
+    this.dropArea.nativeElement.classList.add('modal-window-group__drop-layout_hide');
     this.picture.nativeElement.setAttribute('src', file);
-    this.resizer.init(this.picture.nativeElement, this.area.nativeElement);
+
+    this.resizer.init(this.picture.nativeElement, this.resizeArea.nativeElement);
   }
 
   translate() {

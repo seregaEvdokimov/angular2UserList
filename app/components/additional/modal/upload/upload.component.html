@@ -6,7 +6,7 @@
       <div class="modal-window-group__resize-layout">
         <div class="modal-window-group-picture">
           <img class="picture" src="" alt="" #picture>
-          <div class="resize-area" #area>
+          <div class="resize-area" #resizearea>
             <span class="resize-handle resize-handle-n"></span>
             <span class="resize-handle resize-handle-w"></span>
             <span class="resize-handle resize-handle-e"></span>
@@ -17,6 +17,9 @@
             <span class="resize-handle resize-handle-sw"></span>
           </div>
         </div>
+      </div>
+      <div class="modal-window-group__drop-layout" #droparea>
+        <div class="modal-window-group-drop" dragupload (onDrop)="dropImage($event)"></div>
       </div>
       <input type="file" class="modal-window-group__input" (change)="handlerUploadFile($event)">
     </div>

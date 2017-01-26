@@ -197,8 +197,8 @@ export class ResizeServices {
     width += xDifference;
     height += yDifference;
 
-    width = (width > widthContainer) ? widthContainer: (width < 100) ? 100 : width;
-    height = (height > heightContainer) ? heightContainer: (height < 150) ? 150 : height;
+    width = (width > widthContainer) ? widthContainer: (width < 135) ? 135 : width;
+    height = (height > heightContainer) ? heightContainer: (height < 195) ? 195 : height;
 
     this.setAreaParams({width: width, height: height, transform: transform});
     this.saveEventState(newEvent);
@@ -222,11 +222,15 @@ export class ResizeServices {
   }
 
   reset() {
-    this.area.style.left = '0';
-    this.area.style.top = '0';
-    this.area.style.width = '135px';
-    this.area.style.height = '195px';
+    if(this.area) {
+      this.area.style.left = '0';
+      this.area.style.top = '0';
+      this.area.style.width = '135px';
+      this.area.style.height = '195px';
+    }
 
-    this.image.setAttribute('src', '');
+    if(this.image) {
+      this.image.setAttribute('src', '');
+    }
   }
 }

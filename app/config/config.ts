@@ -25,6 +25,7 @@ import {NotifyComponent}  from '../components/additional/notify/notify.component
 
 // DIRECTIVES
 import {LivetimeDirective} from '../assets/directives/livetime.directive';
+import {DragUploadDirective} from '../assets/directives/dragUpload.directive';
 
 // SERVICES
 import {DictionaryService} from '../assets/services/dictionary.service';
@@ -53,7 +54,8 @@ export let declarations = [
   TooltipComponent,
   NotifyComponent,
 
-  LivetimeDirective
+  LivetimeDirective,
+  DragUploadDirective
 ];
 
 
