@@ -170,32 +170,39 @@ export class ResizeServices {
     let yDifference = y - this.event_state.mouse_y;
 
     switch(target.classList[1]) {
-      case 'resize-handle-n':
-        transform.top += yDifference;
-        break;
-      case 'resize-handle-s':
-        break;
-      case 'resize-handle-w':
-        transform.left += xDifference;
-        break;
       case 'resize-handle-e':
+      case 'resize-handle-se':
+      case 'resize-handle-s':
+        width += xDifference;
+        height += yDifference;
         break;
       case 'resize-handle-ne':
-        transform.top += yDifference;
-        break;
-      case 'resize-handle-nw':
-        transform.top += yDifference;
-        transform.left += xDifference;
-        break;
-      case 'resize-handle-se':
+      case 'resize-handle-n':
+        transform.top = (transform.top > 0) ? 0 : transform.top + yDifference;
+        yDifference *= -1;
+
+        width += xDifference;
+        height = (transform.top >= 0) ? height : height + yDifference;
         break;
       case 'resize-handle-sw':
-        transform.left += xDifference;
+      case 'resize-handle-w':
+        transform.left = (transform.left > 0) ? 0 : transform.left + xDifference;
+        xDifference *= -1;
+
+        width = (transform.left >= 0) ? width : width + xDifference;
+        height += yDifference;
+        break;
+      case 'resize-handle-nw':
+        transform.top = (transform.top > 0) ? 0 : transform.top + yDifference;
+        transform.left = (transform.left > 0) ? 0 : transform.left + xDifference;
+
+        yDifference *= -1;
+        xDifference *= -1;
+
+        width = (transform.left >= 0) ? width : width + xDifference;
+        height = (transform.top >= 0) ? height : height + yDifference;
         break;
     }
-
-    width += xDifference;
-    height += yDifference;
 
     width = (width > widthContainer) ? widthContainer: (width < 135) ? 135 : width;
     height = (height > heightContainer) ? heightContainer: (height < 195) ? 195 : height;
