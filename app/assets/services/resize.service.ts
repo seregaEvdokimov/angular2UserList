@@ -215,8 +215,9 @@ export class ResizeServices {
     if(!this.image) return false;
 
     let crop_canvas: any,
-      left = this.resize_state.area.left,
-      top = this.resize_state.area.top,
+      transform: any = this.resize_state.area.transform,
+      left = this.resize_state.area.left + transform.left,
+      top = this.resize_state.area.top + transform.left,
       width = this.resize_state.area.width,
       height = this.resize_state.area.height;
 
