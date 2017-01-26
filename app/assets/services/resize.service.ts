@@ -12,7 +12,11 @@ export class ResizeServices {
   image: HTMLElement = null;
   newImage: HTMLElement = null;
   event_state: any = {};
+  event: any;
   resize_state: any = {container: {}, area: {}};
+
+  MIN_HEIGHT_AREA = 195;
+  MIN_WIDTH_AREA = 135;
 
   constructor() {}
 
@@ -23,6 +27,8 @@ export class ResizeServices {
 
     e.preventDefault();
     e.stopPropagation();
+
+    this.event = e;
     this.saveEventState(e);
 
     switch (target.tagName) {
@@ -122,8 +128,8 @@ export class ResizeServices {
     }
 
     this.resize_state.area = {
-      width: (this.area.style.width) ? parseInt(this.area.style.width.slice(0, -2)) : 135,
-      height: (this.area.style.height) ? parseInt(this.area.style.height.slice(0, -2)) : 195,
+      width: (this.area.style.width) ? parseInt(this.area.style.width.slice(0, -2)) : this.MIN_WIDTH_AREA,
+      height: (this.area.style.height) ? parseInt(this.area.style.height.slice(0, -2)) : this.MIN_HEIGHT_AREA,
       left: (this.area.style.left) ? parseInt(this.area.style.left.slice(0, -2)) : 0,
       top: (this.area.style.top) ? parseInt(this.area.style.top.slice(0, -2)) : 0,
       transform: transform
@@ -158,10 +164,15 @@ export class ResizeServices {
     let height: number = this.resize_state.area.height;
     let transform: any = this.resize_state.area.transform;
 
+    let left: number = this.resize_state.area.left;
+    let maxLeft: number = this.resize_state.container.left.finish;
+    let top: number = this.resize_state.area.top;
+    let maxTop: number = this.resize_state.container.top.finish;
+
     let widthContainer = this.resize_state.container.width;
     let heightContainer = this.resize_state.container.height;
 
-    let target: any = this.event_state.evnt.target;
+    let target: any = this.event.target;
 
     let x = newEvent.clientX - this.resize_state.container.left.start;
     let y = newEvent.clientY - this.resize_state.container.top.start;
@@ -178,34 +189,32 @@ export class ResizeServices {
         break;
       case 'resize-handle-ne':
       case 'resize-handle-n':
-        transform.top = (transform.top > 0) ? 0 : transform.top + yDifference;
-        yDifference *= -1;
+        transform.top = (height <= this.MIN_HEIGHT_AREA) ? transform.top : transform.top + yDifference;
 
         width += xDifference;
-        height = (transform.top >= 0) ? height : height + yDifference;
+        height = (height < this.MIN_HEIGHT_AREA) ? height : height + (yDifference * -1);
         break;
       case 'resize-handle-sw':
       case 'resize-handle-w':
-        transform.left = (transform.left > 0) ? 0 : transform.left + xDifference;
-        xDifference *= -1;
+        transform.left = (width <= this.MIN_WIDTH_AREA) ? transform.left : transform.left + xDifference;
 
-        width = (transform.left >= 0) ? width : width + xDifference;
+        width = (width < this.MIN_WIDTH_AREA) ? width : width + (xDifference * -1);
         height += yDifference;
         break;
       case 'resize-handle-nw':
-        transform.top = (transform.top > 0) ? 0 : transform.top + yDifference;
-        transform.left = (transform.left > 0) ? 0 : transform.left + xDifference;
+        transform.top = (height <= this.MIN_HEIGHT_AREA) ? transform.top : transform.top + yDifference;
+        transform.left = (width <= this.MIN_WIDTH_AREA) ? transform.left : transform.left + xDifference;
 
-        yDifference *= -1;
-        xDifference *= -1;
-
-        width = (transform.left >= 0) ? width : width + xDifference;
-        height = (transform.top >= 0) ? height : height + yDifference;
+        width = (width < this.MIN_WIDTH_AREA) ? width : width + (xDifference * -1);
+        height = (height < this.MIN_HEIGHT_AREA) ? height : height + (yDifference * -1);
         break;
     }
 
-    width = (width > widthContainer) ? widthContainer: (width < 135) ? 135 : width;
-    height = (height > heightContainer) ? heightContainer: (height < 195) ? 195 : height;
+    transform.top = (transform.top + top < 0) ? 0 : (transform.top + top > maxTop) ? maxTop: transform.top;
+    transform.left = (transform.left + left < 0) ? 0 : (transform.left + left > maxLeft) ? maxLeft: transform.left;
+
+    width = (width > widthContainer) ? widthContainer: (width <= this.MIN_WIDTH_AREA) ? this.MIN_WIDTH_AREA : width;
+    height = (height > heightContainer) ? heightContainer: (height <= this.MIN_HEIGHT_AREA) ? this.MIN_HEIGHT_AREA : height;
 
     this.setAreaParams({width: width, height: height, transform: transform});
     this.saveEventState(newEvent);
@@ -233,8 +242,8 @@ export class ResizeServices {
     if(this.area) {
       this.area.style.left = '0';
       this.area.style.top = '0';
-      this.area.style.width = '135px';
-      this.area.style.height = '195px';
+      this.area.style.width = this.MIN_WIDTH_AREA + 'px';
+      this.area.style.height = this.MIN_HEIGHT_AREA + 'px';
     }
 
     if(this.image) {

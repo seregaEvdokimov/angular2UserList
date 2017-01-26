@@ -84,14 +84,13 @@ export class UploadModalComponent implements AfterViewInit{
         });
         break;
     }
-
-    // this.resizer.reset();
-    // this.dropArea.nativeElement.classList.remove('modal-window-group__drop-layout_hide');
   }
 
   handlerUploadFile($event: any) {
     let input: HTMLElement = $event.target;
+
     if(input['files'].length) this.uploader.read(input, this.insertImage.bind(this));
+    input['value'] = ''
   }
 
   // METHODS
