@@ -210,11 +210,11 @@ export class ResizeServices {
         break;
     }
 
-    transform.top = (transform.top + top < 0) ? 0 : (transform.top + top > maxTop) ? maxTop: transform.top;
-    transform.left = (transform.left + left < 0) ? 0 : (transform.left + left > maxLeft) ? maxLeft: transform.left;
+    transform.top = (transform.top + top < 0) ? 0: ((transform.top + top) > maxTop) ? maxTop: transform.top;
+    transform.left = (transform.left + left < 0) ? 0: ((transform.left + left) > maxLeft) ? maxLeft: transform.left;
 
-    width = (width > widthContainer) ? widthContainer: (width <= this.MIN_WIDTH_AREA) ? this.MIN_WIDTH_AREA : width;
-    height = (height > heightContainer) ? heightContainer: (height <= this.MIN_HEIGHT_AREA) ? this.MIN_HEIGHT_AREA : height;
+    width = (width > widthContainer) ? widthContainer: (width <= this.MIN_WIDTH_AREA) ? this.MIN_WIDTH_AREA: width;
+    height = (height > heightContainer) ? heightContainer: (height <= this.MIN_HEIGHT_AREA) ? this.MIN_HEIGHT_AREA: height;
 
     this.setAreaParams({width: width, height: height, transform: transform});
     this.saveEventState(newEvent);

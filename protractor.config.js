@@ -36,6 +36,9 @@ exports.config = {
   // Base URL for application server
   baseUrl: 'http://localhost:8080',
 
+  // allScriptsTimeout: 120000,
+  // getPageTimeout: 120000,
+
   // doesn't seem to work.
   // resultJsonOutputFile: "foo.json",
 

@@ -28,12 +28,12 @@
         <td class="row__name" data-tooltip="name">{{ user.name }}</td>
         <td class="row__email" data-tooltip="email">{{ user.email }}</td>
         <td class="row__birth">{{ user.startDate }}</td>
-        <td class="row__date" livetime
+        <td class="row__date"
+            livetime
             [startDate]="user.birth"
             [finishDate]="user.date"
             [counterTag]="leftTime"
-            [progressBarTag]="overlay"
-        >
+            [progressBarTag]="overlay">
           <div #leftTime class="left-time"></div>
           <div #overlay class="overlay"></div>
         </td>

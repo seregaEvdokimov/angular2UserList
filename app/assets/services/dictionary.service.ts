@@ -21,7 +21,7 @@ export class DictionaryService {
     number: /(%number)/g
   };
 
-  url: string = 'http://localhost:4001/language';
+  url: string = 'http://localhost:4002/language';
 
   constructor(private http: Http) {}
 

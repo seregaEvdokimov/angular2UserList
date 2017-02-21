@@ -2,7 +2,7 @@
  * Created by s.evdokimov on 04.01.2017.
  */
 
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, NgZone } from '@angular/core';
 
 import {NOTIFY_ADD, NOTIFY_SWITCH} from './actions';
 
@@ -35,10 +35,12 @@ export class NotifyComponent {
   items: any = [];
   display: boolean = true;
 
-  constructor() {
-    setInterval(() => {
-      this.liveCycle();
-    }, 1000);
+  constructor(private ngZone: NgZone) {
+    this.ngZone.runOutsideAngular(() => {
+      setInterval(() => {
+        this.liveCycle();
+      }, 1000);
+    });
   }
 
   // LISTENERS

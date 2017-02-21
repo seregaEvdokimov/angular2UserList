@@ -11,7 +11,7 @@ import {ProgressBarService} from '../services/progressbar.service';
 
 @Directive({
   selector: '[livetime]',
-  providers: [ProgressBarService, TimerService]
+  providers: [TimerService, ProgressBarService]
 })
 
 
@@ -21,7 +21,7 @@ export class LivetimeDirective implements OnInit, OnDestroy {
   @Input() counterTag: HTMLElement;
   @Input() progressBarTag: HTMLElement;
 
-  constructor(el: ElementRef, public progress: ProgressBarService, private timer: TimerService) {}
+  constructor(el: ElementRef, public progress: ProgressBarService) {}
 
   ngOnInit(): void {
     this.init();
@@ -38,19 +38,15 @@ export class LivetimeDirective implements OnInit, OnDestroy {
       end: this.finishDate
     };
 
-    this.timer.init(timerData, this.showLiveTime.bind(this));
-    this.progress.init(timerData, this.progressBarTag);
-
+    this.progress.init(timerData, this.progressBarTag, this.showLiveTime.bind(this));
     this.start();
   }
 
   start(): void {
-    this.timer.start();
     this.progress.start();
   }
 
   stop(): void {
-    this.timer.stop();
     this.progress.stop();
   }
 
@@ -90,7 +86,7 @@ export class LivetimeDirective implements OnInit, OnDestroy {
     };
 
     let dateString = '';
-    for (var key in timeLeft) {
+    for (let key in timeLeft) {
       dateString += key + ': ' + timeLeft[key] + ', ';
     }
 

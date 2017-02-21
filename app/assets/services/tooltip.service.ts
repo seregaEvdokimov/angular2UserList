@@ -21,7 +21,7 @@ export class TooltipService {
     params.set('type', payload.type);
     params.set('id', payload.id);
 
-    this.http.get('http://localhost:4001/tooltip', {search: params}).subscribe(res => {
+    this.http.get('http://localhost:4002/tooltip', {search: params}).subscribe(res => {
       let data = Object.assign(res.json(), payload);
       callback({
         type: TOOLTIP_SHOW,

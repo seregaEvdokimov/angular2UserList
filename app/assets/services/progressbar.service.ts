@@ -13,25 +13,22 @@ export class ProgressBarService {
 
   // INIT
 
-  timer: TimerService;
   element: HTMLElement;
   startTime: number;
   finishTime: number;
   className: string;
   percent: number = null;
 
-  constructor() {
-    this.timer = new TimerService();
-  }
+  constructor(private timer: TimerService) {}
 
   // METHODS
 
-  init(data: ITimer, element: HTMLElement): void {
+  init(data: ITimer, element: HTMLElement, callback: any): void {
     this.startTime = new Date(data.start).getTime();
     this.finishTime = new Date(data.end).getTime();
     this.element = element;
 
-    this.timer.init(data, this.tick.bind(this));
+    this.timer.init(data, [this.tick.bind(this), callback]);
   }
 
   start(): void {

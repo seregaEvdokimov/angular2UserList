@@ -1,7 +1,6 @@
 /**
  * Created by s.evdokimov on 07.12.2016.
  */
-
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -111,9 +110,7 @@ var backAPI = {
 
         var findIndex;
         this.userData.forEach(function (item, index) {
-            if (item.id === data.id) {
-                findIndex = index;
-            }
+            if (item.id === data.id) findIndex = index;
         });
 
         this.userData.splice(findIndex, 1, data);
@@ -164,7 +161,7 @@ var backAPI = {
     }
 }.init();
 
-server.listen(4001);
+server.listen(4002);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
@@ -211,7 +208,7 @@ app.get('/tooltip', function (req, res) {
 });
 
 function addResponseHeaders(obj) {
-    obj.header('Access-Control-Allow-Origin', siteUrl);
+    obj.header('Access-Control-Allow-Origin', '*');
     obj.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     obj.header('Access-Control-Allow-Headers', 'Content-Type');
 }

@@ -2,8 +2,10 @@
  * Created by s.evdokimov on 26.12.2016.
  */
 
+import {NgZone, Injectable} from '@angular/core';
 import {ITimer} from '../interfaces/timer';
 
+@Injectable()
 export class TimerService {
 
   // INIT
@@ -12,23 +14,30 @@ export class TimerService {
   finishTime: number;
   intervalId: any;
   active: boolean = false;
-  callback: any;
+  callbacks: any;
 
-  constructor() {}
+  constructor(private ngZone: NgZone) {}
 
   // METHODS
 
-  init(data: ITimer, callback: any):void {
+  init(data: ITimer, callbacks: any):void {
     this.startTime = new Date(data.start).getTime();
     this.finishTime = new Date(data.end).getTime();
-    this.callback = callback;
+    this.callbacks = callbacks;
   }
 
   start(): boolean {
     if(this.active === true) return false;
 
     this.active = true;
-    this.intervalId = setInterval(() => this.callback(), 1000);
+    this.ngZone.runOutsideAngular(() => {
+      setInterval(() => {
+
+        this.callbacks.forEach((callback: any) => {
+          callback();
+        });
+      }, 1000);
+    });
   }
 
   stop(): void {

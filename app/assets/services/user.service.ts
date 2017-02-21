@@ -15,7 +15,7 @@ export class UserService {
 
   // INIT
 
-  url: string = 'http://localhost:4001/user';
+  url: string = 'http://localhost:4002/user';
   users: IUser[] = [];
   count: number = null;
 
