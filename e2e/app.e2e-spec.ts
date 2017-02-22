@@ -5,6 +5,7 @@ describe('QuickStart E2E Tests', function () {
   const SLEEP_TIME = 3000;
 
   beforeEach(function () {
+    browser.driver.manage().window().maximize();
     browser.get('');
   });
 
@@ -72,6 +73,38 @@ describe('QuickStart E2E Tests', function () {
     }).then(function (name) {
       expect(user[0]).toEqual(name);
       browser.sleep(SLEEP_TIME);
+    });
+  });
+
+  it('update user', function () {
+    let username = 'Update Client';
+    let useremail = 'updateclient@hotmail.com';
+
+    element(by.css('.table__tbody tr')).element(by.css('.edit-btn')).click();
+    $$('.modal-window_show .modal-window-group__input').each(function (item, index) {
+      browser.wait(ExpectedConditions.elementToBeClickable(item));
+
+      switch(index) {
+        case 0:
+          item.clear();
+          item.sendKeys(username);
+          break;
+        case 1:
+          item.clear();
+          item.sendKeys(useremail);
+          break;
+      }
+    }).then(function () {
+      element(by.css('.modal-window_show .add-btn')).click();
+
+      Promise.all([
+        element(by.css('.table__tbody tr')).element(by.css('.row__name')).getText(),
+        element(by.css('.table__tbody tr')).element(by.css('.row__email')).getText()
+      ]).then(function (data) {
+        expect(data[0]).toBe(username);
+        expect(data[1]).toBe(useremail);
+        browser.sleep(SLEEP_TIME);
+      });
     });
   });
 

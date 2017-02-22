@@ -139,13 +139,18 @@ export class UpdateModalComponent {
   }
 
   reDrawImage(image: any) {
+    let src = image.getAttribute('src');
+    if(/^https?/.test(src)) return src;
+
     let width = image.clientWidth;
     let height = image.clientHeight;
 
     let image_canvas: any = document.createElement('canvas');
     image_canvas.width = width;
     image_canvas.height = height;
+
     image_canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+    console.log(image_canvas.toDataURL());
     return image_canvas.toDataURL("image/png");
   }
 
